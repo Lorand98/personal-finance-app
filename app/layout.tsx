@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 
+import SidebarNav from "@/app/_components/layout/SidebarNav";
+
 const publicSans = localFont({
   src: "./fonts/PublicSans-VariableFont_wght.ttf",
 });
@@ -21,7 +23,13 @@ export default function RootLayout({
       <body
         className={`${publicSans.className} antialiased`}
       >
-        {children}
+        <div className="flex">
+
+          <SidebarNav />
+          <main>
+            {children}
+          </main>
+        </div>
       </body>
     </html>
   );
