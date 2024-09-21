@@ -24,7 +24,6 @@ export default function RootLayout({
         className={`${publicSans.className} antialiased`}
       >
         <div className="flex">
-
           <SidebarNav />
           <main>
             {children}
