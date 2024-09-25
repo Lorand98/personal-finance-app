@@ -3,6 +3,8 @@ import localFont from "next/font/local";
 import "./globals.css";
 
 import SidebarNav from "@/app/_components/layout/SidebarNav";
+import { LayoutProvider } from "./_context/LayoutContext";
+import { MainLayout } from "./_components/layout/MainLayout";
 
 const publicSans = localFont({
   src: "./fonts/PublicSans-VariableFont_wght.ttf",
@@ -18,16 +20,20 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
   return (
     <html lang="en">
       <body
         className={`${publicSans.className} antialiased`}
       >
-        <div className="flex">
-          <SidebarNav />
-          <main>
-            {children}
-          </main>
+        <div className="flex bg-beige-100">
+          <LayoutProvider>
+
+            <SidebarNav />
+            <MainLayout>
+              {children}
+            </MainLayout>
+          </LayoutProvider>
         </div>
       </body>
     </html>
