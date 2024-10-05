@@ -24,11 +24,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${publicSans.className} antialiased`}
+        className={`${publicSans.className} antialiased min-h-screen flex flex-col relative`}
       >
-        <div className="flex bg-beige-100">
+        <div className="bg-beige-100">
           <LayoutProvider>
-
             <SidebarNav />
             <MainLayout>
               {children}

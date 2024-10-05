@@ -48,7 +48,7 @@ const SidebarNav = () => {
         <motion.nav
             initial={{ width: `${sidebarWidth}rem` }}
             animate={{ width: `${sidebarWidth}rem` }}
-            className='h-screen fixed flex flex-col bg-grey-900 text-grey-300 px-8 py-10 rounded-r-2xl'
+            className='min-h-full fixed flex flex-col bg-grey-900 text-grey-300 px-8 py-10 rounded-r-2xl'
         >
             <div className='mb-10'>
                 <Logo size={minimized ? 'small' : 'large'} />

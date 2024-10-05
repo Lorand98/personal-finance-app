@@ -40,6 +40,23 @@ const config: Config = {
         gold: '#CAB361',
         orange: '#BE6C49',
       },
+      spacing: {
+        50: '0.25rem',  // 4px
+        100: '0.5rem',   // 8px
+        150: '0.75rem',  // 12px
+        200: '1rem',     // 16px
+        250: '1.25rem',  // 20px
+        300: '1.5rem',   // 24px
+        400: '2rem',     // 32px
+        500: '2.5rem',   // 40px
+      },
+      fontSize: {
+        'preset-1': ['2rem', { lineHeight: '1.2' }],    // 32px, 120% line height
+        'preset-2': ['1.25rem', { lineHeight: '1.2' }], // 20px, 120% line height
+        'preset-3': ['1rem', { lineHeight: '1.5' }],    // 16px, 150% line height
+        'preset-4': ['0.875rem', { lineHeight: '1.5' }],// 14px, 150% line height
+        'preset-5': ['0.75rem', { lineHeight: '1.5' }], // 12px, 150% line height
+      },
     },
   },
   plugins: [],

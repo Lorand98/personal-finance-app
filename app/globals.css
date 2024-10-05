@@ -27,7 +27,35 @@ body {
 } */
 
 @layer base {
+  body {
+    @apply text-preset-3; /* Default body text size */
+  }
+
   h1 {
-    @apply text-4xl font-bold;
+    @apply text-preset-1 font-bold;
+  }
+
+  h2 {
+    @apply text-preset-2 font-bold;
+  }
+
+  p {
+    @apply text-preset-4;
+  }
+
+  th {
+    @apply text-preset-5 text-grey-500 font-normal
+  }
+
+  td {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    @apply border-t border-grey-100;
+
+  }
+
+  /* Remove bottom padding for the last row */
+  tr:last-child td {
+    padding-bottom: 0;
   }
 }
