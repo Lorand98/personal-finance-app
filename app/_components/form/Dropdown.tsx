@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import React, { useState, useRef, useEffect, useId } from 'react';
 import Image from 'next/image';
@@ -60,6 +60,7 @@ const Dropdown = ({
     }, []);
 
     const handleKeyDown = (event: React.KeyboardEvent) => {
+        event.preventDefault();
         if (event.key === 'ArrowDown') {
             setHighlightedIndex((prevIndex) => {
                 if (prevIndex === null) return 0;
@@ -75,6 +76,19 @@ const Dropdown = ({
         }
     };
 
+    useEffect(() => {
+        if (isOpen) {
+            setHighlightedIndex(0);
+        }
+    }, [isOpen]);
+
+    useEffect(() => {
+        if (highlightedIndex !== null && isOpen) {
+            const listItem = document.getElementById(`dropdown-item-${highlightedIndex}`);
+            listItem?.focus();
+        }
+    }, [highlightedIndex, isOpen]);
+
     return (
         <FormComponentWrapper
             {...props}
@@ -88,7 +102,6 @@ const Dropdown = ({
                         aria-expanded={isOpen}
                         aria-controls={controlId}
                         onClick={() => setIsOpen(!isOpen)}
-                        onKeyDown={handleKeyDown}
                         className={`${className} flex justify-between items-center gap-4 cursor-pointer`}
                     >
                         <span>{selectedItem ? selectedItem.name : 'Select an option'}</span>
@@ -99,23 +112,25 @@ const Dropdown = ({
                             id={controlId}
                             aria-labelledby={id}
                             role="listbox"
-                            className="absolute left-0 bg-white border border-gray-300 rounded-lg mt-4 w-full overflow-hidden"
+                            className="absolute left-0 bg-white border border-gray-300 rounded-lg mt-4 w-full p-1"
+                            onKeyDown={handleKeyDown}
                         >
                             {items.map((item, index) => (
                                 <li
                                     key={item.id}
+                                    id={`dropdown-item-${index}`}
                                     role="option"
-                                    tabIndex={0}
+                                    tabIndex={-1}
                                     aria-selected={selectedItem?.id === item.id}
                                     onClick={() => handleSelect(item)}
-                                    className={`cursor-pointer px-4 py-2 hover:bg-gray-200 ${selectedItem?.id === item.id ? 'font-bold' : ''} ${highlightedIndex === index ? 'bg-gray-200' : ''}`}
+                                    className={`cursor-pointer px-4 py-2 hover:bg-gray-200 ${selectedItem?.id === item.id ? 'font-bold' : ''} focus:outline-2`}
                                 >
                                     {item.name}
                                 </li>
                             ))}
-                        </ul>
+                        </ul >
                     )}
-                </div>
+                </div >
             )}
         />
     );
