@@ -33,4 +33,8 @@
   tr:last-child td {
     padding-bottom: 0;
   }
+
+  label {
+    @apply text-preset-4 text-grey-500;
+  }
 }

@@ -5,12 +5,14 @@ import searchIcon from '@/public/icon-search.svg'
 
 import BaseInput from './BaseInput';
 
-const SearchBar = () => {
+const SearchBar = (props:
+    React.ComponentProps<typeof BaseInput>
+) => {
     return (
         <BaseInput
             endAdornment={<Image src={searchIcon} alt='search' />}
-            placeholder='Search transactions'
             className='w-80'
+            {...props}
         />
     )
 }

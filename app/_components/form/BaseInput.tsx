@@ -1,4 +1,3 @@
-import React from 'react'
 import FormComponentWrapper from './FormComponentWrapper'
 
 interface BaseInputProps extends Omit<React.ComponentProps<typeof FormComponentWrapper>, 'renderFormComponent'
