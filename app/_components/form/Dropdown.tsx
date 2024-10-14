@@ -35,6 +35,15 @@ const Dropdown = ({
         setIsOpen(false);
     };
 
+    const dropdownRef = useRef<HTMLDivElement>(null);
+    const comboboxRef = useRef<HTMLDivElement>(null);
+
+    const handleClickOutside = (event: MouseEvent) => {
+        if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+            setIsOpen(false);
+        }
+    };
+
     useEffect(() => {
         if (selectedId) {
             const newSelectedItem = items.find((item) => item.id === selectedId);
@@ -44,37 +53,12 @@ const Dropdown = ({
         }
     }, [selectedId, items]);
 
-    const dropdownRef = useRef<HTMLDivElement>(null);
-
-    const handleClickOutside = (event: MouseEvent) => {
-        if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-            setIsOpen(false);
-        }
-    };
-
     useEffect(() => {
         document.addEventListener('mousedown', handleClickOutside);
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, []);
-
-    const handleKeyDown = (event: React.KeyboardEvent) => {
-        event.preventDefault();
-        if (event.key === 'ArrowDown') {
-            setHighlightedIndex((prevIndex) => {
-                if (prevIndex === null) return 0;
-                return (prevIndex + 1) % items.length;
-            });
-        } else if (event.key === 'ArrowUp') {
-            setHighlightedIndex((prevIndex) => {
-                if (prevIndex === null) return items.length - 1;
-                return (prevIndex - 1 + items.length) % items.length;
-            });
-        } else if (event.key === 'Enter' && highlightedIndex !== null) {
-            handleSelect(items[highlightedIndex]);
-        }
-    };
 
     useEffect(() => {
         if (isOpen) {
@@ -89,6 +73,44 @@ const Dropdown = ({
         }
     }, [highlightedIndex, isOpen]);
 
+    const focusComboBox = () => comboboxRef.current?.focus();
+
+    const handleComboBoxKeyDown = (event: React.KeyboardEvent) => {
+        if (event.key === 'Enter') {
+            setIsOpen((prevIsOpen) => !prevIsOpen);
+        }
+    }
+
+    const handleDropdownListKeyDown = (event: React.KeyboardEvent) => {
+        event.preventDefault();
+        switch (event.key) {
+            case 'ArrowDown':
+                setHighlightedIndex((prevIndex) => {
+                    if (prevIndex === null) return 0;
+                    return (prevIndex + 1) % items.length;
+                });
+                break;
+            case 'ArrowUp':
+                setHighlightedIndex((prevIndex) => {
+                    if (prevIndex === null) return items.length - 1;
+                    return (prevIndex - 1 + items.length) % items.length;
+                });
+                break;
+            case 'Enter':
+                if (highlightedIndex !== null) {
+                    handleSelect(items[highlightedIndex]);
+                    focusComboBox();
+                }
+                break;
+            case 'Escape':
+                setIsOpen(false);
+                focusComboBox();
+                break;
+            default:
+                break;
+        }
+    };
+
     return (
         <FormComponentWrapper
             {...props}
@@ -97,11 +119,13 @@ const Dropdown = ({
                     <div
                         id={id}
                         role="combobox"
+                        ref={comboboxRef}
                         tabIndex={0}
                         aria-haspopup="listbox"
                         aria-expanded={isOpen}
                         aria-controls={controlId}
                         onClick={() => setIsOpen(!isOpen)}
+                        onKeyDown={handleComboBoxKeyDown}
                         className={`${className} flex justify-between items-center gap-4 cursor-pointer`}
                     >
                         <span>{selectedItem ? selectedItem.name : 'Select an option'}</span>
@@ -113,7 +137,7 @@ const Dropdown = ({
                             aria-labelledby={id}
                             role="listbox"
                             className="absolute left-0 bg-white border border-gray-300 rounded-lg mt-4 w-full p-1"
-                            onKeyDown={handleKeyDown}
+                            onKeyDown={handleDropdownListKeyDown}
                         >
                             {items.map((item, index) => (
                                 <li

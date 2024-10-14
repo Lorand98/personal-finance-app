@@ -40,6 +40,7 @@ const Transactions = () => {
                             selectedId={dropdownItems[0].id}
                             label='Sort by'
                             labelPosition='left'
+                            className='w-28'
                         />
                     </div>
 
