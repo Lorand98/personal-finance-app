@@ -76,13 +76,18 @@ const Dropdown = ({
     const focusComboBox = () => comboboxRef.current?.focus();
 
     const handleComboBoxKeyDown = (event: React.KeyboardEvent) => {
-        if (event.key === 'Enter') {
+        if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
             setIsOpen((prevIsOpen) => !prevIsOpen);
         }
     }
 
     const handleDropdownListKeyDown = (event: React.KeyboardEvent) => {
-        event.preventDefault();
+        const preventDefaultKeys = ['ArrowDown', 'ArrowUp', 'Enter', ' '];
+        if (preventDefaultKeys.includes(event.key)) {
+            event.preventDefault();
+        }
+    
         switch (event.key) {
             case 'ArrowDown':
                 setHighlightedIndex((prevIndex) => {
@@ -97,6 +102,7 @@ const Dropdown = ({
                 });
                 break;
             case 'Enter':
+            case ' ':
                 if (highlightedIndex !== null) {
                     handleSelect(items[highlightedIndex]);
                     focusComboBox();
@@ -115,7 +121,7 @@ const Dropdown = ({
         <FormComponentWrapper
             {...props}
             renderFormComponent={(className, id) => (
-                <div ref={dropdownRef} className="w-full">
+                <div ref={dropdownRef} className={`${className} w-full`}>
                     <div
                         id={id}
                         role="combobox"
@@ -126,7 +132,7 @@ const Dropdown = ({
                         aria-controls={controlId}
                         onClick={() => setIsOpen(!isOpen)}
                         onKeyDown={handleComboBoxKeyDown}
-                        className={`${className} flex justify-between items-center gap-4 cursor-pointer`}
+                        className={`flex justify-between items-center gap-4 cursor-pointer h-full`}
                     >
                         <span>{selectedItem ? selectedItem.name : 'Select an option'}</span>
                         <Image src={caretDownIcon} alt="caret down icon" />
@@ -136,7 +142,7 @@ const Dropdown = ({
                             id={controlId}
                             aria-labelledby={id}
                             role="listbox"
-                            className="absolute left-0 bg-white border border-gray-300 rounded-lg mt-4 w-full p-1"
+                            className="absolute left-0 bg-white border border-gray-300 rounded-lg mt-2 w-full p-1"
                             onKeyDown={handleDropdownListKeyDown}
                         >
                             {items.map((item, index) => (
@@ -147,7 +153,7 @@ const Dropdown = ({
                                     tabIndex={-1}
                                     aria-selected={selectedItem?.id === item.id}
                                     onClick={() => handleSelect(item)}
-                                    className={`cursor-pointer px-4 py-2 hover:bg-gray-200 ${selectedItem?.id === item.id ? 'font-bold' : ''} focus:outline-2`}
+                                    className={`cursor-pointer px-4 py-2 hover:bg-gray-200 ${selectedItem?.id === item.id ? 'font-bold' : ''} focus:outline-2 border-b-[1px] border-b-grey-100 last:border-b-0`}
                                 >
                                     {item.name}
                                 </li>
