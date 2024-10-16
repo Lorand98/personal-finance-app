@@ -3,8 +3,9 @@ import data from '@/public/data.json';
 import { TransactionsTable } from '@/app/_components/transactions/TransactionsTable';
 import withPageHeading from '@/app/_components/layout/withPageHeading';
 
-import SearchBar from '@/app/_components/form/SearchBar';
-import Dropdown from '@/app/_components/form/Dropdown';
+import SearchBar from '@/app/_components/ui/fields/SearchBar';
+import Dropdown from '@/app/_components/ui/fields/Dropdown';
+import BaseInput from '@/app/_components/ui/fields/BaseInput';
 
 export const metadata = {
     title: 'Transactions',
@@ -28,7 +29,7 @@ const Transactions = () => {
                 <div className='flex justify-between'>
                     {/* transaction filter */}
 
-                    <SearchBar inputProps={
+                    {/* <SearchBar inputProps={
                         {
                             placeholder: 'Search transactions'
                         }
@@ -42,7 +43,9 @@ const Transactions = () => {
                             labelPosition='left'
                             className='w-28'
                         />
-                    </div>
+                    </div> */}
+
+                    <BaseInput placeholder='test'/>
 
                 </div>
                 <TransactionsTable transactions={transactions} />

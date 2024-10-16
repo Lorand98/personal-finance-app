@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect, useId } from 'react';
 import Image from 'next/image';
-import FormComponentWrapper from './FormComponentWrapper';
+import FormComponentWrapper from './FieldWrapper';
 import caretDownIcon from '@/public/icon-caret-down.svg';
 
 interface DropdownItem {
