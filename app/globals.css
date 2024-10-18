@@ -38,3 +38,9 @@
     @apply text-preset-4 text-grey-500;
   }
 }
+
+@layer components {
+  .input{
+    @apply w-full h-11 border border-grey-300 rounded-lg px-5 text-preset-4;
+  }
+}

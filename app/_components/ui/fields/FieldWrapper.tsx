@@ -1,34 +1,21 @@
 interface FieldWrapperProps {
-  labelProps?: {
-    label: string;
-    labelId: string;
-  };
+  fieldId: string;
+  label?: string;
   helperText?: string;
-  className?: string;
-  children?: React.ReactNode;
+  children: React.ReactNode;
 }
 
-const FieldWrapper = ({
-  labelProps,
-  helperText,
-  className,
-  children
-}: FieldWrapperProps) => {
-  const { label, labelId } = labelProps || {};
+const FieldWrapper = ({ fieldId, label, helperText, children }: FieldWrapperProps) => {
 
   return (
     <div>
-      <div
-        className="flex gap-2 items-center"
-      >
-        {label && <label htmlFor={labelId}>{label}</label>}
-        <div
-          className='border rounded-lg flex items-center h-11 relative text-preset-4 border-grey-300 min-w-28 max-w-80'
-        >
-            {children}
+      <div className="flex gap-2 items-center">
+        {label && <label htmlFor={fieldId} className="whitespace-nowrap">{label}</label>}
+        <div className="flex gap-2 flex-col items-end">
+          {children}
+          {helperText && <p>{helperText}</p>}
         </div>
       </div>
-      {helperText && <p>{helperText}</p>}
     </div>
   );
 };
