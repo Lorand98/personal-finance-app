@@ -8,7 +8,7 @@ import { FieldProps } from "./types";
 import FieldWrapper from "./FieldWrapper";
 import useFallbackId from "@/app/_hooks/useFallbackId";
 
-interface DropdownItem {
+export interface DropdownItem {
   id: string;
   name: string;
 }
@@ -18,6 +18,7 @@ interface DropdownProps extends FieldProps {
   initialSelectedItem: DropdownItem;
   id?: string;
   className?: string;
+  onSelect: (itemName: string) => void;
 }
 
 const Dropdown = ({
@@ -26,7 +27,8 @@ const Dropdown = ({
   id,
   label,
   helperText,
-  className
+  className,
+  onSelect,
 }: DropdownProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(initialSelectedItem);
@@ -37,6 +39,7 @@ const Dropdown = ({
   const handleSelect = (item: DropdownItem) => {
     setSelectedItem(item);
     setIsOpen(false);
+    onSelect(item.name);
   };
 
   const dropdownRef = useRef<HTMLDivElement>(null);
