@@ -18,7 +18,7 @@ interface DropdownProps extends FieldProps {
   initialSelectedItem: DropdownItem;
   id?: string;
   className?: string;
-  onSelect: (itemName: string) => void;
+  onSelect: (item: DropdownItem) => void;
 }
 
 const Dropdown = ({
@@ -39,7 +39,7 @@ const Dropdown = ({
   const handleSelect = (item: DropdownItem) => {
     setSelectedItem(item);
     setIsOpen(false);
-    onSelect(item.name);
+    onSelect(item);
   };
 
   const dropdownRef = useRef<HTMLDivElement>(null);
