@@ -13,6 +13,15 @@ import {
   searchTransactionsByName,
   sortTransactions,
 } from "./utils";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/app/_components/ui/table";
+import { cn } from "@/app/_lib/utils";
 
 interface TransactionsTableProps {
   transactions: Transaction[];
@@ -57,22 +66,22 @@ export const TransactionsTable = ({
   ];
 
   return (
-    <table className="min-w-full">
-      <thead>
-        <tr>
+    <Table>
+      <TableHeader>
+        <TableRow>
           {tableHeadings.map((heading, index, headingsArr) => (
-            <th
+            <TableHead
               key={heading}
-              className={`py-3 ${
-                index === headingsArr.length - 1 ? "text-right" : "text-left"
-              }`}
+              className={cn("py-3", {
+                "text-right": index === headingsArr.length - 1,
+              })}
             >
               {heading}
-            </th>
+            </TableHead>
           ))}
-        </tr>
-      </thead>
-      <tbody>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
         {filteredTransactions.map(
           ({ avatar, name, category, date: dateString, amount }) => {
             const date = moment(dateString).format("DD MMM YYYY");
@@ -82,28 +91,38 @@ export const TransactionsTable = ({
             )}`;
 
             return (
-              <tr key={`${name}-${date}-${amount}`}>
-                <td className="flex items-center gap-4">
-                  <div className="relative h-10 w-10">
-                    <Image
-                      src={`/${avatar}`}
-                      alt={name}
-                      fill
-                      className="rounded-full"
-                    />
+              <TableRow key={`${name}-${date}-${amount}`}>
+                <TableCell>
+                  <div className="flex items-center gap-4">
+                    <div className="relative h-10 w-10">
+                      <Image
+                        src={`/${avatar}`}
+                        alt={name}
+                        fill
+                        className="rounded-full"
+                      />
+                    </div>
+                    <strong>{name}</strong>
                   </div>
-                  <strong>{name}</strong>
-                </td>
-                <td className="text-preset-5 text-grey-500">{category}</td>
-                <td className="text-preset-5 text-grey-500">{date}</td>
-                <td className={`${!isNegative ? "text-green" : ""} text-right`}>
+                </TableCell>
+                <TableCell className="text-preset-5 text-grey-500 ">
+                  {category}
+                </TableCell>
+                <TableCell className="text-preset-5 text-grey-500 ">
+                  {date}
+                </TableCell>
+                <TableCell
+                  className={cn("text-right", {
+                    "text-green": !isNegative,
+                  })}
+                >
                   <strong>{currencyAmount}</strong>
-                </td>
-              </tr>
+                </TableCell>
+              </TableRow>
             );
           }
         )}
-      </tbody>
-    </table>
+      </TableBody>
+    </Table>
   );
 };
