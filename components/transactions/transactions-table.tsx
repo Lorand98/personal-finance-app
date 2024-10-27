@@ -3,6 +3,8 @@
 import Dropdown from "@/components/ui/fields/dropdown";
 import SearchBar from "@/components/ui/fields/search-bar";
 import { DataTable } from "@/components/ui/table/data-table";
+import caretLeftIcon from "@/public/icon-caret-left.svg";
+import caretRightIcon from "@/public/icon-caret-right.svg";
 import {
   ColumnFiltersState,
   getCoreRowModel,
@@ -12,7 +14,14 @@ import {
   SortingState,
   useReactTable,
 } from "@tanstack/react-table";
+import Image from "next/image";
 import { useState } from "react";
+import { Button } from "../ui/button";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+} from "../ui/pagination";
 import columns from "./transaction-table-columns";
 import { Transaction } from "./types";
 
@@ -138,21 +147,50 @@ export const TransactionsTable = ({ transactions }: TransactionsTableProps) => {
           </div>
         </div>
       </div>
+
       <DataTable table={table} />
-      <div className="flex ">
-        <button
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
-          Previous
-        </button>
-        <button
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
-          Next
-        </button>
-      </div>
+
+      <Pagination>
+        <PaginationContent>
+          <PaginationItem>
+            <Button
+              variant={"outline"}
+              onClick={() => table.previousPage()}
+              disabled={!table.getCanPreviousPage()}
+            >
+              <Image src={caretLeftIcon} alt="Previous" />
+              Prev
+            </Button>
+          </PaginationItem>
+          <div className="flex gap-2">
+            {Array.from({ length: table.getPageCount() }, (_, index) => (
+              <PaginationItem key={index}>
+                <Button
+                  variant={
+                    table.getState().pagination.pageIndex === index
+                      ? "default"
+                      : "outline"
+                  }
+                  onClick={() => table.setPageIndex(index)}
+                  className="w-10 h-10"
+                >
+                  {index + 1}
+                </Button>
+              </PaginationItem>
+            ))}
+          </div>
+          <PaginationItem>
+            <Button
+              variant={"outline"}
+              onClick={() => table.nextPage()}
+              disabled={!table.getCanNextPage()}
+            >
+              Next
+              <Image src={caretRightIcon} alt="Next" />
+            </Button>
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
     </div>
   );
 };
