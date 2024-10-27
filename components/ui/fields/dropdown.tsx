@@ -10,18 +10,18 @@ import { FieldProps } from "./types";
 
 export interface DropdownItem {
   id: string;
-  name: string;
+  label: string;
 }
 
-interface DropdownProps extends FieldProps {
-  items: DropdownItem[];
-  initialSelectedItem: DropdownItem;
+interface DropdownProps<T extends DropdownItem> extends FieldProps {
+  items: readonly T[];
+  initialSelectedItem: T;
   id?: string;
   className?: string;
-  onSelect: (item: DropdownItem) => void;
+  onSelect: (item: T) => void;
 }
 
-const Dropdown = ({
+const Dropdown = <T extends DropdownItem>({
   items,
   initialSelectedItem,
   id,
@@ -29,14 +29,14 @@ const Dropdown = ({
   helperText,
   className,
   onSelect,
-}: DropdownProps) => {
+}: DropdownProps<T>) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(initialSelectedItem);
   const [highlightedIndex, setHighlightedIndex] = useState<number | null>(null);
   const controlId = useId();
   const comboboxId = useFallbackId(id);
 
-  const handleSelect = (item: DropdownItem) => {
+  const handleSelect = (item: T) => {
     setSelectedItem(item);
     setIsOpen(false);
     onSelect(item);
@@ -135,7 +135,7 @@ const Dropdown = ({
           onKeyDown={handleComboBoxKeyDown}
           className="input flex justify-between items-center gap-4 cursor-pointer"
         >
-          <span>{selectedItem.name}</span>
+          <span>{selectedItem.label}</span>
           <Image src={caretDownIcon} alt="Caret Down Icon" />
         </div>
         {isOpen && (
@@ -161,7 +161,7 @@ const Dropdown = ({
                   }
                 )}
               >
-                {item.name}
+                {item.label}
               </li>
             ))}
           </ul>

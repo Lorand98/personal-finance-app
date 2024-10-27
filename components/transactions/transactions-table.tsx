@@ -1,128 +1,158 @@
 "use client";
 
+import Dropdown from "@/components/ui/fields/dropdown";
+import SearchBar from "@/components/ui/fields/search-bar";
+import { DataTable } from "@/components/ui/table/data-table";
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { cn } from "@/lib/utils";
-import moment from "moment";
-import Image from "next/image";
-import { useMemo } from "react";
-import {
-  Transaction,
-  TransactionCategories,
-  TransactionSortingOptions,
-} from "./types";
-import {
-  filterTransactions,
-  searchTransactionsByName,
-  sortTransactions,
-} from "./utils";
+  ColumnFiltersState,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  SortingState,
+  useReactTable,
+} from "@tanstack/react-table";
+import { useState } from "react";
+import columns from "./transaction-table-columns";
+import { Transaction } from "./types";
+
+const SORTING_OPTIONS = [
+  { id: "latest", label: "Latest" },
+  { id: "oldest", label: "Oldest" },
+  { id: "a_to_z", label: "A to Z" },
+  { id: "z_to_a", label: "Z to A" },
+  { id: "highest", label: "Highest" },
+  { id: "lowest", label: "Lowest" },
+] as const;
+
+const sortDropdownId = "sort-transactions-dropdown";
+const filterDropdownId = "filter-transactions-dropdown";
 
 interface TransactionsTableProps {
   transactions: Transaction[];
-  filter: {
-    search?: string;
-    category?: TransactionCategories;
-    sort?: TransactionSortingOptions;
-  };
 }
-export const TransactionsTable = ({
-  transactions,
-  filter,
-}: TransactionsTableProps) => {
-  const { search, category, sort } = filter;
 
-  const filteredTransactions = useMemo(() => {
-    let updatedTransactions = transactions;
+export const TransactionsTable = ({ transactions }: TransactionsTableProps) => {
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const table = useReactTable({
+    data: transactions,
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    onColumnFiltersChange: setColumnFilters,
+    getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    state: {
+      sorting,
+      columnFilters,
+    },
+  });
 
-    if (category) {
-      updatedTransactions = filterTransactions(updatedTransactions, category);
+  const transactionCategories = transactions.reduce(
+    (acc, transaction) => {
+      if (!acc.find((category) => category.id === transaction.category)) {
+        acc.push({
+          id: transaction.category,
+          label: transaction.category,
+        });
+      }
+      return acc;
+    },
+    [
+      {
+        id: "All Transactions",
+        label: "All Transactions",
+      },
+    ]
+  );
+
+  const handleSort = (item: (typeof SORTING_OPTIONS)[number]) => {
+    let sortOption;
+    switch (item.id) {
+      case "latest":
+        sortOption = { id: "date", desc: true };
+        break;
+      case "oldest":
+        sortOption = { id: "date", desc: false };
+        break;
+      case "a_to_z":
+        sortOption = { id: "name", desc: false };
+        break;
+      case "z_to_a":
+        sortOption = { id: "name", desc: true };
+        break;
+      case "highest":
+        sortOption = { id: "amount", desc: true };
+        break;
+      case "lowest":
+        sortOption = { id: "amount", desc: false };
+        break;
+      default:
+        sortOption = { id: "date", desc: true };
     }
+    setSorting([sortOption]);
+  };
 
-    if (search) {
-      updatedTransactions = searchTransactionsByName(
-        updatedTransactions,
-        search
-      );
+  const handleFilter = (item: (typeof transactionCategories)[number]) => {
+    if (item.id === "All Transactions") {
+      table.getColumn("category")?.setFilterValue(undefined);
+    } else {
+      table.getColumn("category")?.setFilterValue(item.id);
     }
-
-    if (sort) {
-      updatedTransactions = sortTransactions(updatedTransactions, sort);
-    }
-
-    return updatedTransactions;
-  }, [transactions, category, search, sort]);
-
-  const tableHeadings = [
-    "Recipient / Sender",
-    "Category",
-    "Transaction Date",
-    "Amount",
-  ];
+  };
 
   return (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          {tableHeadings.map((heading, index, headingsArr) => (
-            <TableHead
-              key={heading}
-              className={cn("py-3", {
-                "text-right": index === headingsArr.length - 1,
-              })}
-            >
-              {heading}
-            </TableHead>
-          ))}
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {filteredTransactions.map(
-          ({ avatar, name, category, date: dateString, amount }) => {
-            const date = moment(dateString).format("DD MMM YYYY");
-            const isNegative = amount < 0;
-            const currencyAmount = `${isNegative ? "-" : "+"}$${Math.abs(
-              amount
-            )}`;
+    <div className="flex flex-col gap-6">
+      <div className="flex justify-between gap-4">
+        <div className="basis-80 flex-shrink">
+          <SearchBar
+            placeholder="Search transaction"
+            value={(table.getColumn("name")?.getFilterValue() as string) || ""}
+            onChange={(event) =>
+              table.getColumn("name")?.setFilterValue(event.target.value)
+            }
+          />
+        </div>
 
-            return (
-              <TableRow key={`${name}-${date}-${amount}`}>
-                <TableCell>
-                  <div className="flex items-center gap-4">
-                    <div className="relative h-10 w-10">
-                      <Image
-                        src={`/${avatar}`}
-                        alt={name}
-                        fill
-                        className="rounded-full"
-                      />
-                    </div>
-                    <strong>{name}</strong>
-                  </div>
-                </TableCell>
-                <TableCell className="text-preset-5 text-grey-500 ">
-                  {category}
-                </TableCell>
-                <TableCell className="text-preset-5 text-grey-500 ">
-                  {date}
-                </TableCell>
-                <TableCell
-                  className={cn("text-right", {
-                    "text-green": !isNegative,
-                  })}
-                >
-                  <strong>{currencyAmount}</strong>
-                </TableCell>
-              </TableRow>
-            );
-          }
-        )}
-      </TableBody>
-    </Table>
+        <div className="flex justify-between gap-6">
+          <div>
+            <Dropdown
+              items={SORTING_OPTIONS}
+              initialSelectedItem={SORTING_OPTIONS[0]}
+              id={sortDropdownId}
+              label="Sort by"
+              className="w-28"
+              onSelect={handleSort}
+            />
+          </div>
+          <div>
+            <Dropdown
+              items={transactionCategories}
+              initialSelectedItem={transactionCategories[0]}
+              id={filterDropdownId}
+              label="Filter by"
+              className="w-44"
+              onSelect={handleFilter}
+            />
+          </div>
+        </div>
+      </div>
+      <DataTable table={table} />
+      <div className="flex ">
+        <button
+          onClick={() => table.previousPage()}
+          disabled={!table.getCanPreviousPage()}
+        >
+          Previous
+        </button>
+        <button
+          onClick={() => table.nextPage()}
+          disabled={!table.getCanNextPage()}
+        >
+          Next
+        </button>
+      </div>
+    </div>
   );
 };
