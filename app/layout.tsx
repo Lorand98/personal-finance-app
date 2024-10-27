@@ -1,9 +1,9 @@
 import localFont from "next/font/local";
 import "./globals.css";
 
-import SidebarNav from "@/app/_components/layout/SidebarNav";
-import { LayoutProvider } from "./_context/LayoutContext";
-import { MainLayout } from "./_components/layout/MainLayout";
+import { MainLayout } from "@/components/layout/main-layout";
+import SidebarNav from "@/components/layout/sidebar-nav";
+import { LayoutProvider } from "@/context/layout-context";
 
 const publicSans = localFont({
   src: "./fonts/PublicSans-VariableFont_wght.ttf",

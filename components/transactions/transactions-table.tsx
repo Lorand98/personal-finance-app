@@ -1,8 +1,17 @@
 "use client";
 
-import React, { useMemo } from "react";
-import Image from "next/image";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { cn } from "@/lib/utils";
 import moment from "moment";
+import Image from "next/image";
+import { useMemo } from "react";
 import {
   Transaction,
   TransactionCategories,
@@ -13,15 +22,6 @@ import {
   searchTransactionsByName,
   sortTransactions,
 } from "./utils";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/app/_components/ui/table";
-import { cn } from "@/app/_lib/utils";
 
 interface TransactionsTableProps {
   transactions: Transaction[];

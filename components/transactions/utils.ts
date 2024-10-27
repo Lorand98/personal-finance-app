@@ -1,8 +1,8 @@
 import { transactionCategories } from "./constants";
 import {
   Transaction,
-  TransactionSortingOptions,
   TransactionCategories,
+  TransactionSortingOptions,
 } from "./types";
 
 export const filterTransactions = (

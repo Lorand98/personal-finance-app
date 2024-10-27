@@ -3,7 +3,7 @@
 
 import { motion } from "framer-motion";
 
-import { useLayout } from "@/app/_context/LayoutContext";
+import { useLayout } from "@/context/layout-context";
 
 
 export const MainLayout = ({

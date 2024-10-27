@@ -1,14 +1,13 @@
 import data from "@/public/data.json";
 
-import { TransactionsTable } from "@/app/_components/transactions/TransactionsTable";
-import withPageHeading from "@/app/_components/layout/withPageHeading";
-
-import { TransactionsFilter } from "@/app/_components/transactions/TransactionsFilter";
-import { ServerSideComponentProps } from "@/app/_lib/types";
+import withPageHeading from "@/components/layout/with-page-heading";
+import { TransactionsFilter } from "@/components/transactions/transactions-filter";
+import { TransactionsTable } from "@/components/transactions/transactions-table";
 import {
   TransactionCategories,
   TransactionSortingOptions,
-} from "@/app/_components/transactions/types";
+} from "@/components/transactions/types";
+import { ServerSideComponentProps } from "@/lib/types";
 
 export const metadata = {
   title: "Transactions",

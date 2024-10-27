@@ -1,10 +1,9 @@
 "use client";
 
+import Dropdown, { DropdownItem } from "@/components/ui/fields/dropdown";
+import SearchBar from "@/components/ui/fields/search-bar";
+import useUrlParams from "@/hooks/use-url-params";
 import React from "react";
-import SearchBar from "@/app/_components/ui/fields/SearchBar";
-import Dropdown from "@/app/_components/ui/fields/Dropdown";
-import { DropdownItem } from "@/app/_components/ui/fields/Dropdown";
-import useUrlParams from "@/app/_hooks/useUrlParams";
 import { transactionCategories, transactionSortingOptions } from "./constants";
 
 export const TransactionsFilter = () => {

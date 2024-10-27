@@ -1,12 +1,12 @@
 "use client";
 
-import React, { useState, useRef, useEffect, useId } from "react";
-import Image from "next/image";
+import useFallbackId from "@/hooks/use-fallback-id";
+import { cn } from "@/lib/utils";
 import caretDownIcon from "@/public/icon-caret-down.svg";
-import { cn } from "@/app/_lib/utils";
+import Image from "next/image";
+import React, { useEffect, useId, useRef, useState } from "react";
+import FieldWrapper from "./field-wrapper";
 import { FieldProps } from "./types";
-import FieldWrapper from "./FieldWrapper";
-import useFallbackId from "@/app/_hooks/useFallbackId";
 
 export interface DropdownItem {
   id: string;
@@ -143,7 +143,7 @@ const Dropdown = ({
             id={controlId}
             aria-labelledby={id}
             role="listbox"
-            className="absolute left-0 bg-white border border-gray-300 rounded-lg mt-2 w-full p-1 text-preset-4"
+            className="absolute left-0 bg-white border border-gray-300 rounded-lg mt-2 w-full p-1 text-preset-4 z-10"
             onKeyDown={handleDropdownListKeyDown}
           >
             {items.map((item, index) => (

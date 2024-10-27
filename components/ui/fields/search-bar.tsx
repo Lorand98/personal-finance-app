@@ -1,9 +1,9 @@
-import React from "react";
 import Image from "next/image";
+import React from "react";
 
 import searchIcon from "@/public/icon-search.svg";
 
-import BaseInput from "./BaseInput";
+import BaseInput from "./base-input";
 
 const SearchBar = (props: React.ComponentProps<typeof BaseInput>) => {
   return (

@@ -1,7 +1,7 @@
-import { cn } from "@/app/_lib/utils";
+import useFallbackId from "@/hooks/use-fallback-id";
+import { cn } from "@/lib/utils";
+import FieldWrapper from "./field-wrapper";
 import { FieldProps } from "./types";
-import FieldWrapper from "./FieldWrapper";
-import useFallbackId from "@/app/_hooks/useFallbackId";
 
 interface BaseInputProps
   extends React.ComponentPropsWithoutRef<"input">,

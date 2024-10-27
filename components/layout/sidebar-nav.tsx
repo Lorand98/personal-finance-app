@@ -1,12 +1,12 @@
 'use client'
 
-import { ReactNode } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
+import { ReactNode } from 'react'
 
 import Image from 'next/image'
 import Link from 'next/link'
 
-import Logo from '../Logo'
+import Logo from '@/components/logo'
 
 import minimizeMenuIcon from '@/public/icon-minimize-menu.svg'
 import budgetsIcon from '@/public/icon-nav-budgets.svg'
@@ -15,7 +15,7 @@ import potsIcon from '@/public/icon-nav-pots.svg'
 import recurringBillsIcon from '@/public/icon-nav-recurring-bills.svg'
 import transactionsIcon from '@/public/icon-nav-transactions.svg'
 
-import { useLayout } from '@/app/_context/LayoutContext'
+import { useLayout } from '@/context/layout-context'
 
 
 const SidebarNavLabel = ({ isVisible, children }: {

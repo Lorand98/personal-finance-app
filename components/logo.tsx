@@ -1,11 +1,10 @@
-import Link from 'next/link'
-import React from 'react'
+import Link from 'next/link';
 
 import logoLarge from "@/public/logo-large.svg";
 import logoSmall from "@/public/logo-small.svg";
 
-import Image from 'next/image';
 import { AnimatePresence, motion } from 'framer-motion';
+import Image from 'next/image';
 
 interface LogoProps {
     size: 'large' | 'small'
