@@ -3,8 +3,8 @@
 import Dropdown from "@/components/ui/fields/dropdown";
 import SearchBar from "@/components/ui/fields/search-bar";
 import { DataTable } from "@/components/ui/table/data-table";
-import caretLeftIcon from "@/public/icon-caret-left.svg";
-import caretRightIcon from "@/public/icon-caret-right.svg";
+import CaretLeftIcon from "@/components/ui/icons/caret-left-icon";
+import CaretRightIcon from "@/components/ui/icons/caret-right-icon";
 import {
   ColumnFiltersState,
   getCoreRowModel,
@@ -14,7 +14,6 @@ import {
   SortingState,
   useReactTable,
 } from "@tanstack/react-table";
-import Image from "next/image";
 import { useState } from "react";
 import { Button } from "../ui/button";
 import {
@@ -42,7 +41,12 @@ interface TransactionsTableProps {
 }
 
 export const TransactionsTable = ({ transactions }: TransactionsTableProps) => {
-  const [sorting, setSorting] = useState<SortingState>([]);
+  const [sorting, setSorting] = useState<SortingState>([
+    {
+      id: "date",
+      desc: true,
+    },
+  ]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const table = useReactTable({
     data: transactions,
@@ -154,11 +158,12 @@ export const TransactionsTable = ({ transactions }: TransactionsTableProps) => {
         <PaginationContent>
           <PaginationItem>
             <Button
-              variant={"outline"}
+              variant="outline"
               onClick={() => table.previousPage()}
               disabled={!table.getCanPreviousPage()}
+              className="group"
             >
-              <Image src={caretLeftIcon} alt="Previous" />
+              <CaretLeftIcon className="group-hover:[&_path]:fill-white"/>
               Prev
             </Button>
           </PaginationItem>
@@ -181,12 +186,13 @@ export const TransactionsTable = ({ transactions }: TransactionsTableProps) => {
           </div>
           <PaginationItem>
             <Button
-              variant={"outline"}
+              variant="outline"
               onClick={() => table.nextPage()}
               disabled={!table.getCanNextPage()}
+              className="group"
             >
               Next
-              <Image src={caretRightIcon} alt="Next" />
+              <CaretRightIcon className="group-hover:[&_path]:fill-white"/>
             </Button>
           </PaginationItem>
         </PaginationContent>
