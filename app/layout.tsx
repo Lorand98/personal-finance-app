@@ -2,10 +2,8 @@ import localFont from "next/font/local";
 import "./globals.css";
 
 import { MainLayout } from "@/components/layout/main-layout";
-import SidebarNav from "@/components/layout/sidebar/sidebar-nav";
-import { LayoutProvider } from "@/context/layout-context";
-import CompactSidebarNav from "@/components/layout/sidebar/compact-sidebar-nav";
 import BottomNav from "@/components/layout/sidebar/bottom-nav";
+import SidebarNav from "@/components/layout/sidebar/sidebar-nav";
 
 const publicSans = localFont({
   src: "./fonts/PublicSans-VariableFont_wght.ttf",
@@ -25,21 +23,15 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
-
   return (
-    <html lang="en">
+    <html lang="en" className="h-full">
       <body
-        className={`${publicSans.className} antialiased min-h-screen flex flex-col relative`}
+        className={`${publicSans.className} antialiased h-full flex flex-col relative`}
       >
-        <div className="bg-beige-100 ">
-          <LayoutProvider>
-            <SidebarNav />
-            <BottomNav/>
-            <MainLayout>
-              {children}
-            </MainLayout>
-          </LayoutProvider>
+        <div className="flex bg-beige-100 h-full ">
+          <SidebarNav />
+          <BottomNav />
+          <MainLayout>{children}</MainLayout>
         </div>
       </body>
     </html>

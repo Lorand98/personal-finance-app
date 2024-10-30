@@ -1,24 +1,7 @@
-
-'use client';
-
-import { motion } from "framer-motion";
-
-import { useLayout } from "@/context/layout-context";
-
-
-export const MainLayout = ({
-    children
-}: {
-    children: React.ReactNode,
-}) => {
-    const { sidebarWidth } = useLayout();
-
-    return (
-        <motion.main
-            initial={{ marginLeft: `${sidebarWidth}rem` }}
-            animate={{ marginLeft: `${sidebarWidth}rem` }}
-            className={'px-10 py-8'} >
-            {children}
-        </motion.main >
-    )
-}
+export const MainLayout = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <main className="px-10 pt-8 pb-20 lg:pb-8 overflow-y-scroll w-full">
+      {children}
+    </main>
+  );
+};
