@@ -10,7 +10,7 @@ import Logo from "@/components/logo";
 import minimizeMenuIcon from "@/public/icon-minimize-menu.svg";
 import { menuItems } from "./constants";
 import SidebarLink from "./sidebar-link";
-import SidebarNavLabel from "./SidebarNavLabel";
+import SidebarNavLabel from "./sidebar-nav-label";
 
 const SIDEBAR_OPEN_WIDTH = `18.75rem`;
 const SIDEBAR_MINIMIZED_WIDTH = `5.5rem`;
@@ -29,21 +29,21 @@ const SidebarNav = () => {
       <motion.nav
         initial={{ width: sidebarWidth }}
         animate={{ width: sidebarWidth }}
-        className="hidden lg:flex min-h-screen flex-col bg-grey-900 text-grey-300 px-8 py-10 rounded-r-2xl"
+        className="hidden lg:flex min-h-screen flex-col bg-grey-900 text-grey-300 py-10 rounded-r-2xl"
       >
-        <div className="mb-10">
+        <div className="mb-10 px-8">
           <Logo size={minimized ? "small" : "large"} />
         </div>
         <ul className="py-6 flex gap-1 flex-col flex-grow">
           {menuItems.map((item) => (
-            <li key={item.label} className="py-4 ">
-              <SidebarLink {...item} minimized={minimized} />
+            <li key={item.label} className="py-1 pr-8">
+              <SidebarLink {...item} minimized={minimized} className="px-8" />
             </li>
           ))}
         </ul>
         <div>
           <button
-            className="flex items-center gap-4 min-h-6"
+            className="flex items-center gap-4 min-h-6 px-8"
             onClick={toggleSidebar}
           >
             <motion.div

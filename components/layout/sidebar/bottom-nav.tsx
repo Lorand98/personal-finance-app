@@ -1,3 +1,5 @@
+"use client";
+
 import { menuItems } from "./constants";
 import SidebarLink from "./sidebar-link";
 

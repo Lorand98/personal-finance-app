@@ -1,26 +1,46 @@
-import Image from "next/image";
+"use client";
+
+import { cn } from "@/lib/utils";
 import Link from "next/link";
-import SidebarNavLabel from "./SidebarNavLabel";
+import { usePathname } from "next/navigation";
+import { SVGProps } from "react";
+import SidebarNavLabel from "./sidebar-nav-label";
 
 interface SidebarLinkProps {
-  icon: string;
+  Icon: (props: SVGProps<SVGSVGElement>) => JSX.Element;
   link: string;
   label: string;
   minimized?: boolean;
+  className?: string;
 }
 
 const SidebarLink = ({
-  icon,
+  Icon,
   link,
   label,
   minimized = false,
+  className,
 }: SidebarLinkProps) => {
+  const pathname = usePathname();
+  const isActive = pathname === link;
+
   return (
     <Link
       href={link}
-      className="flex flex-col lg:flex-row lg:gap-4 lg:min-h-6 items-center"
+      className={cn(
+        "flex flex-col lg:flex-row lg:gap-4 lg:min-h-14 items-center border-grey-900 border-l-4 transition-colors duration-300",
+        {
+          "text-grey-900 bg-beige-100 border-green ": isActive,
+          "hover:text-white hover:white": !isActive,
+        },
+        className
+      )}
     >
-      <Image src={icon} alt={label} />
+      <Icon
+        className={cn({
+          "fill-green transition-colors duration-300": isActive,
+        })}
+      />
       <SidebarNavLabel isVisible={!minimized}>{label}</SidebarNavLabel>
     </Link>
   );

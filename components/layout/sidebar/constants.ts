@@ -1,14 +1,17 @@
-import budgetsIcon from '@/public/icon-nav-budgets.svg'
-import overviewIcon from '@/public/icon-nav-overview.svg'
-import potsIcon from '@/public/icon-nav-pots.svg'
-import recurringBillsIcon from '@/public/icon-nav-recurring-bills.svg'
-import transactionsIcon from '@/public/icon-nav-transactions.svg'
-
+import NavBudgetsIcon from "@/components/ui/icons/nav-budgets-icon";
+import NavOverviewIcon from "@/components/ui/icons/nav-overview-icon";
+import NavPotsIcon from "@/components/ui/icons/nav-pots-icon";
+import NavRecurringBillsIcon from "@/components/ui/icons/nav-recurring-bills-icon";
+import NavTransactionsIcon from "@/components/ui/icons/nav-transactions-icon";
 
 export const menuItems = [
-    { icon: overviewIcon, link: '/', label: 'Overview' },
-    { icon: transactionsIcon, link: '/transactions', label: 'Transactions' },
-    { icon: budgetsIcon, link: '/budgets', label: 'Budgets' },
-    { icon: potsIcon, link: '/pots', label: 'Pots' },
-    { icon: recurringBillsIcon, link: '/recurring-bills', label: 'Recurring Bills' },
+  { Icon: NavOverviewIcon, link: "/", label: "Overview" },
+  { Icon: NavTransactionsIcon, link: "/transactions", label: "Transactions" },
+  { Icon: NavBudgetsIcon, link: "/budgets", label: "Budgets" },
+  { Icon: NavPotsIcon, link: "/pots", label: "Pots" },
+  {
+    Icon: NavRecurringBillsIcon,
+    link: "/recurring-bills",
+    label: "Recurring Bills",
+  },
 ];
