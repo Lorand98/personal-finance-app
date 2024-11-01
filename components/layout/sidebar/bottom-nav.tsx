@@ -1,7 +1,7 @@
 "use client";
 
 import { menuItems } from "./constants";
-import SidebarLink from "./sidebar-link";
+import NavLink from "./nav-link";
 
 const BottomNav = () => {
   return (
@@ -9,7 +9,7 @@ const BottomNav = () => {
       <ul className="flex justify-around items-center w-full">
         {menuItems.map((item) => (
           <li key={item.label}>
-            <SidebarLink {...item} />
+            <NavLink {...item} />
           </li>
         ))}
       </ul>

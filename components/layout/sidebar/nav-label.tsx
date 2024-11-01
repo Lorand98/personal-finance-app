@@ -13,12 +13,12 @@ const SidebarNavLabel = ({
   <AnimatePresence initial={false}>
     {isVisible && (
       <motion.span
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0, transition: { duration: 0.2 } }}
-        transition={{ duration: 0.5 }}
-        className={"hidden sm:block text-nowrap font-bold overflow-hidden "}
-      >
+      initial={{ opacity: 0, maxWidth: 0 }}
+      animate={{ opacity: 1, maxWidth: "100%" }}
+      exit={{ opacity: 0, maxWidth: 0, transition: { duration: 0.2 } }}
+      transition={{ duration: 0.5 }}
+      className={"hidden sm:block text-nowrap font-bold overflow-hidden"}
+    >
         {children}
       </motion.span>
     )}

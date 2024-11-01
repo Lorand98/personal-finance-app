@@ -4,9 +4,9 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { SVGProps } from "react";
-import SidebarNavLabel from "./sidebar-nav-label";
+import NavLabel from "./nav-label";
 
-interface SidebarLinkProps {
+interface NavLinkProps {
   Icon: (props: SVGProps<SVGSVGElement>) => JSX.Element;
   link: string;
   label: string;
@@ -14,13 +14,13 @@ interface SidebarLinkProps {
   className?: string;
 }
 
-const SidebarLink = ({
+const NavLink = ({
   Icon,
   link,
   label,
   minimized = false,
   className,
-}: SidebarLinkProps) => {
+}: NavLinkProps) => {
   const pathname = usePathname();
   const isActive = pathname === link;
 
@@ -33,10 +33,6 @@ const SidebarLink = ({
           "text-grey-900 bg-beige-100 border-green ": isActive,
           "hover:text-white": !isActive,
         },
-        {
-          "mr-8": !minimized,
-          "mr-4": minimized,
-        }, 
         className
       )}
     >
@@ -46,9 +42,9 @@ const SidebarLink = ({
           "group-hover:fill-white": !isActive,
         })}
       />
-      <SidebarNavLabel isVisible={!minimized}>{label}</SidebarNavLabel>
+      <NavLabel isVisible={!minimized}>{label}</NavLabel>
     </Link>
   );
 };
 
-export default SidebarLink;
+export default NavLink;

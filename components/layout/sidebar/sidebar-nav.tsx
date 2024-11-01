@@ -9,8 +9,8 @@ import Logo from "@/components/logo";
 
 import minimizeMenuIcon from "@/public/icon-minimize-menu.svg";
 import { menuItems } from "./constants";
-import SidebarLink from "./sidebar-link";
-import SidebarNavLabel from "./sidebar-nav-label";
+import NavLink from "./nav-link";
+import NavLabel from "./nav-label";
 
 const SIDEBAR_OPEN_WIDTH = `18.75rem`;
 const SIDEBAR_MINIMIZED_WIDTH = `5.5rem`;
@@ -25,7 +25,6 @@ const SidebarNav = () => {
   const sidebarWidth = minimized ? SIDEBAR_MINIMIZED_WIDTH : SIDEBAR_OPEN_WIDTH;
 
   return (
-    <div>
       <motion.nav
         initial={{ width: sidebarWidth }}
         animate={{ width: sidebarWidth }}
@@ -36,9 +35,11 @@ const SidebarNav = () => {
         </div>
         <ul className="py-6 flex gap-1 flex-col flex-grow">
           {menuItems.map((item) => (
-            <li key={item.label} className="py-1">
-              <SidebarLink {...item} minimized={minimized}  />
-            </li>
+            <motion.li key={item.label} className="py-1"
+            animate={{ paddingRight: minimized ? '0.5rem' : '1rem' }}
+            >
+              <NavLink {...item} minimized={minimized}  />
+            </motion.li>
           ))}
         </ul>
         <div>
@@ -54,13 +55,12 @@ const SidebarNav = () => {
             >
               <Image src={minimizeMenuIcon} alt="Minimize Menu" />
             </motion.div>
-            <SidebarNavLabel isVisible={!minimized}>
+            <NavLabel isVisible={!minimized}>
               Minimize Menu
-            </SidebarNavLabel>
+            </NavLabel>
           </button>
         </div>
       </motion.nav>
-    </div>
   );
 };
 
