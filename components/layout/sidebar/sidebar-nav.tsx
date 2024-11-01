@@ -36,8 +36,8 @@ const SidebarNav = () => {
         </div>
         <ul className="py-6 flex gap-1 flex-col flex-grow">
           {menuItems.map((item) => (
-            <li key={item.label} className="py-1 pr-8">
-              <SidebarLink {...item} minimized={minimized} className="px-8" />
+            <li key={item.label} className="py-1">
+              <SidebarLink {...item} minimized={minimized}  />
             </li>
           ))}
         </ul>

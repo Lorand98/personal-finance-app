@@ -28,17 +28,22 @@ const SidebarLink = ({
     <Link
       href={link}
       className={cn(
-        "flex flex-col lg:flex-row lg:gap-4 lg:min-h-14 items-center border-grey-900 border-l-4 transition-colors duration-300",
+        "group flex flex-col rounded-t-xl p-3 border-b-4 lg:flex-row lg:gap-4 lg:min-h-14 items-center border-grey-900 lg:rounded-l-none lg:rounded-r-xl lg:border-l-4 lg:border-b-0 lg:pl-8 transition-colors duration-300",
         {
           "text-grey-900 bg-beige-100 border-green ": isActive,
-          "hover:text-white hover:white": !isActive,
+          "hover:text-white": !isActive,
         },
+        {
+          "mr-8": !minimized,
+          "mr-4": minimized,
+        }, 
         className
       )}
     >
       <Icon
-        className={cn({
-          "fill-green transition-colors duration-300": isActive,
+        className={cn("transition-colors duration-300", {
+          "fill-green": isActive,
+          "group-hover:fill-white": !isActive,
         })}
       />
       <SidebarNavLabel isVisible={!minimized}>{label}</SidebarNavLabel>

@@ -163,7 +163,7 @@ export const TransactionsTable = ({ transactions }: TransactionsTableProps) => {
               disabled={!table.getCanPreviousPage()}
               className="group"
             >
-              <CaretLeftIcon className="group-hover:[&_path]:fill-white"/>
+              <CaretLeftIcon className="group-hover:fill-white" />
               Prev
             </Button>
           </PaginationItem>
@@ -192,7 +192,7 @@ export const TransactionsTable = ({ transactions }: TransactionsTableProps) => {
               className="group"
             >
               Next
-              <CaretRightIcon className="group-hover:[&_path]:fill-white"/>
+              <CaretRightIcon className="group-hover:fill-white" />
             </Button>
           </PaginationItem>
         </PaginationContent>
