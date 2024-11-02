@@ -1,10 +1,13 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import Dropdown from "@/components/ui/fields/dropdown";
 import SearchBar from "@/components/ui/fields/search-bar";
-import { DataTable } from "@/components/ui/table/data-table";
 import CaretLeftIcon from "@/components/ui/icons/caret-left-icon";
 import CaretRightIcon from "@/components/ui/icons/caret-right-icon";
+import MobileFilterIcon from "@/components/ui/icons/mobile-filter-icon";
+import MobileSortIcon from "@/components/ui/icons/mobile-sort-icon";
+import { DataTable } from "@/components/ui/table/data-table";
 import {
   ColumnFiltersState,
   getCoreRowModel,
@@ -15,7 +18,6 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { useState } from "react";
-import { Button } from "../ui/button";
 import {
   Pagination,
   PaginationContent,
@@ -135,8 +137,9 @@ export const TransactionsTable = ({ transactions }: TransactionsTableProps) => {
               initialSelectedItem={SORTING_OPTIONS[0]}
               id={sortDropdownId}
               label="Sort by"
-              className="w-28"
+              className="md:w-28"
               onSelect={handleSort}
+              MobileSvgIcon={MobileSortIcon}
             />
           </div>
           <div>
@@ -145,8 +148,9 @@ export const TransactionsTable = ({ transactions }: TransactionsTableProps) => {
               initialSelectedItem={transactionCategories[0]}
               id={filterDropdownId}
               label="Filter by"
-              className="w-44"
+              className="md:w-44"
               onSelect={handleFilter}
+              MobileSvgIcon={MobileFilterIcon}
             />
           </div>
         </div>

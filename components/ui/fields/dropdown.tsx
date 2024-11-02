@@ -19,6 +19,7 @@ interface DropdownProps<T extends DropdownItem> extends FieldProps {
   id?: string;
   className?: string;
   onSelect: (item: T) => void;
+  MobileSvgIcon?: (props: React.SVGProps<SVGSVGElement>) => JSX.Element;
 }
 
 const Dropdown = <T extends DropdownItem>({
@@ -29,6 +30,7 @@ const Dropdown = <T extends DropdownItem>({
   helperText,
   className,
   onSelect,
+  MobileSvgIcon,
 }: DropdownProps<T>) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(initialSelectedItem);
@@ -120,30 +122,52 @@ const Dropdown = <T extends DropdownItem>({
     }
   };
 
+  const comboboxProps = {
+    id: comboboxId,
+    role: "combobox",
+    ref: comboboxRef,
+    tabIndex: 0,
+    "aria-haspopup": "listbox" as const,
+    "aria-expanded": isOpen,
+    "aria-controls": controlId,
+    onClick: () => setIsOpen(!isOpen),
+    onKeyDown: handleComboBoxKeyDown,
+  };
+
+  const caretDown = <Image src={caretDownIcon} alt="Caret Down Icon" />;
+
   return (
-    <FieldWrapper label={label} helperText={helperText} fieldId={comboboxId}>
-      <div ref={dropdownRef} className={cn("relative w-full", className)}>
+    <FieldWrapper
+      label={label}
+      helperText={helperText}
+      fieldId={comboboxId}
+      labelProps={{ className: "hidden md:block" }}
+    >
+      <div
+        ref={dropdownRef}
+        className={cn("relative w-full h-full", className)}
+      >
         <div
-          id={id}
-          role="combobox"
-          ref={comboboxRef}
-          tabIndex={0}
-          aria-haspopup="listbox"
-          aria-expanded={isOpen}
-          aria-controls={controlId}
-          onClick={() => setIsOpen(!isOpen)}
-          onKeyDown={handleComboBoxKeyDown}
-          className="input flex justify-between items-center gap-4 cursor-pointer"
+          {...comboboxProps}
+          className="input hidden md:flex h-full justify-between items-center gap-4 cursor-pointer"
         >
           <span>{selectedItem.label}</span>
-          <Image src={caretDownIcon} alt="Caret Down Icon" />
+          {caretDown}
+        </div>
+        {/* mobile dropdown combobox */}
+        <div
+          {...comboboxProps}
+          aria-label={label}
+          className="md:hidden flex items-center h-full"
+        >
+          {MobileSvgIcon ? <MobileSvgIcon /> : caretDown}
         </div>
         {isOpen && (
           <ul
             id={controlId}
             aria-labelledby={id}
             role="listbox"
-            className="absolute left-0 bg-white border border-gray-300 rounded-lg mt-2 w-full p-1 text-preset-4 z-10"
+            className="absolute right-0 md:left-0 bg-white border border-gray-300 rounded-lg mt-2 w-auto p-1 text-preset-4 z-10"
             onKeyDown={handleDropdownListKeyDown}
           >
             {items.map((item, index) => (
@@ -155,7 +179,7 @@ const Dropdown = <T extends DropdownItem>({
                 aria-selected={selectedItem?.id === item.id}
                 onClick={() => handleSelect(item)}
                 className={cn(
-                  "cursor-pointer px-4 py-2 hover:bg-gray-200 focus:outline-2 border-b border-b-grey-100 last:border-b-0",
+                  "cursor-pointer px-4 py-2 hover:bg-grey-100 focus:outline-2 border-b border-b-grey-100 last:border-b-0",
                   {
                     "font-bold": selectedItem?.id === item.id,
                   }
