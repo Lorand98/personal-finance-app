@@ -28,7 +28,7 @@ const NavLink = ({
     <Link
       href={link}
       className={cn(
-        "group flex flex-col rounded-t-xl p-3 border-b-4 lg:flex-row lg:gap-4 lg:min-h-14 items-center border-grey-900 lg:rounded-l-none lg:rounded-r-xl lg:border-l-4 lg:border-b-0 lg:pl-8 transition-colors duration-300",
+        "group flex flex-col rounded-t-xl px-3 py-2 border-b-4 lg:flex-row gap-1 lg:gap-4 lg:min-h-14 items-center border-grey-900 lg:rounded-l-none lg:rounded-r-xl lg:border-l-4 lg:border-b-0 lg:pl-8 transition-colors duration-300",
         {
           "text-grey-900 bg-beige-100 border-green ": isActive,
           "hover:text-white": !isActive,

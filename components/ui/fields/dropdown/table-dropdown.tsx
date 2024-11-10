@@ -5,7 +5,7 @@ import useFallbackId from "@/hooks/use-fallback-id";
 import { cn } from "@/lib/utils";
 import caretDownIcon from "@/public/icon-caret-down.svg";
 import Image from "next/image";
-import { useEffect, useId, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import DropdownList from "./dropdown-list";
 
 export interface DropdownItem {
@@ -23,7 +23,19 @@ interface DropdownProps<T extends DropdownItem> {
   label: string;
 }
 
-const CARET_DOWN_ICON_SIZE = 16;
+const FONT = "16px Public Sans";
+
+export const calculateInitialWidth = <T extends DropdownItem>(
+  items: readonly T[],
+  font: string
+) => {
+  const longestLabel = items.reduce(
+    (longest, item) =>
+      item.label.length > longest.length ? item.label : longest,
+    ""
+  );
+  return measureTextWidth(longestLabel, font);
+};
 
 const TableDropdown = <T extends DropdownItem>({
   items,
@@ -36,11 +48,15 @@ const TableDropdown = <T extends DropdownItem>({
 }: DropdownProps<T>) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(initialSelectedItem);
-  const [dropdownWidth, setDropdownWidth] = useState<number>(0);
+
   const controlId = useId();
   const comboboxId = useFallbackId(id);
 
-  const focusComboBox = () => comboboxRef.current?.focus();
+  const comboboxRef = useRef<HTMLDivElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Ref to store calculated width
+  const labelWidthRef = useRef(calculateInitialWidth(items, FONT));
 
   const handleSelect = (
     event: React.MouseEvent | React.KeyboardEvent,
@@ -51,13 +67,11 @@ const TableDropdown = <T extends DropdownItem>({
     onSelect(item);
 
     if (event.type === "keydown") {
-      focusComboBox();
+      comboboxRef.current?.focus();
     }
   };
 
-  const dropdownRef = useRef<HTMLDivElement>(null);
-  const comboboxRef = useRef<HTMLDivElement>(null);
-
+  // Outside click handler
   const handleClickOutside = (event: MouseEvent) => {
     if (
       dropdownRef.current &&
@@ -74,12 +88,9 @@ const TableDropdown = <T extends DropdownItem>({
     };
   }, []);
 
-  const handleComboBoxKeyDown = (event: React.KeyboardEvent) => {
-    if (event.key === "Enter" || event.key === " ") {
-      event.preventDefault();
-      setIsOpen((prevIsOpen) => !prevIsOpen);
-    }
-  };
+  useEffect(() => {
+    labelWidthRef.current = calculateInitialWidth(items, FONT);
+  }, [items]);
 
   const comboboxProps = {
     id: comboboxId,
@@ -89,73 +100,54 @@ const TableDropdown = <T extends DropdownItem>({
     "aria-haspopup": "listbox" as const,
     "aria-expanded": isOpen,
     "aria-controls": controlId,
-    onClick: () => setIsOpen(!isOpen),
-    onKeyDown: handleComboBoxKeyDown,
+    onClick: () => setIsOpen((prev) => !prev),
+    onKeyDown: (event: React.KeyboardEvent) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        setIsOpen((prev) => !prev);
+      }
+    },
   };
 
   const caretDown = <Image src={caretDownIcon} alt="Caret Down Icon" />;
 
-  useLayoutEffect(() => {
-    if (comboboxRef.current) {
-      // Get the computed font style of the combobox
-      const computedStyle = window.getComputedStyle(comboboxRef.current);
-      const font = computedStyle.font;
-
-      // Find the longest label
-      const longestLabel = items.reduce(
-        (longest, item) =>
-          item.label.length > longest.length ? item.label : longest,
-        ""
-      );
-
-      // Measure the width of the longest label
-      const longestLabelWidth = measureTextWidth(longestLabel, font);
-
-      // Get padding and icon width from styles
-      const paddingLeft = parseFloat(computedStyle.paddingLeft || "0");
-      const paddingRight = parseFloat(computedStyle.paddingRight || "0");
-      const borderLeftWidth = parseFloat(computedStyle.borderLeftWidth || "0");
-      const borderRightWidth = parseFloat(
-        computedStyle.borderRightWidth || "0"
-      );
-
-      const totalHorizontalPadding =
-        paddingLeft + paddingRight + borderLeftWidth + borderRightWidth;
-      const iconWidth = CARET_DOWN_ICON_SIZE;
-
-      const totalWidth = longestLabelWidth + totalHorizontalPadding + iconWidth;
-
-      setDropdownWidth(totalWidth);
-    }
-  }, [items]);
-
   return (
-    <div ref={dropdownRef} className={cn("relative h-full", className)}>
-      <div className="flex items-center text-nowrap h-full">
-        <label htmlFor={comboboxId} className="mr-2">
-          {label}
-        </label>
+    <div
+      ref={dropdownRef}
+      className={cn("relative flex items-center h-full", className)}
+    >
+      <label
+        htmlFor={comboboxId}
+        className="hidden md:block mr-2 whitespace-nowrap"
+      >
+        {label}
+      </label>
+      <div className="relative flex-shrink-0">
         <div
           {...comboboxProps}
-          className="input hidden md:flex justify-between items-center gap-2 cursor-pointer"
-          style={{ width: dropdownWidth }}
+          className="input hidden md:flex items-center gap-2 cursor-pointer"
         >
-          <span>{selectedItem.label}</span>
+          <div
+            style={{ width: labelWidthRef.current }}
+            className="flex-shrink-0 overflow-hidden"
+          >
+            <span>{selectedItem.label}</span>
+          </div>
           {caretDown}
         </div>
         {/* Mobile dropdown combobox */}
         <div {...comboboxProps} className="md:hidden flex items-center h-full">
           {MobileSvgIcon ? <MobileSvgIcon /> : caretDown}
         </div>
+        {isOpen && (
+          <DropdownList
+            items={items}
+            selectedItem={selectedItem}
+            controlId={controlId}
+            onSelect={handleSelect}
+          />
+        )}
       </div>
-      {isOpen && (
-        <DropdownList
-          items={items}
-          selectedItem={selectedItem}
-          controlId={controlId}
-          onSelect={handleSelect}
-        />
-      )}
     </div>
   );
 };

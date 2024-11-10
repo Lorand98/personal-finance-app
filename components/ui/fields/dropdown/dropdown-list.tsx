@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
+import { useEffect, useState } from "react";
 import { DropdownItem } from "./table-dropdown";
 
 interface DropdownListProps<T extends DropdownItem> {
@@ -10,6 +10,8 @@ interface DropdownListProps<T extends DropdownItem> {
   controlId: string;
   onSelect: (event: React.MouseEvent | React.KeyboardEvent, item: T) => void;
 }
+
+//TODO make dropdown list solution for mobile (long list of items overflow the screen)
 
 const DropdownList = <T extends DropdownItem>({
   items,
@@ -79,7 +81,7 @@ const DropdownList = <T extends DropdownItem>({
           role="option"
           tabIndex={-1}
           aria-selected={selectedItem?.id === item.id}
-          onClick={(event) => onSelect(event,item)}
+          onClick={(event) => onSelect(event, item)}
           className={cn(
             "cursor-pointer px-4 py-2 hover:bg-grey-100 focus:outline-2 border-b border-b-grey-100 last:border-b-0",
             {
