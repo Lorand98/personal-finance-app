@@ -8,6 +8,7 @@ import CaretRightIcon from "@/components/ui/icons/caret-right-icon";
 import MobileFilterIcon from "@/components/ui/icons/mobile-filter-icon";
 import MobileSortIcon from "@/components/ui/icons/mobile-sort-icon";
 import { DataTable } from "@/components/ui/table/data-table";
+import useWindowSize from "@/hooks/use-window-size";
 import {
   ColumnFiltersState,
   getCoreRowModel,
@@ -17,13 +18,13 @@ import {
   SortingState,
   useReactTable,
 } from "@tanstack/react-table";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import {
   Pagination,
   PaginationContent,
   PaginationItem,
 } from "../ui/pagination";
-import columns from "./transaction-table-columns";
+import columns, { ColumnMeta } from "./transaction-table-columns";
 import { Transaction } from "./types";
 
 const SORTING_OPTIONS = [
@@ -49,6 +50,19 @@ export const TransactionsTable = ({ transactions }: TransactionsTableProps) => {
       desc: true,
     },
   ]);
+  const windowSize = useWindowSize();
+  const isMobile = windowSize === "xs";
+
+  const columnVisibility = useMemo(() => {
+    const visibility: Record<string, boolean> = {};
+    columns.forEach((column) => {
+      if ((column.meta as ColumnMeta)?.hideOnMobile) {
+        visibility[column.accessorKey as string] = !isMobile;
+      }
+    });
+    return visibility;
+  }, [isMobile]);
+
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const table = useReactTable({
     data: transactions,
@@ -61,6 +75,7 @@ export const TransactionsTable = ({ transactions }: TransactionsTableProps) => {
     state: {
       sorting,
       columnFilters,
+      columnVisibility,
     },
   });
 

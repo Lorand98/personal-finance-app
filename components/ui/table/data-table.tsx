@@ -18,7 +18,7 @@ interface DataTableProps<TData> {
 export function DataTable<TData>({ table }: DataTableProps<TData>) {
   return (
     <Table>
-      <TableHeader>
+      <TableHeader className="hidden md:table-header-group">
         {table.getHeaderGroups().map((headerGroup) => (
           <TableRow key={headerGroup.id}>
             {headerGroup.headers.map((header) => {

@@ -3,14 +3,12 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
 
-import Image from "next/image";
-
 import Logo from "@/components/logo";
 
-import minimizeMenuIcon from "@/public/icon-minimize-menu.svg";
+import MinimizeMenuIcon from "@/components/ui/icons/minimize-menu-icon";
 import { menuItems } from "./constants";
-import NavLink from "./nav-link";
 import NavLabel from "./nav-label";
+import NavLink from "./nav-link";
 
 const SIDEBAR_OPEN_WIDTH = `18.75rem`;
 const SIDEBAR_MINIMIZED_WIDTH = `5.5rem`;
@@ -47,7 +45,7 @@ const SidebarNav = () => {
       </ul>
       <div>
         <button
-          className="flex items-center gap-4 min-h-6 px-8"
+          className="flex items-center gap-4 min-h-6 px-8 group"
           onClick={toggleSidebar}
         >
           <motion.div
@@ -56,9 +54,18 @@ const SidebarNav = () => {
             }}
             className="flex-shrink-0"
           >
-            <Image src={minimizeMenuIcon} alt="Minimize Menu" />
+            <MinimizeMenuIcon
+              className="
+            group-hover:fill-white transition-colors duration-300
+            "
+            />
           </motion.div>
-          <NavLabel isVisible={!minimized}>Minimize Menu</NavLabel>
+          <NavLabel
+            isVisible={!minimized}
+            className="group-hover:text-white transition-colors duration-300"
+          >
+            Minimize Menu
+          </NavLabel>
         </button>
       </div>
     </motion.nav>
