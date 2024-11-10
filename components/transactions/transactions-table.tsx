@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import Dropdown from "@/components/ui/fields/dropdown";
+import TableDropdown from "@/components/ui/fields/dropdown/table-dropdown";
 import SearchBar from "@/components/ui/fields/search-bar";
 import CaretLeftIcon from "@/components/ui/icons/caret-left-icon";
 import CaretRightIcon from "@/components/ui/icons/caret-right-icon";
@@ -131,28 +131,22 @@ export const TransactionsTable = ({ transactions }: TransactionsTableProps) => {
         </div>
 
         <div className="flex justify-between gap-6">
-          <div>
-            <Dropdown
-              items={SORTING_OPTIONS}
-              initialSelectedItem={SORTING_OPTIONS[0]}
-              id={sortDropdownId}
-              label="Sort by"
-              className="md:w-28"
-              onSelect={handleSort}
-              MobileSvgIcon={MobileSortIcon}
-            />
-          </div>
-          <div>
-            <Dropdown
-              items={transactionCategories}
-              initialSelectedItem={transactionCategories[0]}
-              id={filterDropdownId}
-              label="Filter by"
-              className="md:w-44"
-              onSelect={handleFilter}
-              MobileSvgIcon={MobileFilterIcon}
-            />
-          </div>
+          <TableDropdown
+            items={SORTING_OPTIONS}
+            initialSelectedItem={SORTING_OPTIONS[0]}
+            id={sortDropdownId}
+            label="Sort by"
+            onSelect={handleSort}
+            MobileSvgIcon={MobileSortIcon}
+          />
+          <TableDropdown
+            items={transactionCategories}
+            initialSelectedItem={transactionCategories[0]}
+            id={filterDropdownId}
+            label="Filter by"
+            onSelect={handleFilter}
+            MobileSvgIcon={MobileFilterIcon}
+          />
         </div>
       </div>
 
