@@ -140,9 +140,8 @@ export const TransactionsTable = ({ transactions }: TransactionsTableProps) => {
     const currentPage = table.getState().pagination.pageIndex;
     const pages: (number | "ellipsis")[] = [];
 
-    const isDesktop = windowSize !== "xs";
-    const maxPageNumbersToShow = isDesktop ? 7 : 3;
-    const siblingsCount = isDesktop ? 2 : 1;
+    const maxPageNumbersToShow = isMobile ? 3 : 7;
+    const siblingsCount = isMobile ? 1 : 2;
 
     if (totalPages <= maxPageNumbersToShow) {
       // Show all pages
@@ -205,6 +204,7 @@ export const TransactionsTable = ({ transactions }: TransactionsTableProps) => {
             label="Sort by"
             onSelect={handleSort}
             MobileSvgIcon={MobileSortIcon}
+            dropdownLabelClassName="w-14"
           />
           <TableDropdown
             items={transactionCategories}
@@ -213,6 +213,7 @@ export const TransactionsTable = ({ transactions }: TransactionsTableProps) => {
             label="Filter by"
             onSelect={handleFilter}
             MobileSvgIcon={MobileFilterIcon}
+            dropdownLabelClassName="w-28"
           />
         </div>
       </div>

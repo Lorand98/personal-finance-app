@@ -1,6 +1,5 @@
 "use client";
 
-import { measureTextWidth } from "@/lib/utils";
 import useFallbackId from "@/hooks/use-fallback-id";
 import { cn } from "@/lib/utils";
 import caretDownIcon from "@/public/icon-caret-down.svg";
@@ -21,21 +20,8 @@ interface DropdownProps<T extends DropdownItem> {
   onSelect: (item: T) => void;
   MobileSvgIcon?: (props: React.SVGProps<SVGSVGElement>) => JSX.Element;
   label: string;
+  dropdownLabelClassName?: string;
 }
-
-const FONT = "16px Public Sans";
-
-export const calculateInitialWidth = <T extends DropdownItem>(
-  items: readonly T[],
-  font: string
-) => {
-  const longestLabel = items.reduce(
-    (longest, item) =>
-      item.label.length > longest.length ? item.label : longest,
-    ""
-  );
-  return measureTextWidth(longestLabel, font);
-};
 
 const TableDropdown = <T extends DropdownItem>({
   items,
@@ -45,6 +31,7 @@ const TableDropdown = <T extends DropdownItem>({
   onSelect,
   MobileSvgIcon,
   label,
+  dropdownLabelClassName,
 }: DropdownProps<T>) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(initialSelectedItem);
@@ -52,11 +39,8 @@ const TableDropdown = <T extends DropdownItem>({
   const controlId = useId();
   const comboboxId = useFallbackId(id);
 
-  const comboboxRef = useRef<HTMLDivElement>(null);
+  const combobxRefDesktop = useRef<HTMLDivElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
-
-  // Ref to store calculated width
-  const labelWidthRef = useRef(calculateInitialWidth(items, FONT));
 
   const handleSelect = (
     event: React.MouseEvent | React.KeyboardEvent,
@@ -67,7 +51,7 @@ const TableDropdown = <T extends DropdownItem>({
     onSelect(item);
 
     if (event.type === "keydown") {
-      comboboxRef.current?.focus();
+      combobxRefDesktop.current?.focus();
     }
   };
 
@@ -89,13 +73,14 @@ const TableDropdown = <T extends DropdownItem>({
   }, []);
 
   useEffect(() => {
-    labelWidthRef.current = calculateInitialWidth(items, FONT);
-  }, [items]);
+    if (!isOpen && combobxRefDesktop.current) {
+      combobxRefDesktop.current.focus();
+    }
+  }, [isOpen]);
 
   const comboboxProps = {
     id: comboboxId,
     role: "combobox",
-    ref: comboboxRef,
     tabIndex: 0,
     "aria-haspopup": "listbox" as const,
     "aria-expanded": isOpen,
@@ -107,6 +92,15 @@ const TableDropdown = <T extends DropdownItem>({
         setIsOpen((prev) => !prev);
       }
     },
+  };
+
+  const handleListKeyDown = (event: React.KeyboardEvent) => {
+    if (event.key === "Escape") {
+      setIsOpen(false);
+    }
+    if (event.key === "Tab") {
+      setIsOpen(false);
+    }
   };
 
   const caretDown = <Image src={caretDownIcon} alt="Caret Down Icon" />;
@@ -123,13 +117,17 @@ const TableDropdown = <T extends DropdownItem>({
         {label}
       </label>
       <div className="relative flex-shrink-0">
+        {/* Desktop dropdown combobox */}
         <div
           {...comboboxProps}
+          ref={combobxRefDesktop}
           className="input hidden md:flex items-center gap-2 cursor-pointer"
         >
           <div
-            style={{ width: labelWidthRef.current }}
-            className="flex-shrink-0 overflow-hidden"
+            className={cn(
+              "flex-shrink-0 overflow-hidden",
+              dropdownLabelClassName
+            )}
           >
             <span>{selectedItem.label}</span>
           </div>
@@ -145,6 +143,7 @@ const TableDropdown = <T extends DropdownItem>({
             selectedItem={selectedItem}
             controlId={controlId}
             onSelect={handleSelect}
+            onKeyDown={handleListKeyDown}
           />
         )}
       </div>
