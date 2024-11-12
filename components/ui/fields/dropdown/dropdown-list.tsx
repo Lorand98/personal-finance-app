@@ -9,15 +9,18 @@ interface DropdownListProps<T extends DropdownItem> {
   selectedItem: T;
   controlId: string;
   onSelect: (event: React.MouseEvent | React.KeyboardEvent, item: T) => void;
+  onKeyDown: (event: React.KeyboardEvent) => void;
 }
 
 //TODO make dropdown list solution for mobile (long list of items overflow the screen)
+//TODO add shadow-box
 
 const DropdownList = <T extends DropdownItem>({
   items,
   selectedItem,
   controlId,
   onSelect,
+  onKeyDown,
 }: DropdownListProps<T>) => {
   const [highlightedIndex, setHighlightedIndex] = useState<number | null>(null);
 
@@ -59,12 +62,11 @@ const DropdownList = <T extends DropdownItem>({
           onSelect(event, items[highlightedIndex]);
         }
         break;
-      case "Escape":
-        // Handle escape key if needed
-        break;
       default:
         break;
     }
+    
+    onKeyDown(event);
   };
 
   return (
