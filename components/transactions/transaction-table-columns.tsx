@@ -34,7 +34,7 @@ const UserInfoCell: React.FC<{
     <div className="flex items-center gap-4">
       <div className="relative h-10 w-10">
         <Image
-          src={`/${avatar}`}
+          src={avatar}
           alt={name}
           fill
           className="rounded-full object-cover"

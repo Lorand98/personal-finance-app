@@ -1,14 +1,13 @@
-import data from "@/public/data.json";
-
 import withPageHeading from "@/components/layout/with-page-heading";
 import { TransactionsTable } from "@/components/transactions/transactions-table";
+import { getTransactions } from "@/lib/data-service";
 
 export const metadata = {
   title: "Transactions",
 };
 
-const Transactions = () => {
-  const { transactions } = data;
+const Transactions = async () => {
+  const transactions = await getTransactions();
 
   return (
     <div>
