@@ -37,7 +37,8 @@ const UserInfoCell: React.FC<{
           src={avatar}
           alt={name}
           fill
-          className="rounded-full object-cover"
+          className="rounded-full object-cover background-grey-900"
+          placeholder="empty"
           sizes="40px"
         />
       </div>

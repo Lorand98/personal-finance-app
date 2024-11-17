@@ -72,12 +72,6 @@ const TableDropdown = <T extends DropdownItem>({
     };
   }, []);
 
-  useEffect(() => {
-    if (!isOpen && combobxRefDesktop.current) {
-      combobxRefDesktop.current.focus();
-    }
-  }, [isOpen]);
-
   const comboboxProps = {
     id: comboboxId,
     role: "combobox",
@@ -97,6 +91,7 @@ const TableDropdown = <T extends DropdownItem>({
   const handleListKeyDown = (event: React.KeyboardEvent) => {
     if (event.key === "Escape") {
       setIsOpen(false);
+      combobxRefDesktop.current?.focus();
     }
     if (event.key === "Tab") {
       setIsOpen(false);
