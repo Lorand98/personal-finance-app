@@ -1,6 +1,6 @@
 import withPageHeading from "@/components/layout/with-page-heading";
 import { TransactionsTable } from "@/components/transactions/transactions-table";
-import { getTransactions } from "@/lib/data-service";
+import { getTransactions } from "@/lib/supabase/data-service";
 
 export const metadata = {
   title: "Transactions",
