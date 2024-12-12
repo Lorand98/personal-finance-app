@@ -1,30 +1,8 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
-
-const formSchemas = {
-  signup: z.object({
-    name: z.string().min(2, {
-      message: "Name must be at least 2 characters.",
-    }),
-    email: z.string().email({
-      message: "Please enter a valid email address.",
-    }),
-    password: z.string().min(6, {
-      message: "Password must be at least 6 characters.",
-    }),
-  }),
-  login: z.object({
-    email: z.string().email({
-      message: "Please enter a valid email address.",
-    }),
-    password: z.string().min(1, {
-      message: "Password is required.",
-    }),
-  }),
-};
+import authSchema from "@/lib/auth/formValidationSchemas";
 
 type AuthError = {
   fieldErrors?: {
@@ -44,7 +22,7 @@ export async function signupAction(
     password: formData.get("password"),
   };
 
-  const parsed = formSchemas.signup.safeParse(values);
+  const parsed = authSchema.signup.safeParse(values);
 
   if (!parsed.success) {
     return { fieldErrors: parsed.error.flatten().fieldErrors };
@@ -79,7 +57,7 @@ export async function loginAction(
     password: formData.get("password"),
   };
 
-  const parsed = formSchemas.login.safeParse(values);
+  const parsed = authSchema.login.safeParse(values);
 
   if (!parsed.success) {
     return { fieldErrors: parsed.error.flatten().fieldErrors };
@@ -96,5 +74,5 @@ export async function loginAction(
     return { serverSideError: error.message };
   }
 
-  redirect("/dashboard");
+  redirect("/");
 }

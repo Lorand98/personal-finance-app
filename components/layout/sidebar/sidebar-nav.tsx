@@ -26,7 +26,7 @@ const SidebarNav = () => {
     <motion.nav
       initial={{ width: sidebarWidth }}
       animate={{ width: sidebarWidth }}
-      className="hidden lg:flex min-h-screen flex-col bg-grey-900 text-grey-300 py-10 rounded-r-2xl"
+      className="hidden lg:flex h-screen flex-col bg-grey-900 text-grey-300 py-10 rounded-r-2xl overflow-y-auto overflow-x-hidden"
     >
       <div className="mb-10 px-8">
         <Logo size={minimized ? "small" : "large"} />

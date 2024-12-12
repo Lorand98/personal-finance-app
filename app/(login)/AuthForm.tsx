@@ -6,7 +6,9 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 
-import { loginAction, signupAction } from "@/app/actions";
+import { loginAction, signupAction } from "@/app/(login)/actions";
+
+import authSchema from "@/lib/auth/formValidationSchemas";
 
 import {
   Form,
@@ -23,32 +25,10 @@ type AuthFormProps = {
   mode: "login" | "signup";
 };
 
-const formSchemas = {
-  login: z.object({
-    email: z.string().email({
-      message: "Please enter a valid email address.",
-    }),
-    password: z.string().min(1, {
-      message: "Password is required.",
-    }),
-  }),
-  signup: z.object({
-    name: z.string().min(2, {
-      message: "Name must be at least 2 characters.",
-    }),
-    email: z.string().email({
-      message: "Please enter a valid email address.",
-    }),
-    password: z.string().min(6, {
-      message: "Password must be at least 6 characters.",
-    }),
-  }),
-};
-
 const AuthForm: React.FC<AuthFormProps> = ({ mode }) => {
   const router = useRouter();
 
-  const formSchema = formSchemas[mode];
+  const formSchema = authSchema[mode];
   type FormValues = z.infer<typeof formSchema>;
 
   const form = useForm<FormValues>({
@@ -87,7 +67,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ mode }) => {
         });
       }
     } else {
-      router.push(mode === "signup" ? "/login" : "/dashboard");
+      router.push(mode === "signup" ? "/login" : "/");
     }
   };
 

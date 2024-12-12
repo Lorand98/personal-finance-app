@@ -1,4 +1,4 @@
-import AuthForm from "@/components/auth/AuthForm";
+import AuthForm from "@/app/(login)/AuthForm";
 
 const Signup = () => {
   return <AuthForm mode="signup" />;

@@ -1,13 +1,16 @@
 import withPageHeading from "@/components/layout/with-page-heading";
 import { TransactionsTable } from "@/components/transactions/transactions-table";
 import { getTransactions } from "@/lib/supabase/data-service";
+import { createClient } from "@/lib/supabase/server";
 
 export const metadata = {
   title: "Transactions",
 };
 
 const Transactions = async () => {
-  const transactions = await getTransactions();
+    const supabase = await createClient();
+
+    const transactions = await getTransactions(supabase);
 
   return (
     <div>
