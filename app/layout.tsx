@@ -22,7 +22,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="h-full">
       <body
-        className={`${publicSans.className} antialiased h-full flex flex-col `}
+        className={`${publicSans.className} antialiased h-full flex flex-col bg-beige-100`}
       >
         {children}
       </body>

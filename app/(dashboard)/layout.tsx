@@ -5,7 +5,7 @@ import React from "react";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex bg-beige-100 h-full ">
+    <div className="flex h-full ">
       <SidebarNav />
       <BottomNav />
       <MainLayout>{children}</MainLayout>

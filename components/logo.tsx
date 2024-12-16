@@ -1,3 +1,5 @@
+"use client";
+
 import Link from 'next/link';
 
 import logoLarge from "@/public/logo-large.svg";
