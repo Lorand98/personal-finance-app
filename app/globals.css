@@ -85,20 +85,4 @@
   .input {
     @apply w-full h-11 border border-grey-300 rounded-lg px-5 text-preset-4;
   }
-
-  .spinner {
-    margin: 3.2rem auto 1.6rem;
-    width: 60px;
-    aspect-ratio: 1;
-    border-radius: 50%;
-    border: 8px solid theme("colors.grey.900");
-    border-right-color: theme("colors.grey.300");
-    animation: rotate 1s infinite linear;
-  }
-
-  @keyframes rotate {
-    to {
-      transform: rotate(1turn);
-    }
-  }
 }

@@ -1,17 +1,5 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
-import React, { useState } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-
-import { loginAction, signupAction } from "./actions";
-
-import authSchema from "@/lib/auth/formValidationSchemas";
-
-import { Eye } from "@phosphor-icons/react/dist/ssr";
-
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -23,9 +11,42 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import authSchema from "@/lib/auth/formValidationSchemas";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Eye } from "@phosphor-icons/react/dist/ssr";
+import { Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { loginAction, signupAction } from "./actions";
+
+type SubmitButtonProps = {
+  mode: "login" | "signup";
+  isSubmitting: boolean;
+};
 
 type AuthFormProps = {
   mode: "login" | "signup";
+};
+
+const SubmitButton = ({ mode, isSubmitting }: SubmitButtonProps) => {
+  const buttonText = mode === "signup" ? "Create Account" : "Login";
+  const loadingText =
+    mode === "signup" ? "Creating Account..." : "Logging in...";
+
+  return (
+    <Button type="submit" className="w-full p-6" disabled={isSubmitting}>
+      {isSubmitting ? (
+        <>
+          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+          {loadingText}
+        </>
+      ) : (
+        buttonText
+      )}
+    </Button>
+  );
 };
 
 const AuthForm: React.FC<AuthFormProps> = ({ mode }) => {
@@ -133,6 +154,11 @@ const AuthForm: React.FC<AuthFormProps> = ({ mode }) => {
                     className="absolute top-1/2 right-4 transform -translate-y-1/2"
                     onClick={() => setPasswordVisible((prev) => !prev)}
                     type="button"
+                    aria-label={
+                      passwordVisible
+                        ? "Hide password"
+                        : "Show password as plain text"
+                    }
                   >
                     <Eye weight="fill" />
                   </button>
@@ -155,9 +181,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ mode }) => {
         {errors.root && <p className="text-red">{errors.root.message}</p>}
 
         {/* Submit Button */}
-        <Button type="submit" className="w-full p-6" disabled={isSubmitting}>
-          {mode === "signup" ? "Sign Up" : "Login"}
-        </Button>
+        <SubmitButton mode={mode} isSubmitting={isSubmitting} />
       </form>
     </Form>
   );

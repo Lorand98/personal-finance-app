@@ -4,8 +4,14 @@ import Image from "next/image";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex min-h-screen p-5 gap-5">
-      <div className="basis-2/5 relative">
+    <div className="flex flex-col lg:flex-row min-h-screen lg:p-5 gap-5 justify-center">
+      {/* Header for Mobile and Tablet */}
+      <div className="lg:hidden bg-black w-full py-4 flex justify-center">
+        <Logo size="large" />
+      </div>
+
+      {/* Left Side - Image and Content (Visible on lg and above) */}
+      <div className="hidden lg:block lg:basis-1/3 relative">
         <Image
           src={authIllustrationSrc}
           alt="Authentication Illustration"
@@ -25,8 +31,16 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         </div>
       </div>
 
-      <div className="basis-3/5 flex items-center justify-center">
-        <div className="bg-white p-8 rounded-xl max-w-[35rem] w-full">
+      {/* Right Side - Form */}
+      <div className="flex items-center justify-center flex-1">
+        <div
+          className="
+            bg-white p-8 rounded-xl w-full
+            max-w-[90%]           /* On mobile screens */
+            md:max-w-[75%]        /* On tablet screens */
+            lg:max-w-[35rem]      /* On desktop screens */
+          "
+        >
           {children}
         </div>
       </div>
