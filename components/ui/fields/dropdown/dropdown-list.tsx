@@ -13,7 +13,6 @@ interface DropdownListProps<T extends DropdownItem> {
 }
 
 //TODO make dropdown list solution for mobile (long list of items overflow the screen)
-//TODO add shadow-box
 
 const DropdownList = <T extends DropdownItem>({
   items,
@@ -65,7 +64,7 @@ const DropdownList = <T extends DropdownItem>({
       default:
         break;
     }
-    
+
     onKeyDown(event);
   };
 
@@ -73,7 +72,7 @@ const DropdownList = <T extends DropdownItem>({
     <ul
       id={controlId}
       role="listbox"
-      className="absolute right-0 md:left-0 bg-white border border-gray-300 rounded-lg mt-2  p-1 text-preset-4 z-10"
+      className="absolute right-0 md:left-0 bg-white shadow-lg border border-gray-300 rounded-lg mt-2 p-1 text-preset-4 z-10"
       onKeyDown={handleKeyDown}
     >
       {items.map((item, index) => (
