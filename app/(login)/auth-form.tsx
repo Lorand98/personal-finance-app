@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -14,39 +13,15 @@ import { Input } from "@/components/ui/input";
 import authSchema from "@/lib/auth/formValidationSchemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye } from "@phosphor-icons/react/dist/ssr";
-import { Loader2 } from "lucide-react";
+import SubmitButton from "@/components/ui/submit-button";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { loginAction, signupAction } from "./actions";
 
-type SubmitButtonProps = {
-  mode: "login" | "signup";
-  isSubmitting: boolean;
-};
-
 type AuthFormProps = {
   mode: "login" | "signup";
-};
-
-const SubmitButton = ({ mode, isSubmitting }: SubmitButtonProps) => {
-  const buttonText = mode === "signup" ? "Create Account" : "Login";
-  const loadingText =
-    mode === "signup" ? "Creating Account..." : "Logging in...";
-
-  return (
-    <Button type="submit" className="w-full p-6" disabled={isSubmitting}>
-      {isSubmitting ? (
-        <>
-          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-          {loadingText}
-        </>
-      ) : (
-        buttonText
-      )}
-    </Button>
-  );
 };
 
 const AuthForm: React.FC<AuthFormProps> = ({ mode }) => {
@@ -181,7 +156,11 @@ const AuthForm: React.FC<AuthFormProps> = ({ mode }) => {
         {errors.root && <p className="text-red">{errors.root.message}</p>}
 
         {/* Submit Button */}
-        <SubmitButton mode={mode} isSubmitting={isSubmitting} />
+        <SubmitButton
+          isSubmitting={isSubmitting}
+          text={mode === "signup" ? "Sign Up" : "Log In"}
+          submittingText={mode === "signup" ? "Signing Up..." : "Logging In..."}
+        />
       </form>
     </Form>
   );

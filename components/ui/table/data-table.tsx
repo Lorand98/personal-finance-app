@@ -53,10 +53,10 @@ export function DataTable<TData>({ table }: DataTableProps<TData>) {
         ) : (
           <TableRow>
             <TableCell
-              colSpan={table.getAllColumns.length}
+              colSpan={table.getAllColumns().length}
               className="h-24 text-center"
             >
-              No results.
+              No data available.
             </TableCell>
           </TableRow>
         )}
