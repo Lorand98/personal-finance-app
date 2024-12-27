@@ -55,7 +55,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ mode }) => {
     const error = await action(formData);
 
     if (error) {
-      // Handle server side errors
+      // TODO: handle server side error differently (not to expose server error to client)
       if (error.serverSideError) {
         form.setError("root", { message: error.serverSideError });
       }

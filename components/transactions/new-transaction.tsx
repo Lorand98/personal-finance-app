@@ -1,9 +1,11 @@
 "use client";
 
+import { createTransactionAction } from "@/app/(dashboard)/transactions/actions";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "../ui/button";
+import { Checkbox } from "../ui/checkbox";
 import DatePicker from "../ui/date-picker";
 import {
   Dialog,
@@ -25,13 +27,13 @@ import { Input } from "../ui/input";
 import {
   Select,
   SelectContent,
+  SelectItem,
   SelectTrigger,
   SelectValue,
-  SelectItem,
 } from "../ui/select";
 import SubmitButton from "../ui/submit-button";
-import { Checkbox } from "../ui/checkbox";
-import { createTransactionAction } from "@/app/(dashboard)/transactions/actions";
+import { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 const TRANSACTION_CATEGORIES = [
   "General",
@@ -47,32 +49,61 @@ const TRANSACTION_CATEGORIES = [
 ] as const;
 
 const NewTransaction = () => {
+  const [modalOpen, setModalOpen] = useState(false);
+  const { toast } = useToast();
   const formSchema = z.object({
-    name: z.string().min(1),
+    name: z
+      .string()
+      .min(1, "Name is required")
+      .max(50, "Name must be less than 50 characters"),
     category: z.enum(TRANSACTION_CATEGORIES),
-    date: z.date(),
-    amount: z.number().refine((val) => val > 0, {
-      message: "Amount must be greater than 0",
+    date: z.string(),
+    amount: z.number().refine((val) => val !== 0, {
+      message: "Amount must not be 0",
     }),
-    recurring: z.boolean().optional(),
+    recurring: z.boolean(),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: "",
+      category: TRANSACTION_CATEGORIES[0],
+      date: new Date().toISOString(),
+      amount: undefined,
+      recurring: false,
+    },
   });
 
   type FormValues = z.infer<typeof formSchema>;
 
   const {
     formState: { isSubmitting },
+    reset,
   } = form;
 
   const onSubmit = async (values: FormValues) => {
-    await createTransactionAction(values);
+    try {
+      await createTransactionAction(values);
+      reset();
+      toast({
+        title: "Transaction added",
+        description: "The transaction has been successfully added.",
+      });
+      setModalOpen(false);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error("Unhandled transaction error:", error.message);
+        throw new Error("An unexpected error occurred. Please try again.");
+      } else {
+        console.error("Unknown transaction error:", error);
+        throw new Error("An unexpected error occurred. Please try again.");
+      }
+    }
   };
 
   return (
-    <Dialog>
+    <Dialog open={modalOpen} onOpenChange={setModalOpen}>
       <DialogTrigger asChild>
         <Button>+ Add New Transaction</Button>
       </DialogTrigger>
@@ -96,7 +127,7 @@ const NewTransaction = () => {
               control={form.control}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Recipient/Sender</FormLabel>
+                  <FormLabel>Recipient/Sender Name</FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>
@@ -131,29 +162,53 @@ const NewTransaction = () => {
             <FormField
               name="date"
               control={form.control}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Transaction Date</FormLabel>
-                  <FormControl>
-                    <DatePicker
-                      selected={field.value}
-                      onSelect={(date) => {
-                        field.onChange(date);
-                      }}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+              render={({ field }) => {
+                const selectedDate = field.value
+                  ? new Date(field.value)
+                  : undefined;
+
+                return (
+                  <FormItem>
+                    <FormLabel>Transaction Date</FormLabel>
+                    <FormControl>
+                      <DatePicker
+                        selected={selectedDate}
+                        onSelect={(date) => {
+                          field.onChange(date?.toISOString());
+                        }}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                );
+              }}
             />
             <FormField
               name="amount"
               control={form.control}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Amount</FormLabel>
+                  <FormLabel>Amount (USD)</FormLabel>
                   <FormControl>
-                    <Input type="number" {...field} />
+                    <div className="relative">
+                      <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">
+                        $
+                      </span>
+                      <Input
+                        type="number"
+                        className="pl-8"
+                        value={field.value ?? ""}
+                        onChange={(e) => {
+                          const { value } = e.target;
+                          if (!value) {
+                            field.onChange(undefined);
+                            return;
+                          }
+
+                          field.onChange(parseFloat(e.target.value));
+                        }}
+                      />
+                    </div>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -163,10 +218,13 @@ const NewTransaction = () => {
               name="recurring"
               control={form.control}
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="flex items-center gap-3 space-y-0">
                   <FormLabel>Recurring</FormLabel>
                   <FormControl>
-                    <Checkbox checked={field.value} onChange={field.onChange} />
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

@@ -112,33 +112,36 @@ export type Database = {
       transactions: {
         Row: {
           amount: number
-          avatar: string
+          avatar: string | null
           category: string
           created_at: string
           date: string
           id: number
           name: string
           recurring: boolean
+          user_id: string
         }
         Insert: {
           amount: number
-          avatar: string
+          avatar?: string | null
           category: string
           created_at?: string
           date: string
           id?: number
           name: string
           recurring: boolean
+          user_id: string
         }
         Update: {
           amount?: number
-          avatar?: string
+          avatar?: string | null
           category?: string
           created_at?: string
           date?: string
           id?: number
           name?: string
           recurring?: boolean
+          user_id?: string
         }
         Relationships: []
       }

@@ -1,7 +1,7 @@
 "use client";
 
 import { logoutAction } from "@/app/(login)/actions";
-import { LogOut } from "lucide-react";
+import { Loader2, LogOut } from "lucide-react";
 import { useTransition } from "react";
 import { Button } from "../ui/button";
 
@@ -15,9 +15,11 @@ export default function LogoutButton() {
   };
 
   return (
-    <Button onClick={handleLogout} disabled={isPending}>
+    <Button onClick={handleLogout} disabled={isPending} aria-label="Logout">
       <LogOut className="h-4 w-4" />
-      <span>{isPending ? "Logging out..." : "Logout"}</span>
+      <span className="hidden sm:block">
+        {isPending ? <Loader2 /> : "Logout"}
+      </span>
     </Button>
   );
 }

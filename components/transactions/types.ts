@@ -1,7 +1,8 @@
 export interface Transaction {
-  avatar: string;
+  avatar?: string | null;
   name: string;
   category: string;
   date: string;
   amount: number;
+  recurring: boolean;
 }

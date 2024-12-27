@@ -1,6 +1,7 @@
 import { MainLayout } from "@/components/layout/main-layout";
 import BottomNav from "@/components/layout/sidebar/bottom-nav";
 import SidebarNav from "@/components/layout/sidebar/sidebar-nav";
+import { Toaster } from "@/components/ui/toaster";
 import React from "react";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
@@ -9,6 +10,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <SidebarNav />
       <BottomNav />
       <MainLayout>{children}</MainLayout>
+      <Toaster />
     </div>
   );
 }

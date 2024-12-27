@@ -5,6 +5,7 @@ import { Transaction } from "./types";
 import useWindowSize from "@/hooks/use-window-size";
 import { cn } from "@/lib/utils";
 import React from "react";
+import { AvatarIcon } from "@radix-ui/react-icons";
 
 const columnHelper = createColumnHelper<Transaction>();
 
@@ -24,7 +25,7 @@ const SecondaryCellText: React.FC<{
 const formatDate = (date: string) => moment(date).format("DD MMM YYYY");
 
 const UserInfoCell: React.FC<{
-  avatar: string;
+  avatar?: string | null;
   name: string;
   category: string;
 }> = ({ avatar, name, category }) => {
@@ -33,14 +34,18 @@ const UserInfoCell: React.FC<{
   return (
     <div className="flex items-center gap-4">
       <div className="relative h-10 w-10">
-        <Image
-          src={avatar}
-          alt={name}
-          fill
-          className="rounded-full object-cover background-grey-900"
-          placeholder="empty"
-          sizes="40px"
-        />
+        {avatar ? (
+          <Image
+            src={avatar}
+            alt={name}
+            fill
+            className="rounded-full object-cover background-grey-900"
+            placeholder="empty"
+            sizes="40px"
+          />
+        ) : (
+          <AvatarIcon className="w-full h-full" />
+        )}
       </div>
       <div className="flex flex-col">
         <strong>{name}</strong>
