@@ -1,7 +1,11 @@
 "use client";
 
 import { createTransactionAction } from "@/app/(dashboard)/transactions/actions";
+import { useToast } from "@/hooks/use-toast";
+import { TRANSACTION_CATEGORIES } from "@/lib/constants";
+import { newTransactionSchema } from "@/lib/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "../ui/button";
@@ -32,37 +36,12 @@ import {
   SelectValue,
 } from "../ui/select";
 import SubmitButton from "../ui/submit-button";
-import { useState } from "react";
-import { useToast } from "@/hooks/use-toast";
-
-const TRANSACTION_CATEGORIES = [
-  "General",
-  "Dining Out",
-  "Groceries",
-  "Entertainment",
-  "Transportation",
-  "Lifestyle",
-  "Personal Care",
-  "Education",
-  "Bills",
-  "Shopping",
-] as const;
 
 const NewTransaction = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const { toast } = useToast();
-  const formSchema = z.object({
-    name: z
-      .string()
-      .min(1, "Name is required")
-      .max(50, "Name must be less than 50 characters"),
-    category: z.enum(TRANSACTION_CATEGORIES),
-    date: z.string(),
-    amount: z.number().refine((val) => val !== 0, {
-      message: "Amount must not be 0",
-    }),
-    recurring: z.boolean(),
-  });
+
+  const formSchema = newTransactionSchema;
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -82,6 +61,7 @@ const NewTransaction = () => {
     reset,
   } = form;
 
+  //TODO: extract form to a separate component and find a common way/common component for forms accross the app (also for auth and later for budget/pots etc)
   const onSubmit = async (values: FormValues) => {
     try {
       await createTransactionAction(values);

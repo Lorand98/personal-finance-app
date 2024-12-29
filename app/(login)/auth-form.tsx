@@ -10,7 +10,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import authSchema from "@/lib/auth/formValidationSchemas";
+import { loginSchema, signupSchema } from "@/lib/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye } from "@phosphor-icons/react/dist/ssr";
 import SubmitButton from "@/components/ui/submit-button";
@@ -28,15 +28,16 @@ const AuthForm: React.FC<AuthFormProps> = ({ mode }) => {
   const router = useRouter();
   const [passwordVisible, setPasswordVisible] = useState(false);
 
-  const formSchema = authSchema[mode];
-  type FormValues = z.infer<typeof formSchema>;
+  const formSchema = mode === "signup" ? signupSchema : loginSchema;
+  type LoginValues = z.infer<typeof loginSchema>;
+  type SignupValues = z.infer<typeof signupSchema>;
+  type FormValues = LoginValues | SignupValues;
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues:
-      mode === "signup"
-        ? { name: "", email: "", password: "" }
-        : { email: "", password: "" },
+    defaultValues: (mode === "signup"
+      ? { name: "", email: "", password: "" }
+      : { email: "", password: "" }) as FormValues,
   });
 
   const {

@@ -27,6 +27,7 @@ export async function createTransactionAction(transaction: Transaction) {
     ...transaction,
     user_id: user.id,
   });
+  //TODO validate transaction also on the server side
 
   if (transactionCreationError) {
     throw new Error("Failed to create transaction. Please try again later.");
