@@ -56,12 +56,10 @@ const AuthForm: React.FC<AuthFormProps> = ({ mode }) => {
     const error = await action(formData);
 
     if (error) {
-      // TODO: handle server side error differently (not to expose server error to client)
       if (error.serverSideError) {
         form.setError("root", { message: error.serverSideError });
       }
 
-      // Handle field-level errors
       if (error.fieldErrors) {
         Object.entries(error.fieldErrors).forEach(([key, messages]) => {
           if (messages && messages.length > 0) {
@@ -96,7 +94,6 @@ const AuthForm: React.FC<AuthFormProps> = ({ mode }) => {
           />
         )}
 
-        {/* Email Field */}
         <FormField
           control={form.control}
           name="email"
@@ -111,7 +108,6 @@ const AuthForm: React.FC<AuthFormProps> = ({ mode }) => {
           )}
         />
 
-        {/* Password Field */}
         <FormField
           control={form.control}
           name="password"
@@ -153,10 +149,8 @@ const AuthForm: React.FC<AuthFormProps> = ({ mode }) => {
           )}
         />
 
-        {/* Error Message */}
         {errors.root && <p className="text-red">{errors.root.message}</p>}
 
-        {/* Submit Button */}
         <SubmitButton
           isSubmitting={isSubmitting}
           text={mode === "signup" ? "Sign Up" : "Log In"}
