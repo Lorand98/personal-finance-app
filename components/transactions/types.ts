@@ -6,3 +6,9 @@ export interface Transaction {
   amount: number;
   recurring: boolean;
 }
+
+export interface Budget {
+  category: string;
+  maximum: number;
+  theme: string;
+}
