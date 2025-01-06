@@ -1,39 +1,89 @@
 "use client";
 
-import React from "react";
-import { Budget } from "../transactions/types";
+import { Label, Pie, PieChart } from "recharts";
 import { ChartConfig, ChartContainer } from "../ui/chart";
-import { Pie, PieChart } from "recharts";
 
-const BudgetPieChart = ({ budgets }: { budgets: Budget[] }) => {
-  const chartConfig = budgets.reduce<ChartConfig>((acc, budget) => {
-    acc[budget.category] = {
-      label: budget.category,
-      color: budget.theme,
-    };
-    return acc;
-  }, {}) satisfies ChartConfig;
+interface BudgetSpending {
+  category: string;
+  maximum: number;
+  spent: number;
+  theme: string;
+}
 
-  console.log(budgets);
+interface BudgetPieChartProps {
+  budgetSpendingData: BudgetSpending[];
+}
 
-  const chartData = budgets.map((budget) => ({
-    category: budget.category,
-    maximum: budget.maximum,
-    fill: budget.theme,
+export default function BudgetPieChart({
+  budgetSpendingData,
+}: BudgetPieChartProps) {
+  // Build config for the ChartContainer
+  const chartConfig = budgetSpendingData.reduce<ChartConfig>(
+    (acc, { category, theme }) => {
+      acc[category] = { label: category, color: theme };
+      return acc;
+    },
+    {}
+  ) satisfies ChartConfig;
+
+  // Prepare data for the Pie component
+  const chartData = budgetSpendingData.map(({ category, spent, theme }) => ({
+    category,
+    spent,
+    fill: theme,
   }));
 
+  // Calculate total spent vs. total budget
+  const [totalSpent, totalBudget] = budgetSpendingData.reduce(
+    ([spentSum, maxSum], { spent, maximum }) => [
+      spentSum + spent,
+      maxSum + maximum,
+    ],
+    [0, 0]
+  );
+
   return (
-    <ChartContainer config={chartConfig} className="max-h-[19rem]">
+    <ChartContainer config={chartConfig} className="h-[19rem]">
       <PieChart>
         <Pie
-          dataKey="maximum"
+          dataKey="spent"
           nameKey="category"
           data={chartData}
           innerRadius="50%"
-        />
+        >
+          <Label
+            content={({ viewBox }) => {
+              if (viewBox && "cx" in viewBox && "cy" in viewBox) {
+                const { cx, cy } = viewBox;
+                return (
+                  <text
+                    x={cx}
+                    y={cy}
+                    textAnchor="middle"
+                    dominantBaseline="middle"
+                  >
+                    <tspan
+                      x={cx}
+                      y={cy}
+                      className="fill-foreground text-3xl font-bold"
+                    >
+                      ${totalSpent.toLocaleString()}
+                    </tspan>
+                    <tspan
+                      x={cx}
+                      y={(cy || 0) + 24}
+                      className="fill-muted-foreground"
+                    >
+                      of ${totalBudget.toLocaleString()} limit
+                    </tspan>
+                  </text>
+                );
+              }
+              return null;
+            }}
+          />
+        </Pie>
       </PieChart>
     </ChartContainer>
   );
-};
-
-export default BudgetPieChart;
+}
