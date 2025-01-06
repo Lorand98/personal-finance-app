@@ -7,7 +7,7 @@ import NavTransactionsIcon from "@/components/ui/icons/nav-transactions-icon";
 export const menuItems = [
   { Icon: NavOverviewIcon, link: "/", label: "Overview" },
   { Icon: NavTransactionsIcon, link: "/transactions", label: "Transactions" },
-  { Icon: NavBudgetsIcon, link: "/budgets", label: "Budgets" },
+  { Icon: NavBudgetsIcon, link: "/budget", label: "Budget" },
   { Icon: NavPotsIcon, link: "/pots", label: "Pots" },
   {
     Icon: NavRecurringBillsIcon,

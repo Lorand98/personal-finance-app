@@ -20,3 +20,13 @@ export async function createTransaction(
     return error;
   }
 }
+
+export async function getBudget(supabase: SupabaseClient<Database>) {
+  const { data, error } = await supabase
+    .from("budgets")
+    .select("category, maximum, theme");
+  if (error) {
+    throw error;
+  }
+  return data;
+}

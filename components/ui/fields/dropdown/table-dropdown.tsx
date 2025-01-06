@@ -4,7 +4,7 @@ import useFallbackId from "@/hooks/use-fallback-id";
 import { cn } from "@/lib/utils";
 import caretDownIcon from "@/public/icon-caret-down.svg";
 import Image from "next/image";
-import { useEffect, useId, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState, type JSX } from "react";
 import DropdownList from "./dropdown-list";
 
 export interface DropdownItem {

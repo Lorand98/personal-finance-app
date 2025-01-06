@@ -3,7 +3,7 @@
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { SVGProps } from "react";
+import { SVGProps, type JSX } from "react";
 import NavLabel from "./nav-label";
 
 interface NavLinkProps {
