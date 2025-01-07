@@ -72,7 +72,7 @@ const DropdownList = <T extends DropdownItem>({
     <ul
       id={controlId}
       role="listbox"
-      className="absolute right-0 md:left-0 bg-white shadow-lg border border-gray-300 rounded-lg mt-2 p-1 text-preset-4 z-10"
+      className="absolute right-0 md:left-0 bg-white shadow-lg border border-grey-300 rounded-lg mt-2 p-1 text-preset-4 z-10"
       onKeyDown={handleKeyDown}
     >
       {items.map((item, index) => (
