@@ -2,16 +2,14 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { loginSchema, signupSchema } from "@/lib/validations";
-import { redirect } from "next/navigation";
 
-type AuthError = {
+type AuthResult = {
+  success?: boolean;
   fieldErrors?: { [key: string]: string[] };
   serverSideError?: string;
 };
 
-export async function signupAction(
-  formData: FormData
-): Promise<AuthError | null> {
+export async function signupAction(formData: FormData): Promise<AuthResult> {
   try {
     const supabase = await createClient();
     const values = {
@@ -19,67 +17,75 @@ export async function signupAction(
       email: formData.get("email"),
       password: formData.get("password"),
     };
+    
     const parsed = signupSchema.safeParse(values);
     if (!parsed.success) {
       return { fieldErrors: parsed.error.flatten().fieldErrors };
     }
+
     const { name, email, password } = parsed.data;
     const { error } = await supabase.auth.signUp({
       email,
       password,
       options: { data: { name } },
     });
+
     if (error) {
-      console.error(error);
+      console.error("Signup error:", error);
       return { serverSideError: "Failed to create account. Please try again." };
     }
-    redirect("/login");
-  } catch (error: unknown) {
-    console.error(error);
+
+    return { success: true };
+  } catch (error) {
+    console.error("Unexpected signup error:", error);
     return { serverSideError: "Something went wrong. Please try again." };
   }
 }
 
-export async function loginAction(
-  formData: FormData
-): Promise<AuthError | null> {
+export async function loginAction(formData: FormData): Promise<AuthResult> {
   try {
     const supabase = await createClient();
     const values = {
       email: formData.get("email"),
       password: formData.get("password"),
     };
+
     const parsed = loginSchema.safeParse(values);
     if (!parsed.success) {
       return { fieldErrors: parsed.error.flatten().fieldErrors };
     }
+
     const { email, password } = parsed.data;
     const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
+
     if (error) {
-      console.error(error);
+      console.error("Login error:", error);
       return { serverSideError: "Failed to log in. Please try again." };
     }
-    redirect("/");
-  } catch (error: unknown) {
-    console.error(error);
+
+    return { success: true };
+  } catch (error) {
+    console.error("Unexpected login error:", error);
     return { serverSideError: "Something went wrong. Please try again." };
   }
 }
 
-export async function logoutAction() {
+export async function logoutAction(): Promise<AuthResult> {
   try {
     const supabase = await createClient();
     const { error } = await supabase.auth.signOut();
+    
     if (error) {
-      console.error(error);
-      redirect("/error");
+      console.error("Logout error:", error);
+      return { serverSideError: "Logout failed. Please try again." };
     }
-    redirect("/login");
-  } catch (error: unknown) {
-    console.error(error);
-    redirect("/error");
+
+    return { success: true };
+  } catch (error) {
+    console.error("Unexpected logout error:", error);
+    return { serverSideError: "Something went wrong. Please try again." };
   }
 }

@@ -9,20 +9,20 @@ import { z } from "zod";
 import { Checkbox } from "../ui/checkbox";
 import DatePicker from "../ui/date-picker";
 import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
 } from "../ui/form";
 import { Input } from "../ui/input";
 import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from "../ui/select";
 import SubmitButton from "../ui/submit-button";
 
@@ -46,20 +46,19 @@ const TransactionForm = ({ onSuccess }: { onSuccess: () => void }) => {
   } = form;
 
   const onSubmit = async (values: FormValues) => {
-    const error = await createTransactionAction(values);
+    const result = await createTransactionAction(values);
 
-    if (error) {
-      if (error.serverSideError) {
-        form.setError("root", { message: error.serverSideError });
-      }
-      if (error.fieldErrors) {
-        Object.entries(error.fieldErrors).forEach(([key, messages]) => {
-          if (messages && messages.length > 0) {
-            form.setError(key as keyof FormValues, { message: messages[0] });
-          }
-        });
-      }
-    } else {
+    if (result.serverSideError) {
+      form.setError("root", { message: result.serverSideError });
+    } else if (result.fieldErrors) {
+      Object.entries(result.fieldErrors).forEach(([key, messages]) => {
+        if (messages && messages.length > 0) {
+          form.setError(key as keyof FormValues, {
+            message: messages[0],
+          });
+        }
+      });
+    } else if (result.success) {
       reset();
       onSuccess();
     }

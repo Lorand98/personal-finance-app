@@ -1,11 +1,19 @@
 "use server";
 
-import { newTransactionSchema } from "@/lib/validations";
-import { createClient } from "@/lib/supabase/server";
-import { createTransaction } from "@/lib/supabase/data-service";
 import { Transaction } from "@/components/transactions/types";
+import { createTransaction } from "@/lib/supabase/data-service";
+import { createClient } from "@/lib/supabase/server";
+import { newTransactionSchema } from "@/lib/validations";
 
-export async function createTransactionAction(transaction: Transaction) {
+type TransactionResult = {
+  success?: boolean;
+  fieldErrors?: { [key: string]: string[] };
+  serverSideError?: string;
+};
+
+export async function createTransactionAction(
+  transaction: Transaction
+): Promise<TransactionResult> {
   try {
     const parsed = newTransactionSchema.safeParse(transaction);
     if (!parsed.success) {
@@ -30,6 +38,8 @@ export async function createTransactionAction(transaction: Transaction) {
         serverSideError: "Failed to create transaction. Please try again.",
       };
     }
+
+    return { success: true };
   } catch (e: unknown) {
     console.error("Unexpected server error:", e);
     return { serverSideError: "Something went wrong. Please try again." };

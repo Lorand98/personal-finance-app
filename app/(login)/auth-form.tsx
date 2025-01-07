@@ -53,23 +53,19 @@ const AuthForm: React.FC<AuthFormProps> = ({ mode }) => {
     formData.append("password", values.password);
 
     const action = mode === "signup" ? signupAction : loginAction;
-    const error = await action(formData);
+    const result = await action(formData);
 
-    if (error) {
-      if (error.serverSideError) {
-        form.setError("root", { message: error.serverSideError });
-      }
-
-      if (error.fieldErrors) {
-        Object.entries(error.fieldErrors).forEach(([key, messages]) => {
-          if (messages && messages.length > 0) {
-            form.setError(key as keyof FormValues, {
-              message: messages[0],
-            });
-          }
-        });
-      }
-    } else {
+    if (result.serverSideError) {
+      form.setError("root", { message: result.serverSideError });
+    } else if (result.fieldErrors) {
+      Object.entries(result.fieldErrors).forEach(([key, messages]) => {
+        if (messages && messages.length > 0) {
+          form.setError(key as keyof FormValues, {
+            message: messages[0],
+          });
+        }
+      });
+    } else if (result.success) {
       router.push(mode === "signup" ? "/login" : "/");
     }
   };
