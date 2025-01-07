@@ -1,3 +1,9 @@
+import { formatTransactionDate } from "@/lib/utils";
+import { AvatarIcon } from "@radix-ui/react-icons";
+import Image from "next/image";
+import Link from "next/link";
+import { Transaction } from "../transactions/types";
+import CaretRightIcon from "../ui/icons/caret-right-icon";
 import { Progress } from "../ui/progress";
 import BudgetDetail from "./budget-detail";
 
@@ -6,6 +12,7 @@ interface BudgetCardProps {
   maximum: number;
   theme: string;
   spent: number;
+  latestTransactions: Transaction[];
 }
 
 export default function BudgetCard({
@@ -13,12 +20,13 @@ export default function BudgetCard({
   maximum,
   theme,
   spent,
+  latestTransactions,
 }: BudgetCardProps) {
   const progress = (spent / maximum) * 100;
   const remaining = maximum - spent > 0 ? maximum - spent : 0;
 
   return (
-    <div className="bg-white w-full py-6 px-3 sm:px-4 md:p-8 rounded-xl">
+    <div className="bg-white w-full p-4 sm:p-6 md:p-8 rounded-xl">
       <div className="space-y-4">
         <div className="flex items-center gap-2">
           <span
@@ -32,6 +40,61 @@ export default function BudgetCard({
         <div className="flex">
           <BudgetDetail color={theme} label="Spent" value={spent} />
           <BudgetDetail label="Remaining" value={remaining} />
+        </div>
+        <div className="w-full bg-beige-100 p-4 rounded-xl">
+          <div className="flex justify-between mb-6">
+            <h3>Latest Spending</h3>
+            <Link
+              href="/transactions"
+              className="text-grey-500 text-preset-4 flex items-center gap-3"
+            >
+              See All
+              <CaretRightIcon />
+            </Link>
+          </div>
+          {latestTransactions.length === 0 ? (
+            <p className="text-grey-500">No available data</p>
+          ) : (
+            <ul className="divide-y-2 divide-grey-500 divide-opacity-15 ">
+              {latestTransactions.map(({ name, amount, avatar, date }) => {
+                const isNegative = amount < 0;
+                const currencyAmount = `${isNegative ? "-" : "+"}$${Math.abs(
+                  amount
+                )}`;
+                //TODO: Add actual ID for transactions or get already defined id from supabase
+                return (
+                  <li
+                    key={`${date}-${category}-${name}`}
+                    className="flex justify-between items-center py-4 first:pt-0 last:pb-0"
+                  >
+                    <div className="flex items-center gap-4">
+                      <div className="relative h-10 w-10 hidden sm:block">
+                        {avatar ? (
+                          <Image
+                            src={avatar}
+                            alt={name}
+                            fill
+                            className="rounded-full object-cover background-grey-900"
+                            placeholder="empty"
+                            sizes="40px"
+                          />
+                        ) : (
+                          <AvatarIcon className="w-full h-full" />
+                        )}
+                      </div>
+                      <p className="font-bold">{name}</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="font-bold">{currencyAmount}</p>
+                      <p className="text-grey-500">
+                        {formatTransactionDate(date)}
+                      </p>
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
         </div>
       </div>
     </div>

@@ -27,10 +27,10 @@ export default async function Budget() {
     .sort((a, b) => b.spent - a.spent);
 
   return (
-    <div className="space-y-4">
-      <div className="bg-white w-full py-6 px-3 sm:px-4 md:p-8 rounded-xl flex flex-col sm:flex-row sm:items-center gap-2">
+    <div className="flex flex-col gap-6 md:grid md:grid-cols-[5fr_10fr] md:items-start ">
+      <div className="bg-white py-6 px-3 sm:px-4 md:p-8 rounded-xl flex flex-col sm:flex-row md:flex-col gap-2">
         <BudgetPieChart budgetSpendingData={budgetSpendingData} />
-        <div className="flex-grow">
+        <div>
           <h2 className="text-lg font-semibold mb-2">Spending Summary</h2>
           <ul className="divide-y">
             {budgetSpendingData.map((budget) => (
@@ -41,9 +41,24 @@ export default async function Budget() {
           </ul>
         </div>
       </div>
-      {budgetSpendingData.map((budget) => (
-        <BudgetCard key={budget.category} {...budget} />
-      ))}
+      <div className="space-y-6">
+        {budgetSpendingData.map((budget) => {
+          const latestTransactions = transactions
+            .filter((tx) => tx.category === budget.category)
+            .sort(
+              (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+            )
+            .slice(0, 3);
+
+          return (
+            <BudgetCard
+              key={budget.category}
+              {...budget}
+              latestTransactions={latestTransactions}
+            />
+          );
+        })}
+      </div>
     </div>
   );
 }

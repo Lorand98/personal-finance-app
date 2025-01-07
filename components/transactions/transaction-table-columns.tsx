@@ -1,9 +1,8 @@
 import { createColumnHelper } from "@tanstack/react-table";
-import moment from "moment";
 import Image from "next/image";
 import { Transaction } from "./types";
 import useWindowSize from "@/hooks/use-window-size";
-import { cn } from "@/lib/utils";
+import { cn, formatTransactionDate } from "@/lib/utils";
 import React from "react";
 import { AvatarIcon } from "@radix-ui/react-icons";
 
@@ -22,7 +21,7 @@ const SecondaryCellText: React.FC<{
   </span>
 );
 
-const formatDate = (date: string) => moment(date).format("DD MMM YYYY");
+
 
 const UserInfoCell: React.FC<{
   avatar?: string | null;
@@ -63,7 +62,7 @@ const AmountCell: React.FC<{ amount: number; date: string }> = ({
   const isMobile = windowSize === "xs";
   const isNegative = amount < 0;
   const currencyAmount = `${isNegative ? "-" : "+"}$${Math.abs(amount)}`;
-  const formattedDate = formatDate(date);
+  const formattedDate = formatTransactionDate(date);
 
   return (
     <div
@@ -92,7 +91,7 @@ const columns = [
   columnHelper.accessor("date", {
     header: "Transaction Date",
     cell: ({ row }) => (
-      <SecondaryCellText>{formatDate(row.original.date)}</SecondaryCellText>
+      <SecondaryCellText>{formatTransactionDate(row.original.date)}</SecondaryCellText>
     ),
     meta: {
       hideOnMobile: true,

@@ -19,6 +19,10 @@
     @apply text-preset-2 font-bold;
   }
 
+  h3 {
+    @apply text-preset-3 font-bold;
+  }
+
   p {
     @apply text-preset-4;
   }
