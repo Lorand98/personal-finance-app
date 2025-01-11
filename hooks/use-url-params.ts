@@ -1,17 +1,25 @@
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 
 const useUrlParams = () => {
   const searchParams = useSearchParams();
-  const router = useRouter();
   const pathname = usePathname();
 
   const updateUrlParams = (key: string, value: string) => {
     const params = new URLSearchParams(searchParams.toString());
+
+    if (!value || value === "") {
+      params.delete(key);
+      history.pushState({}, "", `${pathname}?${params.toString()}`);
+      return;
+    }
+
     params.set(key, value);
-    router.push(`${pathname}?${params.toString()}`);
+    history.pushState({}, "", `${pathname}?${params.toString()}`);
   };
 
-  return updateUrlParams;
+  return {
+    updateUrlParams,
+  };
 };
 
 export default useUrlParams;

@@ -66,6 +66,10 @@ const TableDropdown = <T extends DropdownItem>({
   };
 
   useEffect(() => {
+    setSelectedItem(initialSelectedItem);
+  }, [initialSelectedItem]);
+
+  useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);

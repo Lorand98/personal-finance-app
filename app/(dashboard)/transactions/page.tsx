@@ -1,22 +1,16 @@
 import { TransactionsTable } from "@/components/transactions/transactions-table";
 import { getTransactions } from "@/lib/supabase/data-service";
 import { createClient } from "@/lib/supabase/server";
-import { ServerSideComponentProps } from "@/lib/types";
 
 export const metadata = {
   title: "Transactions",
 };
 
-const Transactions = async ({
-  searchParams
-}: ServerSideComponentProps<undefined, {
-  search?: string;
-  category?: string;
-  sort?: string;
-}
-
->) => {
+// Fetch all transactions regardless of URL params
+const Transactions = async () => {
   const supabase = await createClient();
+  
+  
   const transactions = await getTransactions(supabase);
 
   return (

@@ -45,7 +45,7 @@ export default function BudgetCard({
           <div className="flex justify-between mb-6">
             <h3>Latest Spending</h3>
             <Link
-              href="/transactions"
+              href={`/transactions?category=${category}`}
               className="text-grey-500 text-preset-4 flex items-center gap-3"
             >
               See All
