@@ -30,3 +30,13 @@ export async function getBudget(supabase: SupabaseClient<Database>) {
   }
   return data;
 }
+
+export async function createBudget(
+  supabase: SupabaseClient<Database>,
+  budget: TablesInsert<"budgets">
+) {
+  const { error } = await supabase.from("budgets").insert(budget);
+  if (error) {
+    return error;
+  }
+}

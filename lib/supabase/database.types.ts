@@ -41,6 +41,7 @@ export type Database = {
           expenses: number
           id: number
           income: number
+          user_id: string
         }
         Insert: {
           created_at?: string
@@ -48,6 +49,7 @@ export type Database = {
           expenses: number
           id?: number
           income: number
+          user_id: string
         }
         Update: {
           created_at?: string
@@ -55,6 +57,7 @@ export type Database = {
           expenses?: number
           id?: number
           income?: number
+          user_id?: string
         }
         Relationships: []
       }
@@ -65,6 +68,7 @@ export type Database = {
           id: number
           maximum: number
           theme: string
+          user_id: string
         }
         Insert: {
           category: string
@@ -72,6 +76,7 @@ export type Database = {
           id?: number
           maximum: number
           theme: string
+          user_id: string
         }
         Update: {
           category?: string
@@ -79,6 +84,7 @@ export type Database = {
           id?: number
           maximum?: number
           theme?: string
+          user_id?: string
         }
         Relationships: []
       }
@@ -90,6 +96,7 @@ export type Database = {
           target: number
           theme: string
           total: number
+          user_id: string
         }
         Insert: {
           created_at?: string
@@ -98,6 +105,7 @@ export type Database = {
           target: number
           theme: string
           total: number
+          user_id: string
         }
         Update: {
           created_at?: string
@@ -106,6 +114,7 @@ export type Database = {
           target?: number
           theme?: string
           total?: number
+          user_id?: string
         }
         Relationships: []
       }

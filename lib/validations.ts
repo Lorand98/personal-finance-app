@@ -34,3 +34,9 @@ export const newTransactionSchema = z.object({
   }),
   recurring: z.boolean(),
 });
+
+export const newBudgetSchema = z.object({
+  category: z.string().min(1, "Please select a category"),
+  maximum: z.number().min(0, "Amount must be bigger than 0"),
+  theme: z.string().min(1, "Please select a theme"),
+});
