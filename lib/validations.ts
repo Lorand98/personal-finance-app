@@ -27,9 +27,12 @@ export const newTransactionSchema = z.object({
     .string()
     .min(1, "Name is required")
     .max(50, "Name must be less than 50 characters"),
-  category: z.enum(TRANSACTION_CATEGORIES),
+  category: z.enum([
+    TRANSACTION_CATEGORIES[0],
+    ...TRANSACTION_CATEGORIES.slice(1),
+  ]),
   date: z.string(),
-  amount: z.number().refine((val) => val !== 0, {
+  amount: z.coerce.number().refine((val) => val !== 0, {
     message: "Amount must not be 0",
   }),
   recurring: z.boolean(),

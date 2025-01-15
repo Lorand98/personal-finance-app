@@ -2,9 +2,7 @@ import { SupabaseClient } from "@supabase/supabase-js";
 import { Database, TablesInsert } from "./database.types";
 
 export async function getTransactions(supabase: SupabaseClient<Database>) {
-  const { data, error } = await supabase
-    .from("transactions")
-    .select("name, date, amount, category, recurring, avatar");
+  const { data, error } = await supabase.from("transactions").select("*");
   if (error) {
     throw error;
   }
@@ -22,9 +20,7 @@ export async function createTransaction(
 }
 
 export async function getBudget(supabase: SupabaseClient<Database>) {
-  const { data, error } = await supabase
-    .from("budgets")
-    .select("category, maximum, theme");
+  const { data, error } = await supabase.from("budgets").select("*");
   if (error) {
     throw error;
   }

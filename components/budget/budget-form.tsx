@@ -1,12 +1,16 @@
 "use client";
 
+import { THEMES, TRANSACTION_CATEGORIES } from "@/lib/constants";
+import { newBudgetSchema } from "@/lib/validations";
 import { createBudgetAction } from "@/app/(dashboard)/budget/actions";
+import { useResourceForm } from "@/hooks/use-resource-form";
+
 import {
   Form,
-  FormControl,
   FormField,
   FormItem,
   FormLabel,
+  FormControl,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -18,21 +22,16 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import SubmitButton from "@/components/ui/submit-button";
-import { THEMES, TRANSACTION_CATEGORIES } from "@/lib/constants";
-import { newBudgetSchema } from "@/lib/validations";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-
-type FormValues = z.infer<typeof newBudgetSchema>;
 
 export default function NewBudgetForm({
   onSuccess,
 }: {
   onSuccess: () => void;
 }) {
-  const form = useForm<FormValues>({
-    resolver: zodResolver(newBudgetSchema),
+  const { form, onSubmit } = useResourceForm({
+    schema: newBudgetSchema,
+    createAction: createBudgetAction,
+    onSuccess,
     defaultValues: {
       category: TRANSACTION_CATEGORIES[0],
       maximum: 0,
@@ -41,37 +40,18 @@ export default function NewBudgetForm({
   });
 
   const {
-    reset,
-    formState: { errors, isSubmitting },
+    handleSubmit,
+    control,
+    formState: { isSubmitting, errors },
   } = form;
-
-  const onSubmit = async (values: FormValues) => {
-    const result = await createBudgetAction({
-      category: values.category,
-      maximum: values.maximum,
-      theme: values.theme,
-    });
-    if (result.serverSideError) {
-      form.setError("root", { message: result.serverSideError });
-    } else if (result.fieldErrors) {
-      Object.entries(result.fieldErrors).forEach(([key, messages]) => {
-        if (messages && messages.length > 0) {
-          form.setError(key as keyof FormValues, { message: messages[0] });
-        }
-      });
-    } else if (result.success) {
-      reset();
-      onSuccess();
-    }
-  };
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         {/* Budget Category */}
         <FormField
           name="category"
-          control={form.control}
+          control={control}
           render={({ field }) => (
             <FormItem>
               <FormLabel>Budget Category</FormLabel>
@@ -81,8 +61,6 @@ export default function NewBudgetForm({
                     <SelectValue placeholder="Select category" />
                   </SelectTrigger>
                   <SelectContent>
-
-                  {/* TODO: show only budgets that do not exist yet (query existing budget categories from DB) */}
                     {TRANSACTION_CATEGORIES.map((cat) => (
                       <SelectItem key={cat} value={cat}>
                         {cat}
@@ -99,7 +77,7 @@ export default function NewBudgetForm({
         {/* Maximum Spend */}
         <FormField
           name="maximum"
-          control={form.control}
+          control={control}
           render={({ field }) => (
             <FormItem>
               <FormLabel>Maximum Spend</FormLabel>
@@ -111,7 +89,7 @@ export default function NewBudgetForm({
                   <Input
                     type="number"
                     className="pl-8"
-                    value={field.value || ""}
+                    value={field.value ?? ""}
                     onChange={(e) => {
                       field.onChange(parseFloat(e.target.value) || 0);
                     }}
@@ -126,7 +104,7 @@ export default function NewBudgetForm({
         {/* Theme */}
         <FormField
           name="theme"
-          control={form.control}
+          control={control}
           render={({ field }) => (
             <FormItem>
               <FormLabel>Theme</FormLabel>

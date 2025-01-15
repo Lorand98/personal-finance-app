@@ -34,7 +34,7 @@ export default async function Budget() {
           <h2 className="text-lg font-semibold mb-2">Spending Summary</h2>
           <ul className="divide-y">
             {budgetSpendingData.map((budget) => (
-              <li key={budget.category}>
+              <li key={budget.id}>
                 <BudgetPieLegendItem {...budget} />
               </li>
             ))}
@@ -52,7 +52,7 @@ export default async function Budget() {
 
           return (
             <BudgetCard
-              key={budget.category}
+              key={budget.id}
               {...budget}
               latestTransactions={latestTransactions}
             />

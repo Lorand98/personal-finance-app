@@ -1,11 +1,9 @@
 "use client";
 
 import { createTransactionAction } from "@/app/(dashboard)/transactions/actions";
+import { useResourceForm } from "@/hooks/use-resource-form";
 import { TRANSACTION_CATEGORIES } from "@/lib/constants";
 import { newTransactionSchema } from "@/lib/validations";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { Checkbox } from "../ui/checkbox";
 import DatePicker from "../ui/date-picker";
 import {
@@ -27,49 +25,30 @@ import {
 import SubmitButton from "../ui/submit-button";
 
 const TransactionForm = ({ onSuccess }: { onSuccess: () => void }) => {
-  type FormValues = z.infer<typeof newTransactionSchema>;
-
-  const form = useForm<FormValues>({
-    resolver: zodResolver(newTransactionSchema),
+  const { form, onSubmit } = useResourceForm({
+    schema: newTransactionSchema,
+    createAction: createTransactionAction,
+    onSuccess,
     defaultValues: {
       name: "",
       category: TRANSACTION_CATEGORIES[0],
       date: new Date().toISOString(),
-      amount: undefined,
       recurring: false,
     },
   });
 
   const {
-    formState: { errors, isSubmitting },
-    reset,
+    handleSubmit,
+    control,
+    formState: { isSubmitting, errors },
   } = form;
-
-  const onSubmit = async (values: FormValues) => {
-    const result = await createTransactionAction(values);
-
-    if (result.serverSideError) {
-      form.setError("root", { message: result.serverSideError });
-    } else if (result.fieldErrors) {
-      Object.entries(result.fieldErrors).forEach(([key, messages]) => {
-        if (messages && messages.length > 0) {
-          form.setError(key as keyof FormValues, {
-            message: messages[0],
-          });
-        }
-      });
-    } else if (result.success) {
-      reset();
-      onSuccess();
-    }
-  };
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <FormField
           name="name"
-          control={form.control}
+          control={control}
           render={({ field }) => (
             <FormItem>
               <FormLabel>Recipient/Sender Name</FormLabel>

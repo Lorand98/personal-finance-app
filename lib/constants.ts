@@ -1,4 +1,8 @@
-export const TRANSACTION_CATEGORIES = [
+import { Enums } from "./supabase/database.types";
+
+export const TRANSACTION_CATEGORIES: Readonly<
+  Enums<"transaction_categories">[]
+> = [
   "General",
   "Dining Out",
   "Groceries",
@@ -9,7 +13,7 @@ export const TRANSACTION_CATEGORIES = [
   "Education",
   "Bills",
   "Shopping",
-] as const;
+];
 
 export const SORTING_OPTIONS = [
   { id: "latest", label: "Latest" },
@@ -44,3 +48,14 @@ export const THEMES = new Map<string, string>([
   ["#CAB361", "Gold"],
   ["#BE6C49", "Orange"],
 ]);
+
+export const TOAST_MESSAGES = {
+  BUDGET_CREATED: {
+    title: "Budget added",
+    description: "The budget has been created successfully.",
+  },
+  TRANSACTION_CREATED: {
+    title: "Transaction added",
+    description: "The transaction has been created successfully.",
+  },
+} as const;

@@ -56,15 +56,14 @@ export default function BudgetCard({
             <p className="text-grey-500">No available data</p>
           ) : (
             <ul className="divide-y-2 divide-grey-500 divide-opacity-15 ">
-              {latestTransactions.map(({ name, amount, avatar, date }) => {
+              {latestTransactions.map(({ id, name, amount, avatar, date }) => {
                 const isNegative = amount < 0;
                 const currencyAmount = `${isNegative ? "-" : "+"}$${Math.abs(
                   amount
                 )}`;
-                //TODO: Add actual ID for transactions or get already defined id from supabase
                 return (
                   <li
-                    key={`${date}-${category}-${name}`}
+                    key={id}
                     className="flex justify-between items-center py-4 first:pt-0 last:pb-0"
                   >
                     <div className="flex items-center gap-4">
