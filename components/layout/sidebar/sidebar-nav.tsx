@@ -32,6 +32,7 @@ const SidebarNav = () => {
         <Logo size={minimized ? "small" : "large"} />
       </div>
       <ul className="py-6 flex gap-1 flex-col flex-grow">
+        {/* TODO: check buggy animation when expanding */}
         {menuItems.map((item) => (
           <motion.li
             key={item.label}

@@ -38,7 +38,7 @@ export const newTransactionSchema = z.object({
   recurring: z.boolean(),
 });
 
-export const newBudgetSchema = z.object({
+export const budgetSchema = z.object({
   category: z.enum([
     TRANSACTION_CATEGORIES[0],
     ...TRANSACTION_CATEGORIES.slice(1),

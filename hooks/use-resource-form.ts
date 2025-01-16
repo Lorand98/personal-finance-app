@@ -3,17 +3,18 @@
 import { useForm, Path, DefaultValues } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import createResourceAction from "@/lib/server/create-resource-action";
+import resourceAction from "@/lib/server/resource-action";
 
 type UseResourceFormProps<T extends z.ZodTypeAny> = {
   schema: T;
-  createAction: (data: z.infer<T>) => ReturnType<typeof createResourceAction>;
+  action: (data: z.infer<T>) => ReturnType<typeof resourceAction>;
   onSuccess: () => void;
   defaultValues: DefaultValues<z.infer<T>>;
 };
+
 export function useResourceForm<T extends z.ZodTypeAny>({
   schema,
-  createAction,
+  action,
   onSuccess,
   defaultValues,
 }: UseResourceFormProps<T>) {
@@ -26,7 +27,7 @@ export function useResourceForm<T extends z.ZodTypeAny>({
 
   async function onSubmit(values: z.infer<T>) {
     try {
-      const result = await createAction(values);
+      const result = await action(values);
 
       if (result.serverSideError) {
         setError("root", { message: result.serverSideError });

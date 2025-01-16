@@ -8,6 +8,12 @@ export const metadata = {
   title: "Budget",
 };
 
+const NoBudgets = () => (
+  <div className="py-6 rounded-xl">
+    <p className="text-grey-500 text-xl">You have no budgets set up yet.</p>
+  </div>
+);
+
 export default async function Budget() {
   const supabase = await createClient();
   const budgets = await getBudget(supabase);
@@ -26,7 +32,9 @@ export default async function Budget() {
     })
     .sort((a, b) => b.spent - a.spent);
 
-  return (
+  return budgets.length === 0 ? (
+    <NoBudgets />
+  ) : (
     <div className="flex flex-col gap-6 md:grid md:grid-cols-[5fr_10fr] md:items-start ">
       <div className="bg-white py-6 px-3 sm:px-4 md:p-8 rounded-xl flex flex-col sm:flex-row md:flex-col gap-2">
         <BudgetPieChart budgetSpendingData={budgetSpendingData} />
@@ -44,7 +52,7 @@ export default async function Budget() {
       <div className="space-y-6">
         {budgetSpendingData.map((budget) => {
           const latestTransactions = transactions
-            .filter((tx) => tx.category === budget.category)
+            .filter((tx) => tx.category === budget.category && tx.amount < 0)
             .sort(
               (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
             )
@@ -53,7 +61,8 @@ export default async function Budget() {
           return (
             <BudgetCard
               key={budget.id}
-              {...budget}
+              budget={budget}
+              spent={budget.spent}
               latestTransactions={latestTransactions}
             />
           );

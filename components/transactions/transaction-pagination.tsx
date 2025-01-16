@@ -103,6 +103,8 @@ const TransactionPagination = ({
           )}
         </div>
 
+        {/* TODO: CHECK: hover animation timing different between button and icon */}
+
         <PaginationItem>
           <Button
             variant="outline"

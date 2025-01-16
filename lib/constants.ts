@@ -51,11 +51,18 @@ export const THEMES = new Map<Enums<"theme_colors">, string>([
 
 export const THEME_CODES = Array.from(THEMES.keys());
 
-
 export const TOAST_MESSAGES = {
   BUDGET_CREATED: {
     title: "Budget added",
     description: "The budget has been created successfully.",
+  },
+  BUDGET_UPDATED: {
+    title: "Budget updated",
+    description: "The budget has been updated successfully.",
+  },
+  BUDGET_DELETED: {
+    title: "Budget deleted",
+    description: "The budget has been deleted successfully.",
   },
   TRANSACTION_CREATED: {
     title: "Transaction added",

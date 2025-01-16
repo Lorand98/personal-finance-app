@@ -1,39 +1,53 @@
 import { formatTransactionDate } from "@/lib/utils";
-import { AvatarIcon } from "@radix-ui/react-icons";
+import { AvatarIcon, DotsHorizontalIcon } from "@radix-ui/react-icons";
+import { PopoverTrigger } from "@radix-ui/react-popover";
 import Image from "next/image";
 import Link from "next/link";
 import { Transaction } from "../transactions/types";
 import CaretRightIcon from "../ui/icons/caret-right-icon";
+import { Popover, PopoverContent } from "../ui/popover";
 import { Progress } from "../ui/progress";
 import BudgetDetail from "./budget-detail";
+import DeleteBudget from "./delete-budget";
+import EditBudget from "./edit-budget";
+import { Budget } from "./types";
 
 interface BudgetCardProps {
-  category: string;
-  maximum: number;
-  theme: string;
+  budget: Budget;
   spent: number;
   latestTransactions: Transaction[];
 }
 
 export default function BudgetCard({
-  category,
-  maximum,
-  theme,
+  budget,
   spent,
   latestTransactions,
 }: BudgetCardProps) {
+  const { category, maximum, theme } = budget;
   const progress = (spent / maximum) * 100;
   const remaining = maximum - spent > 0 ? maximum - spent : 0;
 
   return (
     <div className="bg-white w-full p-4 sm:p-6 md:p-8 rounded-xl">
       <div className="space-y-4">
-        <div className="flex items-center gap-2">
-          <span
-            className="w-4 h-4 rounded-full"
-            style={{ backgroundColor: theme }}
-          />
-          <h2>{category}</h2>
+        <div className="flex justify-between items-center">
+          <div className="flex gap-2">
+            <span
+              className="w-4 h-4 rounded-full"
+              style={{ backgroundColor: theme }}
+            />
+            <h2>{category}</h2>
+          </div>
+          <Popover>
+            <PopoverTrigger>
+              <DotsHorizontalIcon className="w-6 h-6 text-grey-300 font-bold" />
+            </PopoverTrigger>
+            <PopoverContent className="max-w-32 p-0">
+              <EditBudget budget={budget} />
+              <hr />
+              <DeleteBudget budget={budget} />
+            </PopoverContent>
+          </Popover>
         </div>
         <p className="text-grey-500">Maximum of ${maximum}</p>
         <Progress value={progress} progressBarColor={theme} />
@@ -57,10 +71,7 @@ export default function BudgetCard({
           ) : (
             <ul className="divide-y-2 divide-grey-500 divide-opacity-15 ">
               {latestTransactions.map(({ id, name, amount, avatar, date }) => {
-                const isNegative = amount < 0;
-                const currencyAmount = `${isNegative ? "-" : "+"}$${Math.abs(
-                  amount
-                )}`;
+                const currencyAmount = `-$${Math.abs(amount)}`;
                 return (
                   <li
                     key={id}

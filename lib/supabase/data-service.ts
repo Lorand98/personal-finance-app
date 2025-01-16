@@ -57,3 +57,25 @@ export async function createBudget(
     return error;
   }
 }
+
+export async function updateBudget(
+  supabase: SupabaseClient<Database>,
+  budget: TablesInsert<"budgets">,
+  id: number
+) {
+  const { error } = await supabase.from("budgets").update(budget).eq("id", id);
+
+  if (error) {
+    return error;
+  }
+}
+
+export async function deleteBudget(
+  supabase: SupabaseClient<Database>,
+  budgetId: number
+) {
+  const { error } = await supabase.from("budgets").delete().eq("id", budgetId);
+  if (error) {
+    return error;
+  }
+}

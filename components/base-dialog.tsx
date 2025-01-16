@@ -16,6 +16,7 @@ interface BaseDialogProps {
   buttonLabel: string;
   dialogTitle: string;
   dialogDescription: string;
+  dialogTriggerButtonProps?: React.ComponentProps<typeof Button>;
   children: React.ReactNode;
 }
 
@@ -25,12 +26,13 @@ export function BaseDialog({
   buttonLabel,
   dialogTitle,
   dialogDescription,
+  dialogTriggerButtonProps,
   children,
 }: BaseDialogProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
-        <Button>{buttonLabel}</Button>
+        <Button {...dialogTriggerButtonProps}>{buttonLabel}</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

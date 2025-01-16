@@ -1,16 +1,19 @@
 "use client";
 
-import { THEME_CODES, THEMES, TRANSACTION_CATEGORIES } from "@/lib/constants";
-import { newBudgetSchema } from "@/lib/validations";
-import { createBudgetAction } from "@/app/(dashboard)/budget/actions";
+import {
+  createBudgetAction,
+  editBudgetAction,
+} from "@/app/(dashboard)/budget/actions";
 import { useResourceForm } from "@/hooks/use-resource-form";
+import { THEME_CODES, THEMES, TRANSACTION_CATEGORIES } from "@/lib/constants";
+import { budgetSchema } from "@/lib/validations";
 
 import {
   Form,
+  FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormControl,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -22,33 +25,39 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import SubmitButton from "@/components/ui/submit-button";
+import { Budget } from "./types";
 
 export type AvailableOptions = {
   availableCategories: Array<(typeof TRANSACTION_CATEGORIES)[number]>;
   availableColors: Array<(typeof THEME_CODES)[number]>;
 };
 
-type NewBudgetFormProps = {
+type BudgetFormProps = {
   onSuccess: () => void;
   availableOptions: AvailableOptions;
+  budget?: Budget;
 };
 
-export default function NewBudgetForm({
+export default function BudgetForm({
   onSuccess,
   availableOptions: {
     availableCategories: categories,
     availableColors: colors,
   },
-}: NewBudgetFormProps) {
+  budget,
+}: BudgetFormProps) {
+  const defaultValues = {
+    category: budget?.category ?? categories[0],
+    maximum: budget?.maximum ?? 0,
+    theme: budget?.theme ?? colors[0],
+  };
+
   const { form, onSubmit } = useResourceForm({
-    schema: newBudgetSchema,
-    createAction: createBudgetAction,
+    schema: budgetSchema,
+    action: (data) =>
+      budget ? editBudgetAction(data, budget.id) : createBudgetAction(data),
     onSuccess,
-    defaultValues: {
-      category: categories[0] ?? "",
-      maximum: 0,
-      theme: colors[0] ?? "",
-    },
+    defaultValues,
   });
 
   const {
@@ -126,20 +135,37 @@ export default function NewBudgetForm({
                     <SelectValue placeholder="Select theme" />
                   </SelectTrigger>
                   <SelectContent>
-                    {colors.map((color) => {
-                      const label = THEMES.get(color);
-                      return (
-                        <SelectItem key={color} value={color}>
-                          <div className="flex items-center gap-2">
-                            <span
-                              className="w-4 h-4 rounded-full"
-                              style={{ backgroundColor: color }}
-                            />
-                            {label ?? color}
-                          </div>
-                        </SelectItem>
-                      );
-                    })}
+                    {Array.from(THEMES.entries())
+                      .sort(([colorA], [colorB]) => {
+                        const inColorsA = colors.includes(colorA);
+                        const inColorsB = colors.includes(colorB);
+                        return inColorsA === inColorsB ? 0 : inColorsA ? -1 : 1;
+                      })
+                      .map(([color, label]) => {
+                        const isDisabled = !colors.includes(color);
+                        return (
+                          <SelectItem
+                            key={color}
+                            value={color}
+                            disabled={isDisabled}
+                          >
+                            <div className="flex w-full items-center justify-between">
+                              <div className="flex items-center gap-2">
+                                <span
+                                  className="h-4 w-4 rounded-full"
+                                  style={{ backgroundColor: color }}
+                                />
+                                {label ?? color}
+                              </div>
+                              {isDisabled && (
+                                <span className="text-sm text-grey-500">
+                                  Already Used
+                                </span>
+                              )}
+                            </div>
+                          </SelectItem>
+                        );
+                      })}
                   </SelectContent>
                 </Select>
               </FormControl>
@@ -151,8 +177,8 @@ export default function NewBudgetForm({
         {errors.root && <p className="text-red-500">{errors.root.message}</p>}
 
         <SubmitButton
-          text="Add Budget"
-          submittingText="Adding..."
+          text={budget ? "Update Budget" : "Add Budget"}
+          submittingText={budget ? "Updating Budget" : "Adding Budget"}
           isSubmitting={isSubmitting}
         />
       </form>

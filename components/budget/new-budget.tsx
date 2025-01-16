@@ -4,7 +4,7 @@ import { BaseDialog } from "@/components/base-dialog";
 import { useDialog } from "@/hooks/use-dialog";
 import { TOAST_MESSAGES } from "@/lib/constants";
 import useSWR, { mutate } from "swr";
-import NewBudgetForm, { AvailableOptions } from "./budget-form";
+import BudgetForm, { AvailableOptions } from "./budget-form";
 
 const fetcher = (url: string): Promise<AvailableOptions> =>
   fetch(url).then((res) => res.json());
@@ -46,7 +46,7 @@ export default function NewBudget() {
       );
     } else {
       dialogContent = (
-        <NewBudgetForm
+        <BudgetForm
           onSuccess={onFormSuccess}
           availableOptions={{ availableCategories, availableColors }}
         />

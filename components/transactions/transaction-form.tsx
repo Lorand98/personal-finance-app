@@ -27,7 +27,7 @@ import SubmitButton from "../ui/submit-button";
 const TransactionForm = ({ onSuccess }: { onSuccess: () => void }) => {
   const { form, onSubmit } = useResourceForm({
     schema: newTransactionSchema,
-    createAction: createTransactionAction,
+    action: createTransactionAction,
     onSuccess,
     defaultValues: {
       name: "",
