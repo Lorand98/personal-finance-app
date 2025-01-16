@@ -43,7 +43,7 @@ export default function BudgetPieChart({
   );
 
   return (
-    <ChartContainer config={chartConfig} className=" aspect-square h-[18rem]">
+    <ChartContainer config={chartConfig} className=" aspect-square h-[20rem]">
       <PieChart>
         <Pie
           dataKey="spent"

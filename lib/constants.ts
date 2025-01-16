@@ -32,7 +32,7 @@ export const TRANS_CATEGORIES_FILTER = [
   })),
 ];
 
-export const THEMES = new Map<string, string>([
+export const THEMES = new Map<Enums<"theme_colors">, string>([
   ["#277C78", "Green"],
   ["#F2CDAC", "Yellow"],
   ["#82C9D7", "Cyan"],
@@ -48,6 +48,9 @@ export const THEMES = new Map<string, string>([
   ["#CAB361", "Gold"],
   ["#BE6C49", "Orange"],
 ]);
+
+export const THEME_CODES = Array.from(THEMES.keys());
+
 
 export const TOAST_MESSAGES = {
   BUDGET_CREATED: {

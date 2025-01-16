@@ -1,6 +1,6 @@
 "use client";
 
-import { THEMES, TRANSACTION_CATEGORIES } from "@/lib/constants";
+import { THEME_CODES, THEMES, TRANSACTION_CATEGORIES } from "@/lib/constants";
 import { newBudgetSchema } from "@/lib/validations";
 import { createBudgetAction } from "@/app/(dashboard)/budget/actions";
 import { useResourceForm } from "@/hooks/use-resource-form";
@@ -23,19 +23,31 @@ import {
 } from "@/components/ui/select";
 import SubmitButton from "@/components/ui/submit-button";
 
+export type AvailableOptions = {
+  availableCategories: Array<(typeof TRANSACTION_CATEGORIES)[number]>;
+  availableColors: Array<(typeof THEME_CODES)[number]>;
+};
+
+type NewBudgetFormProps = {
+  onSuccess: () => void;
+  availableOptions: AvailableOptions;
+};
+
 export default function NewBudgetForm({
   onSuccess,
-}: {
-  onSuccess: () => void;
-}) {
+  availableOptions: {
+    availableCategories: categories,
+    availableColors: colors,
+  },
+}: NewBudgetFormProps) {
   const { form, onSubmit } = useResourceForm({
     schema: newBudgetSchema,
     createAction: createBudgetAction,
     onSuccess,
     defaultValues: {
-      category: TRANSACTION_CATEGORIES[0],
+      category: categories[0] ?? "",
       maximum: 0,
-      theme: "#277C78",
+      theme: colors[0] ?? "",
     },
   });
 
@@ -61,7 +73,7 @@ export default function NewBudgetForm({
                     <SelectValue placeholder="Select category" />
                   </SelectTrigger>
                   <SelectContent>
-                    {TRANSACTION_CATEGORIES.map((cat) => (
+                    {categories.map((cat) => (
                       <SelectItem key={cat} value={cat}>
                         {cat}
                       </SelectItem>
@@ -83,7 +95,7 @@ export default function NewBudgetForm({
               <FormLabel>Maximum Spend</FormLabel>
               <FormControl>
                 <div className="relative">
-                  <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-grey-500">
+                  <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">
                     $
                   </span>
                   <Input
@@ -114,17 +126,20 @@ export default function NewBudgetForm({
                     <SelectValue placeholder="Select theme" />
                   </SelectTrigger>
                   <SelectContent>
-                    {Array.from(THEMES.entries()).map(([color, label]) => (
-                      <SelectItem key={label} value={color}>
-                        <div className="flex items-center gap-2">
-                          <span
-                            className="w-4 h-4 rounded-full"
-                            style={{ backgroundColor: color }}
-                          />
-                          {label}
-                        </div>
-                      </SelectItem>
-                    ))}
+                    {colors.map((color) => {
+                      const label = THEMES.get(color);
+                      return (
+                        <SelectItem key={color} value={color}>
+                          <div className="flex items-center gap-2">
+                            <span
+                              className="w-4 h-4 rounded-full"
+                              style={{ backgroundColor: color }}
+                            />
+                            {label ?? color}
+                          </div>
+                        </SelectItem>
+                      );
+                    })}
                   </SelectContent>
                 </Select>
               </FormControl>
@@ -133,7 +148,7 @@ export default function NewBudgetForm({
           )}
         />
 
-        {errors.root && <p className="text-red">{errors.root.message}</p>}
+        {errors.root && <p className="text-red-500">{errors.root.message}</p>}
 
         <SubmitButton
           text="Add Budget"

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { TRANSACTION_CATEGORIES } from "./constants";
+import { TRANSACTION_CATEGORIES, THEME_CODES } from "./constants";
 
 export const signupSchema = z.object({
   name: z.string().min(2, {
@@ -39,7 +39,10 @@ export const newTransactionSchema = z.object({
 });
 
 export const newBudgetSchema = z.object({
-  category: z.string().min(1, "Please select a category"),
+  category: z.enum([
+    TRANSACTION_CATEGORIES[0],
+    ...TRANSACTION_CATEGORIES.slice(1),
+  ]),
   maximum: z.number().min(0, "Amount must be bigger than 0"),
-  theme: z.string().min(1, "Please select a theme"),
+  theme: z.enum([THEME_CODES[0], ...THEME_CODES.slice(1)]),
 });
