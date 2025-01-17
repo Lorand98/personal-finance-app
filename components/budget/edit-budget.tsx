@@ -9,7 +9,13 @@ import { Budget } from "./types";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-export default function EditBudget({ budget }: { budget: Budget }) {
+export default function EditBudget({
+  budget,
+  onClose,
+}: {
+  budget: Budget;
+  onClose: () => void;
+}) {
   const { open, setOpen, handleSuccess } = useDialog(
     TOAST_MESSAGES.BUDGET_UPDATED
   );
@@ -22,6 +28,7 @@ export default function EditBudget({ budget }: { budget: Budget }) {
 
   const onFormSuccess = () => {
     handleSuccess();
+    onClose();
   };
 
   let dialogContent: React.ReactNode = null;

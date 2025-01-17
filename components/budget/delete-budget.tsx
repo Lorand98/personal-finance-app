@@ -9,7 +9,13 @@ import { Button } from "../ui/button";
 import { Budget } from "./types";
 import { Loader2 } from "lucide-react";
 
-export default function DeleteBudget({ budget }: { budget: Budget }) {
+export default function DeleteBudget({
+  budget,
+  onClose,
+}: {
+  budget: Budget;
+  onClose: () => void;
+}) {
   const { open, setOpen, handleSuccess } = useDialog(
     TOAST_MESSAGES.BUDGET_DELETED
   );
@@ -22,6 +28,7 @@ export default function DeleteBudget({ budget }: { budget: Budget }) {
       const result = await deleteBudgetAction(budget.id);
       if (result.success) {
         handleSuccess();
+        onClose();
       } else if (result.serverSideError) {
         setError(result.serverSideError);
       }

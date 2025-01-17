@@ -1,15 +1,12 @@
 import { formatTransactionDate } from "@/lib/utils";
-import { AvatarIcon, DotsHorizontalIcon } from "@radix-ui/react-icons";
-import { PopoverTrigger } from "@radix-ui/react-popover";
+import { AvatarIcon } from "@radix-ui/react-icons";
 import Image from "next/image";
 import Link from "next/link";
 import { Transaction } from "../transactions/types";
 import CaretRightIcon from "../ui/icons/caret-right-icon";
-import { Popover, PopoverContent } from "../ui/popover";
 import { Progress } from "../ui/progress";
 import BudgetDetail from "./budget-detail";
-import DeleteBudget from "./delete-budget";
-import EditBudget from "./edit-budget";
+import BudgetOptions from "./budget-options";
 import { Budget } from "./types";
 
 interface BudgetCardProps {
@@ -38,16 +35,7 @@ export default function BudgetCard({
             />
             <h2>{category}</h2>
           </div>
-          <Popover>
-            <PopoverTrigger>
-              <DotsHorizontalIcon className="w-6 h-6 text-grey-300 font-bold" />
-            </PopoverTrigger>
-            <PopoverContent className="max-w-32 p-0">
-              <EditBudget budget={budget} />
-              <hr />
-              <DeleteBudget budget={budget} />
-            </PopoverContent>
-          </Popover>
+          <BudgetOptions {...budget} />
         </div>
         <p className="text-grey-500">Maximum of ${maximum}</p>
         <Progress value={progress} progressBarColor={theme} />
