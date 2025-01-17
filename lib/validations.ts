@@ -32,7 +32,7 @@ export const newTransactionSchema = z.object({
     ...TRANSACTION_CATEGORIES.slice(1),
   ]),
   date: z.string(),
-  amount: z.coerce.number().refine((val) => val !== 0, {
+  amount: z.number().refine((val) => val !== 0, {
     message: "Amount must not be 0",
   }),
   recurring: z.boolean(),

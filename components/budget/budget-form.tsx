@@ -48,7 +48,7 @@ export default function BudgetForm({
 }: BudgetFormProps) {
   const defaultValues = {
     category: budget?.category ?? categories[0],
-    maximum: budget?.maximum ?? 0,
+    maximum: budget?.maximum ?? undefined,
     theme: budget?.theme ?? colors[0],
   };
 
@@ -149,14 +149,12 @@ export default function BudgetForm({
                             value={color}
                             disabled={isDisabled}
                           >
-                            <div className="flex w-full items-center justify-between">
-                              <div className="flex items-center gap-2">
-                                <span
-                                  className="h-4 w-4 rounded-full"
-                                  style={{ backgroundColor: color }}
-                                />
-                                {label ?? color}
-                              </div>
+                            <div className="flex items-center gap-2 w-full">
+                              <span
+                                className="h-4 w-4 rounded-full"
+                                style={{ backgroundColor: color }}
+                              />
+                              <span className="flex-1">{label ?? color}</span>
                               {isDisabled && (
                                 <span className="text-sm text-grey-500">
                                   Already Used

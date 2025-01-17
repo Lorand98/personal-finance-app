@@ -7,6 +7,7 @@ import { useState } from "react";
 import { BaseDialog } from "../base-dialog";
 import { Button } from "../ui/button";
 import { Budget } from "./types";
+import { Loader2 } from "lucide-react";
 
 export default function DeleteBudget({ budget }: { budget: Budget }) {
   const { open, setOpen, handleSuccess } = useDialog(
@@ -49,7 +50,7 @@ export default function DeleteBudget({ budget }: { budget: Budget }) {
         disabled={loading}
       >
         Yes, Confirm Deletion
-        {loading && <span className="ml-2 spinner" />}
+        {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
       </Button>
       <Button variant="ghost" onClick={() => setOpen(false)}>
         No, Go Back

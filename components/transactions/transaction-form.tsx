@@ -34,6 +34,7 @@ const TransactionForm = ({ onSuccess }: { onSuccess: () => void }) => {
       category: TRANSACTION_CATEGORIES[0],
       date: new Date().toISOString(),
       recurring: false,
+      amount: undefined,
     },
   });
 
@@ -123,8 +124,7 @@ const TransactionForm = ({ onSuccess }: { onSuccess: () => void }) => {
                     className="pl-8"
                     value={field.value ?? ""}
                     onChange={(e) => {
-                      const val = e.target.value;
-                      field.onChange(val ? parseFloat(val) : undefined);
+                      field.onChange(parseFloat(e.target.value) || 0);
                     }}
                   />
                 </div>
