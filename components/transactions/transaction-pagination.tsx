@@ -1,11 +1,12 @@
-import { CaretLeftIcon, CaretRightIcon } from "@radix-ui/react-icons";
+import CaretLeftIcon from "@/components/ui/icons/caret-left-icon";
 import { Table } from "@tanstack/react-table";
 import { Button } from "../ui/button";
+import CaretRightIcon from "../ui/icons/caret-right-icon";
 import {
-    Pagination,
-    PaginationContent,
-    PaginationEllipsis,
-    PaginationItem,
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
 } from "../ui/pagination";
 import { Transaction } from "./types";
 
@@ -102,9 +103,6 @@ const TransactionPagination = ({
             )
           )}
         </div>
-
-        {/* TODO: CHECK: hover animation timing different between button and icon */}
-
         <PaginationItem>
           <Button
             variant="outline"

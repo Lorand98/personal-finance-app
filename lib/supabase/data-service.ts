@@ -79,3 +79,11 @@ export async function deleteBudget(
     return error;
   }
 }
+
+export async function getPots(supabase: SupabaseClient<Database>) {
+  const { data, error } = await supabase.from("pots").select("*");
+  if (error) {
+    throw error;
+  }
+  return data;
+}

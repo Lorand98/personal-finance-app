@@ -28,7 +28,7 @@ export default function BudgetCard({
     <div className="bg-white w-full p-4 sm:p-6 md:p-8 rounded-xl">
       <div className="space-y-4">
         <div className="flex justify-between items-center">
-          <div className="flex gap-2">
+          <div className="flex gap-2 items-center">
             <span
               className="w-4 h-4 rounded-full"
               style={{ backgroundColor: theme }}
@@ -38,7 +38,7 @@ export default function BudgetCard({
           <BudgetOptions {...budget} />
         </div>
         <p className="text-grey-500">Maximum of ${maximum}</p>
-        <Progress value={progress} progressBarColor={theme} />
+        <Progress value={progress} progressBarColor={theme} className="h-6" />
         <div className="flex">
           <BudgetDetail color={theme} label="Spent" value={spent} />
           <BudgetDetail label="Remaining" value={remaining} />

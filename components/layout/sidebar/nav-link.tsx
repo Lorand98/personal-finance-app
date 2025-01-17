@@ -37,7 +37,7 @@ const NavLink = ({
       )}
     >
       <Icon
-        className={cn("transition-colors duration-300", {
+        className={cn("transition-colors duration-300 flex-shrink-0", {
           "fill-green": isActive,
           "group-hover:fill-white": !isActive,
         })}
