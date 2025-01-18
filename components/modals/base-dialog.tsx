@@ -20,7 +20,7 @@ interface BaseDialogProps {
   children: React.ReactNode;
 }
 
-export function BaseDialog({
+export default function BaseDialog({
   open,
   onOpenChange,
   buttonLabel,

@@ -1,6 +1,6 @@
 "use client";
 
-import { BaseDialog } from "@/components/base-dialog";
+import BaseDialog from "@/components/modals/base-dialog";
 import { useDialog } from "@/hooks/use-dialog";
 import { TOAST_MESSAGES } from "@/lib/constants";
 import TransactionForm from "./transaction-form";

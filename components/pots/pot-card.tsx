@@ -1,13 +1,14 @@
 import { Progress } from "../ui/progress";
 import { Button } from "../ui/button";
 import { Pot } from "./types";
+import Card2 from "../ui/card2";
 
 const PotCard = ({ pot }: { pot: Pot }) => {
   const { name, target, total, theme } = pot;
 
   const savedPercent = (total / target) * 100;
   return (
-    <div className="bg-white w-full p-4 sm:p-6 md:p-8 rounded-xl space-y-4">
+    <Card2>
       <div className="flex justify-between items-center">
         <div className="flex gap-2 items-center">
           <span
@@ -42,7 +43,7 @@ const PotCard = ({ pot }: { pot: Pot }) => {
           Withdraw
         </Button>
       </div>
-    </div>
+    </Card2>
   );
 };
 
