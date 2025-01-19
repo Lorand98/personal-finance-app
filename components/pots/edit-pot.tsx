@@ -7,8 +7,7 @@ import useSWR from "swr";
 import PotForm from "./pot-form";
 import { Pot } from "./types";
 import { OptionModalCompProps } from "@/lib/types";
-
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
+import { fetcher } from "@/lib/utils";
 
 export default function EditPot({
   entity: pot,
@@ -36,7 +35,7 @@ export default function EditPot({
 
   if (optionsError) {
     dialogContent = (
-      <p className="text-red-500">
+      <p className="text-red">
         Failed to load data. Please try again later.
       </p>
     );

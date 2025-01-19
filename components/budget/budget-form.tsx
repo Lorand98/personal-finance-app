@@ -111,9 +111,10 @@ export default function BudgetForm({
                   <Input
                     type="number"
                     className="pl-8"
-                    value={field.value ?? ""}
+                    value={field.value === undefined ? "" : String(field.value)}
                     onChange={(e) => {
-                      field.onChange(parseFloat(e.target.value) || 0);
+                      const raw = e.target.value;
+                      field.onChange(raw === "" ? undefined : parseFloat(raw));
                     }}
                   />
                 </div>
@@ -143,7 +144,7 @@ export default function BudgetForm({
           )}
         />
 
-        {errors.root && <p className="text-red-500">{errors.root.message}</p>}
+        {errors.root && <p className="text-red">{errors.root.message}</p>}
 
         <SubmitButton
           text={budget ? "Save Changes" : "Add Budget"}

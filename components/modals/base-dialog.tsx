@@ -34,7 +34,7 @@ export default function BaseDialog({
       <DialogTrigger asChild>
         <Button {...dialogTriggerButtonProps}>{buttonLabel}</Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="w-11/12">
         <DialogHeader>
           <DialogTitle>{dialogTitle}</DialogTitle>
           <DialogDescription>{dialogDescription}</DialogDescription>

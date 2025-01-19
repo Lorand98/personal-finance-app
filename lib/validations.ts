@@ -52,3 +52,11 @@ export const potSchema = z.object({
   target: z.number().min(0, "Amount must be bigger than 0"),
   theme: z.enum([THEME_CODES[0], ...THEME_CODES.slice(1)]),
 });
+
+export const potChangeAmount = (max: number) =>
+  z.object({
+    amount: z
+      .number()
+      .min(0, "Amount must be bigger than 0")
+      .max(max, `Amount must be less than ${max}`),
+  });

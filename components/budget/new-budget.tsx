@@ -5,16 +5,14 @@ import { useDialog } from "@/hooks/use-dialog";
 import { TOAST_MESSAGES } from "@/lib/constants";
 import useSWR, { mutate } from "swr";
 import BudgetForm, { AvailableOptions } from "./budget-form";
-
-const fetcher = (url: string): Promise<AvailableOptions> =>
-  fetch(url).then((res) => res.json());
+import { fetcher } from "@/lib/utils";
 
 export default function NewBudget() {
   const { open, setOpen, handleSuccess } = useDialog(
     TOAST_MESSAGES.BUDGET_CREATED
   );
 
-  const { data, error, isLoading } = useSWR(
+  const { data, error, isLoading } = useSWR<AvailableOptions>(
     "/api/budgets/available-options",
     fetcher
   );
@@ -28,7 +26,7 @@ export default function NewBudget() {
 
   if (error) {
     dialogContent = (
-      <p className="text-red-500">
+      <p className="text-red">
         Failed to load budget options. Please try again later.
       </p>
     );

@@ -133,6 +133,33 @@ export async function updatePot(
   }
 }
 
+export async function updateTotalPot(
+  supabase: SupabaseClient<Database>,
+  { amount }: { amount: number },
+  id: number
+) {
+  const { data, error: selectError } = await supabase
+    .from("pots")
+    .select("total")
+    .eq("id", id)
+    .single();
+
+  if (selectError) {
+    return selectError;
+  }
+
+  const newTotal = data.total + amount;
+
+  const { error: updateError } = await supabase
+    .from("pots")
+    .update({ total: newTotal })
+    .eq("id", id);
+
+  if (updateError) {
+    return updateError;
+  }
+}
+
 export async function deletePot(
   supabase: SupabaseClient<Database>,
   potId: number

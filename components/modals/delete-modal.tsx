@@ -13,6 +13,7 @@ interface DeleteDialogProps {
   description: string;
   triggerButtonProps?: React.ComponentProps<typeof Button>;
   onDelete: () => Promise<{ success: boolean; error?: string }>;
+  onSuccess: () => void;
 }
 
 export default function DeleteDialog({
@@ -22,6 +23,7 @@ export default function DeleteDialog({
   description,
   triggerButtonProps,
   deleteButtonLabel,
+  onSuccess,
   onDelete,
 }: DeleteDialogProps) {
   const [loading, setLoading] = useState(false);
@@ -34,6 +36,8 @@ export default function DeleteDialog({
 
     if (result.success) {
       onOpenChange(false);
+      setError("");
+      onSuccess();
     } else if (result.error) {
       setError(result.error);
     }

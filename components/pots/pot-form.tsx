@@ -7,12 +7,12 @@ import { potSchema } from "@/lib/validations";
 import ThemeSelectContent from "../common/theme-select-content";
 
 import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Select, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -83,9 +83,10 @@ export default function PotForm({
                   <Input
                     type="number"
                     className="pl-8"
-                    value={field.value ?? ""}
+                    value={field.value === undefined ? "" : String(field.value)}
                     onChange={(e) => {
-                      field.onChange(parseFloat(e.target.value) || 0);
+                      const raw = e.target.value;
+                      field.onChange(raw === "" ? undefined : parseFloat(raw));
                     }}
                   />
                 </div>
@@ -115,7 +116,7 @@ export default function PotForm({
           )}
         />
 
-        {errors.root && <p className="text-red-500">{errors.root.message}</p>}
+        {errors.root && <p className="text-red">{errors.root.message}</p>}
 
         <SubmitButton
           text={pot ? "Save Changes" : "Add Pot"}

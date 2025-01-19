@@ -1,8 +1,13 @@
 "use server";
 
 import resourceAction from "@/lib/server/resource-action";
-import { createPot, deletePot, updatePot } from "@/lib/supabase/data-service";
-import { potSchema } from "@/lib/validations";
+import {
+  createPot,
+  deletePot,
+  updatePot,
+  updateTotalPot,
+} from "@/lib/supabase/data-service";
+import { potSchema, potChangeAmount } from "@/lib/validations";
 import { PotInsert } from "@/components/pots/types";
 
 export async function createPotAction(pot: PotInsert) {
@@ -22,6 +27,29 @@ export async function editPotAction(pot: PotInsert, id: number) {
     type: "update",
     fn: updatePot,
     id,
+    revalidatePathRoute: "/pots",
+  });
+}
+
+export async function editTotalPotAction(
+  amount: number,
+  totalCurrent: number,
+  id: number,
+  addition: boolean
+) {
+  return resourceAction({
+    type: "update",
+    fn: (supabase, data, id) =>
+      updateTotalPot(
+        supabase,
+        {
+          amount: addition ? data.amount : -data.amount,
+        },
+        id
+      ),
+    id,
+    data: { amount },
+    schema: potChangeAmount(totalCurrent),
     revalidatePathRoute: "/pots",
   });
 }

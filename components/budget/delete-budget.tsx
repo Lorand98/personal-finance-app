@@ -11,7 +11,7 @@ export default function DeleteBudget({
   entity: budget,
   onClose,
 }: OptionModalCompProps<Budget>) {
-  const { open, setOpen } = useDialog(TOAST_MESSAGES.BUDGET_DELETED);
+  const { open, setOpen, handleSuccess } = useDialog(TOAST_MESSAGES.BUDGET_DELETED);
 
   const handleDelete = async () => {
     const result = await deleteBudgetAction(budget.id);
@@ -25,10 +25,11 @@ export default function DeleteBudget({
         if (!open) onClose();
         setOpen(open);
       }}
-      itemLabel={`\`${budget.category}\``}
+      itemLabel={`'${budget.category}'`}
       deleteButtonLabel="Delete Budget"
       description="Are you sure you want to delete this budget? This action cannot be reversed."
       onDelete={handleDelete}
+      onSuccess={handleSuccess}
       triggerButtonProps={{
         variant: "ghost",
         className: "w-full text-left justify-start text-red hover:text-red",

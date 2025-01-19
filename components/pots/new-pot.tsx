@@ -17,10 +17,9 @@ export default function NewPot() {
     TOAST_MESSAGES.POT_CREATED
   );
 
-  const { data, error, isLoading } = useSWR(
-    "/api/pots/available-themes",
-    fetcher
-  );
+  const { data, error, isLoading } = useSWR<{
+    availableColors: Array<(typeof THEME_CODES)[number]>;
+  }>("/api/pots/available-themes", fetcher);
 
   const onFormSuccess = () => {
     mutate("/api/pots/available-themes");
@@ -31,7 +30,7 @@ export default function NewPot() {
 
   if (error) {
     dialogContent = (
-      <p className="text-red-500">
+      <p className="text-red">
         Failed to load avaiable pot themes. Please try again later.
       </p>
     );

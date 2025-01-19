@@ -8,3 +8,5 @@ export function cn(...inputs: ClassValue[]) {
 
 export const formatTransactionDate = (date: string) =>
   moment(date).format("DD MMM YYYY");
+
+export const fetcher = (url: string) => fetch(url).then((res) => res.json());

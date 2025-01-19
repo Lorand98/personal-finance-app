@@ -9,7 +9,7 @@ type UseResourceFormProps<T extends z.ZodTypeAny> = {
   schema: T;
   action: (data: z.infer<T>) => ReturnType<typeof resourceAction>;
   onSuccess: () => void;
-  defaultValues: DefaultValues<z.infer<T>>;
+  defaultValues?: DefaultValues<z.infer<T>>;
 };
 
 export function useResourceForm<T extends z.ZodTypeAny>({

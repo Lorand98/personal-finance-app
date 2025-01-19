@@ -11,7 +11,9 @@ export default function DeletePot({
   entity: pot,
   onClose,
 }: OptionModalCompProps<Pot>) {
-  const { open, setOpen } = useDialog(TOAST_MESSAGES.POT_DELETED);
+  const { open, setOpen, handleSuccess } = useDialog(
+    TOAST_MESSAGES.POT_DELETED
+  );
 
   const handleDelete = async () => {
     const result = await deletePotAction(pot.id);
@@ -25,10 +27,11 @@ export default function DeletePot({
         if (!open) onClose();
         setOpen(open);
       }}
-      itemLabel={`\`${pot.name}\``}
+      itemLabel={`'${pot.name}'`}
       deleteButtonLabel="Delete Pot"
       description="Are you sure you want to delete this pot? This action cannot be reversed."
       onDelete={handleDelete}
+      onSuccess={handleSuccess}
       triggerButtonProps={{
         variant: "ghost",
         className: "w-full text-left justify-start text-red hover:text-red",

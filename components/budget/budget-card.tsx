@@ -38,7 +38,7 @@ export default function BudgetCard({
         <BudgetOptions budget={{...budget}} />
       </div>
       <p className="text-grey-500">Maximum of ${maximum}</p>
-      <Progress value={progress} progressBarColor={theme} className="h-6" />
+      <Progress valuePercent={progress} progressBarColor={theme} className="h-6" />
       <div className="flex">
         <BudgetDetail color={theme} label="Spent" value={spent} />
         <BudgetDetail label="Remaining" value={remaining} />

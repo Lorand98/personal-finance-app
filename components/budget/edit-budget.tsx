@@ -7,8 +7,7 @@ import useSWR from "swr";
 import BudgetForm, { AvailableOptions } from "./budget-form";
 import { Budget } from "./types";
 import { OptionModalCompProps } from "@/lib/types";
-
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
+import { fetcher } from "@/lib/utils";
 
 export default function EditBudget({
   entity: budget,
@@ -33,7 +32,7 @@ export default function EditBudget({
 
   if (optionsError) {
     dialogContent = (
-      <p className="text-red-500">
+      <p className="text-red">
         Failed to load data. Please try again later.
       </p>
     );
