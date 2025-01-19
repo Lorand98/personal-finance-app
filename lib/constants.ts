@@ -68,4 +68,16 @@ export const TOAST_MESSAGES = {
     title: "Transaction added",
     description: "The transaction has been created successfully.",
   },
+  POT_CREATED: {
+    title: "Pot added",
+    description: "The pot has been created successfully.",
+  },
+  POT_UPDATED: {
+    title: "Pot updated",
+    description: "The pot has been updated successfully.",
+  },
+  POT_DELETED: {
+    title: "Pot deleted",
+    description: "The pot has been deleted successfully.",
+  },
 } as const;

@@ -8,6 +8,7 @@ import { useState } from "react";
 interface DeleteDialogProps {
   open: boolean;
   onOpenChange: (val: boolean) => void;
+  deleteButtonLabel: string;
   itemLabel: string;
   description: string;
   triggerButtonProps?: React.ComponentProps<typeof Button>;
@@ -20,6 +21,7 @@ export default function DeleteDialog({
   itemLabel,
   description,
   triggerButtonProps,
+  deleteButtonLabel,
   onDelete,
 }: DeleteDialogProps) {
   const [loading, setLoading] = useState(false);
@@ -41,7 +43,7 @@ export default function DeleteDialog({
     <BaseDialog
       open={open}
       onOpenChange={onOpenChange}
-      buttonLabel={`Delete ${itemLabel}`}
+      buttonLabel={deleteButtonLabel}
       dialogTitle={`Delete ${itemLabel}?`}
       dialogDescription={description}
       dialogTriggerButtonProps={triggerButtonProps}

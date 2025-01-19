@@ -1,20 +1,20 @@
 "use client";
 
-import { deleteBudgetAction } from "@/app/(dashboard)/budget/actions";
+import { deletePotAction } from "@/app/(dashboard)/pots/actions";
 import DeleteModal from "@/components/modals/delete-modal";
 import { useDialog } from "@/hooks/use-dialog";
 import { TOAST_MESSAGES } from "@/lib/constants";
-import { Budget } from "./types";
+import { Pot } from "./types";
 import { OptionModalCompProps } from "@/lib/types";
 
-export default function DeleteBudget({
-  entity: budget,
+export default function DeletePot({
+  entity: pot,
   onClose,
-}: OptionModalCompProps<Budget>) {
-  const { open, setOpen } = useDialog(TOAST_MESSAGES.BUDGET_DELETED);
+}: OptionModalCompProps<Pot>) {
+  const { open, setOpen } = useDialog(TOAST_MESSAGES.POT_DELETED);
 
   const handleDelete = async () => {
-    const result = await deleteBudgetAction(budget.id);
+    const result = await deletePotAction(pot.id);
     return { success: !!result.success, error: result.serverSideError };
   };
 
@@ -25,9 +25,9 @@ export default function DeleteBudget({
         if (!open) onClose();
         setOpen(open);
       }}
-      itemLabel={`\`${budget.category}\``}
-      deleteButtonLabel="Delete Budget"
-      description="Are you sure you want to delete this budget? This action cannot be reversed."
+      itemLabel={`\`${pot.name}\``}
+      deleteButtonLabel="Delete Pot"
+      description="Are you sure you want to delete this pot? This action cannot be reversed."
       onDelete={handleDelete}
       triggerButtonProps={{
         variant: "ghost",

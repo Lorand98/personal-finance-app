@@ -37,7 +37,10 @@ export async function getAvailableBudgetOptions(
   );
 
   const { data: unusedColors, error: colorError } = await supabase.rpc(
-    "fn_get_unused_colors"
+    "fn_get_unused_colors",
+    {
+      table_name: "budgets",
+    }
   );
 
   if (categoryError || colorError) {
@@ -86,4 +89,56 @@ export async function getPots(supabase: SupabaseClient<Database>) {
     throw error;
   }
   return data;
+}
+
+export async function getAvailablePotThemes(
+  supabase: SupabaseClient<Database>
+) {
+  const { data: unusedColors, error: colorError } = await supabase.rpc(
+    "fn_get_unused_colors",
+    {
+      table_name: "pots",
+    }
+  );
+
+  if (colorError) {
+    throw colorError;
+  }
+
+  return { unusedColors };
+}
+
+export async function createPot(
+  supabase: SupabaseClient<Database>,
+  pot: Omit<TablesInsert<"pots">, "total">
+) {
+  const { error } = await supabase.from("pots").insert({
+    ...pot,
+    total: 0,
+  });
+  if (error) {
+    return error;
+  }
+}
+
+export async function updatePot(
+  supabase: SupabaseClient<Database>,
+  pot: Omit<TablesInsert<"pots">, "total">,
+  id: number
+) {
+  const { error } = await supabase.from("pots").update(pot).eq("id", id);
+
+  if (error) {
+    return error;
+  }
+}
+
+export async function deletePot(
+  supabase: SupabaseClient<Database>,
+  potId: number
+) {
+  const { error } = await supabase.from("pots").delete().eq("id", potId);
+  if (error) {
+    return error;
+  }
 }

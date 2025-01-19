@@ -2,27 +2,30 @@
 
 import BaseDialog from "@/components/modals/base-dialog";
 import { useDialog } from "@/hooks/use-dialog";
-import { TOAST_MESSAGES } from "@/lib/constants";
+import { THEME_CODES, TOAST_MESSAGES } from "@/lib/constants";
 import useSWR from "swr";
-import BudgetForm, { AvailableOptions } from "./budget-form";
-import { Budget } from "./types";
+import PotForm from "./pot-form";
+import { Pot } from "./types";
 import { OptionModalCompProps } from "@/lib/types";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-export default function EditBudget({
-  entity: budget,
+export default function EditPot({
+  entity: pot,
   onClose,
-}: OptionModalCompProps<Budget>) {
+}: OptionModalCompProps<Pot>
+) {
   const { open, setOpen, handleSuccess } = useDialog(
-    TOAST_MESSAGES.BUDGET_UPDATED
+    TOAST_MESSAGES.POT_UPDATED
   );
 
   const {
     data: optionsData,
     error: optionsError,
     isLoading: optionsLoading,
-  } = useSWR<AvailableOptions>("/api/budgets/available-options", fetcher);
+  } = useSWR<{
+    availableColors: Array<(typeof THEME_CODES)[number]>;
+  }>("/api/pots/available-themes", fetcher);
 
   const onFormSuccess = () => {
     handleSuccess();
@@ -40,21 +43,15 @@ export default function EditBudget({
   } else if (optionsLoading) {
     dialogContent = <p>Loading data...</p>;
   } else if (optionsData) {
-    const { availableCategories, availableColors } = optionsData;
-
-    const categories = new Set(availableCategories);
-    categories.add(budget.category);
+    const { availableColors } = optionsData;
 
     const colors = new Set(availableColors);
-    colors.add(budget.theme);
+    colors.add(pot.theme);
 
     dialogContent = (
-      <BudgetForm
-        budget={{ ...budget }}
-        availableOptions={{
-          availableCategories: Array.from(categories),
-          availableColors: Array.from(colors),
-        }}
+      <PotForm
+        pot={{ ...pot }}
+        availableColors={Array.from(colors)}
         onSuccess={onFormSuccess}
       />
     );
@@ -64,9 +61,9 @@ export default function EditBudget({
     <BaseDialog
       open={open}
       onOpenChange={setOpen}
-      buttonLabel="Edit Budget"
-      dialogTitle="Edit Budget"
-      dialogDescription="Update a previously created budget."
+      buttonLabel="Edit Pot"
+      dialogTitle="Edit Pot"
+      dialogDescription="Update a previously created pot."
       dialogTriggerButtonProps={{
         variant: "ghost",
         className: "w-full text-left justify-start",

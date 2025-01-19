@@ -94,7 +94,7 @@ export type Database = {
           id: number
           name: string
           target: number
-          theme: string
+          theme: Database["public"]["Enums"]["theme_colors"]
           total: number
           user_id: string
         }
@@ -103,7 +103,7 @@ export type Database = {
           id?: number
           name: string
           target: number
-          theme: string
+          theme: Database["public"]["Enums"]["theme_colors"]
           total: number
           user_id: string
         }
@@ -112,7 +112,7 @@ export type Database = {
           id?: number
           name?: string
           target?: number
-          theme?: string
+          theme?: Database["public"]["Enums"]["theme_colors"]
           total?: number
           user_id?: string
         }
@@ -164,7 +164,9 @@ export type Database = {
         Returns: string[]
       }
       fn_get_unused_colors: {
-        Args: Record<PropertyKey, never>
+        Args: {
+          table_name: string
+        }
         Returns: string[]
       }
     }

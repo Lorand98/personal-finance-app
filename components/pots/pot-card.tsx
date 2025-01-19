@@ -2,6 +2,7 @@ import { Progress } from "../ui/progress";
 import { Button } from "../ui/button";
 import { Pot } from "./types";
 import Card2 from "../ui/card2";
+import PotOptions from "./pot-options";
 
 const PotCard = ({ pot }: { pot: Pot }) => {
   const { name, target, total, theme } = pot;
@@ -17,8 +18,7 @@ const PotCard = ({ pot }: { pot: Pot }) => {
           />
           <h2>{name}</h2>
         </div>
-        {/* <BudgetOptions {...budget} /> */}
-        ...
+        <PotOptions pot={{...pot}} />
       </div>
       <div className="flex justify-between items-center">
         <p className="text-grey-500 text-preset-4">Total saved</p>

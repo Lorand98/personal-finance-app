@@ -60,7 +60,7 @@ export default function NewBudget() {
       onOpenChange={setOpen}
       buttonLabel="+ Add New Budget"
       dialogTitle="Add New Budget"
-      dialogDescription="Choose a category to set a spending budget."
+      dialogDescription="Choose a category to set a spending budget. These categories can help you monitor spending."
     >
       {dialogContent}
     </BaseDialog>
