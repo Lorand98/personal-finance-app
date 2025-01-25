@@ -1,14 +1,13 @@
 import { formatTransactionDate } from "@/lib/utils";
-import { AvatarIcon } from "@radix-ui/react-icons";
-import Image from "next/image";
 import Link from "next/link";
+import UserAvatar from "../common/user-avatar";
 import { Transaction } from "../transactions/types";
+import Card2 from "../ui/card2";
 import CaretRightIcon from "../ui/icons/caret-right-icon";
 import { Progress } from "../ui/progress";
 import BudgetDetail from "./budget-detail";
 import BudgetOptions from "./budget-options";
 import { Budget } from "./types";
-import Card2 from "../ui/card2";
 
 interface BudgetCardProps {
   budget: Budget;
@@ -35,10 +34,14 @@ export default function BudgetCard({
           />
           <h2>{category}</h2>
         </div>
-        <BudgetOptions budget={{...budget}} />
+        <BudgetOptions budget={{ ...budget }} />
       </div>
       <p className="text-grey-500">Maximum of ${maximum}</p>
-      <Progress valuePercent={progress} progressBarColor={theme} className="h-6" />
+      <Progress
+        valuePercent={progress}
+        progressBarColor={theme}
+        className="h-6"
+      />
       <div className="flex">
         <BudgetDetail color={theme} label="Spent" value={spent} />
         <BudgetDetail label="Remaining" value={remaining} />
@@ -66,20 +69,11 @@ export default function BudgetCard({
                   className="flex justify-between items-center py-4 first:pt-0 last:pb-0"
                 >
                   <div className="flex items-center gap-4">
-                    <div className="relative h-10 w-10 hidden sm:block">
-                      {avatar ? (
-                        <Image
-                          src={avatar}
-                          alt={name}
-                          fill
-                          className="rounded-full object-cover background-grey-900"
-                          placeholder="empty"
-                          sizes="40px"
-                        />
-                      ) : (
-                        <AvatarIcon className="w-full h-full" />
-                      )}
-                    </div>
+                    <UserAvatar
+                      avatar={avatar}
+                      name={name}
+                      className="hidden sm:block"
+                    />
                     <p className="font-bold">{name}</p>
                   </div>
                   <div className="text-right">

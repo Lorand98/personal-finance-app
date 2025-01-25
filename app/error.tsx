@@ -12,7 +12,7 @@ export default function Error({
   useEffect(() => {
     console.error("Captured error:", error);
   }, [error]);
-
+  //TODO: better error page
   return (
     <div>
       <h2>Something went wrong!</h2>

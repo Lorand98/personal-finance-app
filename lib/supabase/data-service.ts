@@ -4,7 +4,19 @@ import { Database, TablesInsert } from "./database.types";
 //TODO handle error throwing on client side
 
 export async function getTransactions(supabase: SupabaseClient<Database>) {
-  const { data, error } = await supabase.from("transactions").select("*");
+  const { data, error } = await supabase.from("transactions").select();
+  if (error) {
+    throw error;
+  }
+  return data;
+}
+
+export async function getRecurringBills(supabase: SupabaseClient<Database>) {
+  const { data, error } = await supabase
+    .from("transactions")
+    .select()
+    .eq("recurring", true)
+    .lt("amount", 0);
   if (error) {
     throw error;
   }
@@ -22,7 +34,7 @@ export async function createTransaction(
 }
 
 export async function getBudget(supabase: SupabaseClient<Database>) {
-  const { data, error } = await supabase.from("budgets").select("*");
+  const { data, error } = await supabase.from("budgets").select();
   if (error) {
     throw error;
   }
@@ -84,7 +96,7 @@ export async function deleteBudget(
 }
 
 export async function getPots(supabase: SupabaseClient<Database>) {
-  const { data, error } = await supabase.from("pots").select("*");
+  const { data, error } = await supabase.from("pots").select();
   if (error) {
     throw error;
   }

@@ -43,7 +43,7 @@ export default function BudgetPieChart({
   );
 
   return (
-    <ChartContainer config={chartConfig} className=" aspect-square h-[20rem]">
+    <ChartContainer config={chartConfig} className="aspect-square h-[16rem] md:h-[20rem]">
       <PieChart>
         <Pie
           dataKey="spent"
@@ -65,7 +65,7 @@ export default function BudgetPieChart({
                     <tspan
                       x={cx}
                       y={cy}
-                      className="fill-foreground text-3xl font-bold"
+                      className="fill-foreground text-2xl md:text-3xl font-bold"
                     >
                       ${totalSpent.toLocaleString()}
                     </tspan>

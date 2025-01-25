@@ -1,51 +1,38 @@
-import { createColumnHelper } from "@tanstack/react-table";
-import Image from "next/image";
-import { Transaction } from "./types";
 import useWindowSize from "@/hooks/use-window-size";
 import { cn, formatTransactionDate } from "@/lib/utils";
+import { createColumnHelper } from "@tanstack/react-table";
 import React from "react";
-import { AvatarIcon } from "@radix-ui/react-icons";
+import UserAvatar from "../common/user-avatar";
+import { Transaction } from "./types";
 
 const columnHelper = createColumnHelper<Transaction>();
 
-export type ColumnMeta = {
-  hideOnMobile?: boolean;
-};
-
-const SecondaryCellText: React.FC<{
+const SecondaryCellText = ({
+  children,
+  hidden,
+}: {
   children: React.ReactNode;
   hidden?: boolean;
-}> = ({ children, hidden }) => (
+}) => (
   <span className={cn("text-preset-5 text-grey-500", { hidden })}>
     {children}
   </span>
 );
 
-
-
-const UserInfoCell: React.FC<{
+const UserInfoCell = ({
+  avatar,
+  name,
+  category,
+}: {
   avatar?: string | null;
   name: string;
   category: string;
-}> = ({ avatar, name, category }) => {
+}) => {
   const windowSize = useWindowSize();
   const isMobile = windowSize === "xs";
   return (
     <div className="flex items-center gap-4">
-      <div className="relative h-10 w-10">
-        {avatar ? (
-          <Image
-            src={avatar}
-            alt={name}
-            fill
-            className="rounded-full object-cover background-grey-900"
-            placeholder="empty"
-            sizes="40px"
-          />
-        ) : (
-          <AvatarIcon className="w-full h-full" />
-        )}
-      </div>
+      <UserAvatar avatar={avatar} name={name} className="flex-shrink-0" />
       <div className="flex flex-col">
         <strong>{name}</strong>
         <SecondaryCellText hidden={!isMobile}>{category}</SecondaryCellText>
@@ -54,10 +41,7 @@ const UserInfoCell: React.FC<{
   );
 };
 
-const AmountCell: React.FC<{ amount: number; date: string }> = ({
-  amount,
-  date,
-}) => {
+const AmountCell = ({ amount, date }: { amount: number; date: string }) => {
   const windowSize = useWindowSize();
   const isMobile = windowSize === "xs";
   const isNegative = amount < 0;
@@ -77,21 +61,25 @@ const AmountCell: React.FC<{ amount: number; date: string }> = ({
 const columns = [
   columnHelper.accessor("name", {
     header: "Recipient / Sender",
-    cell: ({ row }) => <UserInfoCell {...row.original} />,
+    cell: ({ row }) => (
+      <UserInfoCell
+        avatar={row.original.avatar}
+        name={row.original.name}
+        category={row.original.category}
+      />
+    ),
   }),
   columnHelper.accessor("category", {
     header: "Category",
-    cell: ({ row }) => (
-      <SecondaryCellText>{row.original.category}</SecondaryCellText>
-    ),
+    cell: ({ getValue }) => <SecondaryCellText>{getValue()}</SecondaryCellText>,
     meta: {
       hideOnMobile: true,
     },
   }),
   columnHelper.accessor("date", {
     header: "Transaction Date",
-    cell: ({ row }) => (
-      <SecondaryCellText>{formatTransactionDate(row.original.date)}</SecondaryCellText>
+    cell: ({ getValue }) => (
+      <SecondaryCellText>{formatTransactionDate(getValue())}</SecondaryCellText>
     ),
     meta: {
       hideOnMobile: true,

@@ -3,7 +3,8 @@
 import { DataTable } from "@/components/ui/table/data-table";
 import useUrlParams from "@/hooks/use-url-params";
 import useWindowSize from "@/hooks/use-window-size";
-import { TRANS_CATEGORIES_FILTER } from "@/lib/constants";
+import { SORTING_OPTIONS, TRANS_CATEGORIES_FILTER } from "@/lib/constants";
+import { mapSortingOptionsToTanstack, mobileVisibility } from "@/lib/utils";
 import {
   getCoreRowModel,
   getFilteredRowModel,
@@ -15,23 +16,13 @@ import { useSearchParams } from "next/navigation";
 import { useMemo } from "react";
 import TransactionFilter from "./transaction-filter";
 import TransactionPagination from "./transaction-pagination";
-import columns, { ColumnMeta } from "./transaction-table-columns";
+import columns from "./transaction-table-columns";
 import { Transaction } from "./types";
-
-const SORTING_OPTIONS = [
-  { id: "latest", label: "Latest" },
-  { id: "oldest", label: "Oldest" },
-  { id: "a_to_z", label: "A to Z" },
-  { id: "z_to_a", label: "Z to A" },
-  { id: "highest", label: "Highest" },
-  { id: "lowest", label: "Lowest" },
-] as const;
-
 interface TransactionsTableProps {
   transactions: Transaction[];
 }
 
-export const TransactionsTable = ({ transactions }: TransactionsTableProps) => {
+const TransactionsTable = ({ transactions }: TransactionsTableProps) => {
   const windowSize = useWindowSize();
   const { updateUrlParams } = useUrlParams();
   const searchParams = useSearchParams();
@@ -43,31 +34,7 @@ export const TransactionsTable = ({ transactions }: TransactionsTableProps) => {
   const search = searchParams.get("search") || "";
   const sort = searchParams.get("sort") || "";
 
-  // Compute sorting from URL
-  const urlSorting = useMemo(() => {
-    let sortOption = { id: "date", desc: true };
-    switch (sort) {
-      case "latest":
-        sortOption = { id: "date", desc: true };
-        break;
-      case "oldest":
-        sortOption = { id: "date", desc: false };
-        break;
-      case "a_to_z":
-        sortOption = { id: "name", desc: false };
-        break;
-      case "z_to_a":
-        sortOption = { id: "name", desc: true };
-        break;
-      case "highest":
-        sortOption = { id: "amount", desc: true };
-        break;
-      case "lowest":
-        sortOption = { id: "amount", desc: false };
-        break;
-    }
-    return [sortOption];
-  }, [sort]);
+  const urlSorting = useMemo(() => mapSortingOptionsToTanstack(sort), [sort]);
 
   // Compute filters from URL
   const urlFilters = useMemo(() => {
@@ -82,13 +49,7 @@ export const TransactionsTable = ({ transactions }: TransactionsTableProps) => {
   }, [category, search]);
 
   const columnVisibility = useMemo(() => {
-    const visibility: Record<string, boolean> = {};
-    columns.forEach((col) => {
-      if ((col.meta as ColumnMeta)?.hideOnMobile) {
-        visibility[col.accessorKey as string] = !isMobile;
-      }
-    });
-    return visibility;
+    return mobileVisibility(columns, isMobile);
   }, [isMobile]);
 
   const table = useReactTable({
@@ -123,6 +84,9 @@ export const TransactionsTable = ({ transactions }: TransactionsTableProps) => {
         handleSort={handleSort}
         handleFilter={handleFilter}
         handleSearch={handleSearch}
+        selectedCategory={category}
+        selectedSort={sort}
+        search={search}
       />
 
       <DataTable table={table} />
@@ -131,3 +95,5 @@ export const TransactionsTable = ({ transactions }: TransactionsTableProps) => {
     </div>
   );
 };
+
+export default TransactionsTable;

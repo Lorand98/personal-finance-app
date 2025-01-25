@@ -27,10 +27,8 @@ const Progress = React.forwardRef<
     },
     ref
   ) => {
-    const progressPercentage = valuePercent;
     const increasePercent = changePercent > 0 ? changePercent : 0;
     const decreasePercent = changePercent < 0 ? Math.abs(changePercent) : 0;
-    const addedPercentage = valuePercent + increasePercent;
     const remainedPercent = valuePercent - decreasePercent;
 
     return (

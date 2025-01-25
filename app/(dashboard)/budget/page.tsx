@@ -35,10 +35,10 @@ export default async function Budget() {
   return budgets.length === 0 ? (
     <NoBudgets />
   ) : (
-    <div className="flex flex-col gap-6 md:grid md:grid-cols-[5fr_10fr] md:items-start ">
-      <div className="bg-white py-6 px-3 sm:px-4 md:p-8 rounded-xl flex flex-col sm:flex-row md:flex-col gap-2">
+    <div className="flex flex-col gap-6 lg:grid lg:grid-cols-[5fr_10fr] lg:items-start ">
+      <div className="bg-white py-6 px-4 sm:px-4 lg:p-8 rounded-xl flex flex-col sm:flex-row sm:items-center lg:flex-col gap-2">
         <BudgetPieChart budgetSpendingData={budgetSpendingData} />
-        <div>
+        <div className="flex-1">
           <h2 className="text-lg font-semibold mb-2">Spending Summary</h2>
           <ul className="divide-y">
             {budgetSpendingData.map((budget) => (

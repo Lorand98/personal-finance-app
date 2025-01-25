@@ -1,25 +1,26 @@
 import { SORTING_OPTIONS, TRANS_CATEGORIES_FILTER } from "@/lib/constants";
-import { useSearchParams } from "next/navigation";
 import TableDropdown from "../ui/fields/dropdown/table-dropdown";
 import SearchBar from "../ui/fields/search-bar";
 import MobileFilterIcon from "../ui/icons/mobile-filter-icon";
 import MobileSortIcon from "../ui/icons/mobile-sort-icon";
 
+type TransactionFilterProps = {
+  handleSort: (item: (typeof SORTING_OPTIONS)[number]) => void;
+  handleFilter: (item: (typeof TRANS_CATEGORIES_FILTER)[number]) => void;
+  handleSearch: (value: string) => void;
+  selectedCategory: string;
+  selectedSort: string;
+  search: string;
+};
+
 const TransactionFilter = ({
   handleSort,
   handleFilter,
   handleSearch,
-}: {
-  handleSort: (item: (typeof SORTING_OPTIONS)[number]) => void;
-  handleFilter: (item: (typeof TRANS_CATEGORIES_FILTER)[number]) => void;
-  handleSearch: (value: string) => void;
-}) => {
-  const searchParams = useSearchParams();
-
-  const category = searchParams.get("category");
-  const search = searchParams.get("search");
-  const sort = searchParams.get("sort");
-
+  selectedCategory: category,
+  selectedSort: sort,
+  search: search,
+}: TransactionFilterProps) => {
   const selectedSort =
     SORTING_OPTIONS.find((option) => option.id === sort) || SORTING_OPTIONS[0];
   const selectedCategory =

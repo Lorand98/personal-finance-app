@@ -1,7 +1,5 @@
 "use client";
 
-import { useResourceForm } from "@/hooks/use-resource-form";
-import { potChangeAmount } from "@/lib/validations";
 import { editTotalPotAction } from "@/app/(dashboard)/pots/actions";
 import {
   Form,
@@ -13,9 +11,10 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import SubmitButton from "@/components/ui/submit-button";
-import { Pot } from "./types";
+import { useResourceForm } from "@/hooks/use-resource-form";
+import { potChangeAmount } from "@/lib/validations";
 import { useEffect } from "react";
-import { add } from "date-fns";
+import { Pot } from "./types";
 
 type ChangePotFormProps = {
   onSuccess: () => void;

@@ -1,4 +1,4 @@
-import { TransactionsTable } from "@/components/transactions/transactions-table";
+import TransactionsTable from "@/components/transactions/transactions-table";
 import { getTransactions } from "@/lib/supabase/data-service";
 import { createClient } from "@/lib/supabase/server";
 
@@ -6,11 +6,9 @@ export const metadata = {
   title: "Transactions",
 };
 
-// Fetch all transactions regardless of URL params
-const Transactions = async () => {
+export default async function Transactions() {
   const supabase = await createClient();
-  
-  
+
   const transactions = await getTransactions(supabase);
 
   return (
@@ -20,6 +18,4 @@ const Transactions = async () => {
       </div>
     </div>
   );
-};
-
-export default Transactions;
+}
