@@ -2,6 +2,8 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { loginSchema, signupSchema } from "@/lib/validations";
+import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
 type AuthResult = {
   success?: boolean;
@@ -17,7 +19,7 @@ export async function signupAction(formData: FormData): Promise<AuthResult> {
       email: formData.get("email"),
       password: formData.get("password"),
     };
-    
+
     const parsed = signupSchema.safeParse(values);
     if (!parsed.success) {
       return { fieldErrors: parsed.error.flatten().fieldErrors };
@@ -42,7 +44,7 @@ export async function signupAction(formData: FormData): Promise<AuthResult> {
   }
 }
 
-export async function loginAction(formData: FormData): Promise<AuthResult> {
+export async function loginAction(formData: FormData) {
   try {
     const supabase = await createClient();
     const values = {
@@ -52,24 +54,23 @@ export async function loginAction(formData: FormData): Promise<AuthResult> {
 
     const parsed = loginSchema.safeParse(values);
     if (!parsed.success) {
-      return { fieldErrors: parsed.error.flatten().fieldErrors };
+      // Handle validation error
+      throw new Error("Invalid input");
     }
 
-    const { email, password } = parsed.data;
     const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
+      email: parsed.data.email,
+      password: parsed.data.password,
     });
 
     if (error) {
-      console.error("Login error:", error);
-      return { serverSideError: "Failed to log in. Please try again." };
+      throw new Error(error.message);
     }
 
-    return { success: true };
+    revalidatePath("/", "layout");
+    redirect("/");
   } catch (error) {
-    console.error("Unexpected login error:", error);
-    return { serverSideError: "Something went wrong. Please try again." };
+    throw error;
   }
 }
 
@@ -77,7 +78,7 @@ export async function logoutAction(): Promise<AuthResult> {
   try {
     const supabase = await createClient();
     const { error } = await supabase.auth.signOut();
-    
+
     if (error) {
       console.error("Logout error:", error);
       return { serverSideError: "Logout failed. Please try again." };

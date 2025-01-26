@@ -14,7 +14,6 @@ import { loginSchema, signupSchema } from "@/lib/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Eye } from "@phosphor-icons/react/dist/ssr";
 import SubmitButton from "@/components/ui/submit-button";
-import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -25,7 +24,6 @@ type AuthFormProps = {
 };
 
 const AuthForm: React.FC<AuthFormProps> = ({ mode }) => {
-  const router = useRouter();
   const [passwordVisible, setPasswordVisible] = useState(false);
 
   const formSchema = mode === "signup" ? signupSchema : loginSchema;
@@ -55,6 +53,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ mode }) => {
     const action = mode === "signup" ? signupAction : loginAction;
     const result = await action(formData);
 
+    if (!result) return;
     if (result.serverSideError) {
       form.setError("root", { message: result.serverSideError });
     } else if (result.fieldErrors) {
@@ -65,8 +64,6 @@ const AuthForm: React.FC<AuthFormProps> = ({ mode }) => {
           });
         }
       });
-    } else if (result.success) {
-      router.refresh();
     }
   };
 
