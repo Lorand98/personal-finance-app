@@ -2,6 +2,7 @@
 
 import { Label, Pie, PieChart } from "recharts";
 import { ChartConfig, ChartContainer } from "../ui/chart";
+import { cn } from "@/lib/utils";
 
 interface BudgetSpending {
   category: string;
@@ -12,10 +13,12 @@ interface BudgetSpending {
 
 interface BudgetPieChartProps {
   budgetSpendingData: BudgetSpending[];
+  className?: string;
 }
 
 export default function BudgetPieChart({
   budgetSpendingData,
+  className,
 }: BudgetPieChartProps) {
   // Build config for the ChartContainer
   const chartConfig = budgetSpendingData.reduce<ChartConfig>(
@@ -43,7 +46,7 @@ export default function BudgetPieChart({
   );
 
   return (
-    <ChartContainer config={chartConfig} className="aspect-square h-[16rem] md:h-[20rem]">
+    <ChartContainer config={chartConfig} className={cn("aspect-square h-[16rem] md:h-[20rem]", className)}>
       <PieChart>
         <Pie
           dataKey="spent"

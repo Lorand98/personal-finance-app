@@ -1,13 +1,12 @@
 import { formatTransactionDate } from "@/lib/utils";
-import Link from "next/link";
 import UserAvatar from "../common/user-avatar";
 import { Transaction } from "../transactions/types";
-import Card2 from "../ui/card2";
-import CaretRightIcon from "../ui/icons/caret-right-icon";
+import Card from "../common/common-card";
 import { Progress } from "../ui/progress";
 import BudgetDetail from "./budget-detail";
 import BudgetOptions from "./budget-options";
 import { Budget } from "./types";
+import ViewAllLink from "../common/view-all-link";
 
 interface BudgetCardProps {
   budget: Budget;
@@ -25,7 +24,7 @@ export default function BudgetCard({
   const remaining = maximum - spent > 0 ? maximum - spent : 0;
 
   return (
-    <Card2>
+    <Card>
       <div className="flex justify-between items-center">
         <div className="flex gap-2 items-center">
           <span
@@ -49,13 +48,10 @@ export default function BudgetCard({
       <div className="w-full bg-beige-100 p-4 rounded-xl">
         <div className="flex justify-between mb-6">
           <h3>Latest Spending</h3>
-          <Link
+          <ViewAllLink
             href={`/transactions?category=${category}`}
-            className="text-grey-500 text-preset-4 flex items-center gap-3"
-          >
-            See All
-            <CaretRightIcon />
-          </Link>
+            text="See All"
+          />
         </div>
         {latestTransactions.length === 0 ? (
           <p className="text-grey-500">No available data</p>
@@ -88,6 +84,6 @@ export default function BudgetCard({
           </ul>
         )}
       </div>
-    </Card2>
+    </Card>
   );
 }

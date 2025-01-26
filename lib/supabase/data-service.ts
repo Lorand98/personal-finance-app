@@ -3,6 +3,34 @@ import { Database, TablesInsert } from "./database.types";
 
 //TODO handle error throwing on client side
 
+//TODO let the user insert an acutal balance. Currently an example hardcoded balance is inserted
+export async function getBalance(supabase: SupabaseClient<Database>) {
+  const { data, error } = await supabase.from("balance").select().single();
+  if (error) {
+    throw error;
+  }
+  return data;
+}
+
+async function updateBalance(
+  supabase: SupabaseClient<Database>,
+  updates: { current?: number; expenses?: number; income?: number }
+) {
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) throw new Error("Not authenticated");
+
+  const { error } = await supabase
+    .from("balance")
+    .update(updates)
+    .eq("user_id", user.id)
+    .single();
+
+  if (error) return error;
+}
+
 export async function getTransactions(supabase: SupabaseClient<Database>) {
   const { data, error } = await supabase.from("transactions").select();
   if (error) {
@@ -27,10 +55,26 @@ export async function createTransaction(
   supabase: SupabaseClient<Database>,
   transaction: TablesInsert<"transactions">
 ) {
-  const { error } = await supabase.from("transactions").insert(transaction);
-  if (error) {
-    return error;
-  }
+  const { amount } = transaction;
+
+  // Get current balance
+  const balance = await getBalance(supabase);
+
+  // Insert transaction
+  const { error: txError } = await supabase
+    .from("transactions")
+    .insert(transaction);
+
+  if (txError) return txError;
+
+  // Update balance
+  const balanceError = await updateBalance(supabase, {
+    current: balance.current + amount,
+    expenses: amount < 0 ? balance.expenses - amount : balance.expenses,
+    income: amount > 0 ? balance.income + amount : balance.income,
+  });
+
+  if (balanceError) return balanceError;
 }
 
 export async function getBudget(supabase: SupabaseClient<Database>) {
@@ -150,34 +194,57 @@ export async function updateTotalPot(
   { amount }: { amount: number },
   id: number
 ) {
-  const { data, error: selectError } = await supabase
+  const balance = await getBalance(supabase);
+  const { data: pot, error: selectError } = await supabase
     .from("pots")
     .select("total")
     .eq("id", id)
     .single();
 
-  if (selectError) {
-    return selectError;
-  }
+  if (selectError) throw selectError;
 
-  const newTotal = data.total + amount;
-
+  // Update pot total
   const { error: updateError } = await supabase
     .from("pots")
-    .update({ total: newTotal })
+    .update({ total: pot.total + amount })
     .eq("id", id);
 
-  if (updateError) {
-    return updateError;
-  }
+  if (updateError) return updateError;
+
+  // Update balance
+  const balanceError = await updateBalance(supabase, {
+    current: balance.current - amount,
+  });
+
+  if (balanceError) return balanceError;
 }
 
 export async function deletePot(
   supabase: SupabaseClient<Database>,
   potId: number
 ) {
-  const { error } = await supabase.from("pots").delete().eq("id", potId);
-  if (error) {
-    return error;
-  }
+  const { data: pot, error: selectError } = await supabase
+    .from("pots")
+    .select("total")
+    .eq("id", potId)
+    .single();
+
+  if (selectError) throw selectError;
+
+  const balance = await getBalance(supabase);
+
+  // Delete pot
+  const { error: deleteError } = await supabase
+    .from("pots")
+    .delete()
+    .eq("id", potId);
+
+  if (deleteError) return deleteError;
+
+  // Return money to balance
+  const balanceError = await updateBalance(supabase, {
+    current: balance.current + pot.total,
+  });
+
+  if (balanceError) return balanceError;
 }

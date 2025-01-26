@@ -1,6 +1,5 @@
-import useWindowSize from "@/hooks/use-window-size";
 import { cn, formatTransactionDate } from "@/lib/utils";
-import { createColumnHelper } from "@tanstack/react-table";
+import { createColumnHelper, Row } from "@tanstack/react-table";
 import React from "react";
 import UserAvatar from "../common/user-avatar";
 import { Transaction } from "./types";
@@ -9,12 +8,12 @@ const columnHelper = createColumnHelper<Transaction>();
 
 const SecondaryCellText = ({
   children,
-  hidden,
+  className,
 }: {
   children: React.ReactNode;
-  hidden?: boolean;
+  className?: string;
 }) => (
-  <span className={cn("text-preset-5 text-grey-500", { hidden })}>
+  <span className={cn("text-preset-5 text-grey-500", className)}>
     {children}
   </span>
 );
@@ -23,27 +22,39 @@ const UserInfoCell = ({
   avatar,
   name,
   category,
+  compact,
 }: {
   avatar?: string | null;
   name: string;
   category: string;
+  compact?: boolean;
 }) => {
-  const windowSize = useWindowSize();
-  const isMobile = windowSize === "xs";
   return (
     <div className="flex items-center gap-4">
       <UserAvatar avatar={avatar} name={name} className="flex-shrink-0" />
       <div className="flex flex-col">
         <strong>{name}</strong>
-        <SecondaryCellText hidden={!isMobile}>{category}</SecondaryCellText>
+        <SecondaryCellText
+          className={cn("sm:hidden", {
+            hidden: compact,
+          })}
+        >
+          {category}
+        </SecondaryCellText>
       </div>
     </div>
   );
 };
 
-const AmountCell = ({ amount, date }: { amount: number; date: string }) => {
-  const windowSize = useWindowSize();
-  const isMobile = windowSize === "xs";
+const AmountCell = ({
+  amount,
+  date,
+  compact,
+}: {
+  amount: number;
+  date: string;
+  compact?: boolean;
+}) => {
   const isNegative = amount < 0;
   const currencyAmount = `${isNegative ? "-" : "+"}$${Math.abs(amount)}`;
   const formattedDate = formatTransactionDate(date);
@@ -53,12 +64,21 @@ const AmountCell = ({ amount, date }: { amount: number; date: string }) => {
       className={cn("text-right flex flex-col", { "text-green": !isNegative })}
     >
       <strong>{currencyAmount}</strong>
-      <SecondaryCellText hidden={!isMobile}>{formattedDate}</SecondaryCellText>
+      <SecondaryCellText className={cn({ "sm-hidden": !compact })}>
+        {formattedDate}
+      </SecondaryCellText>
     </div>
   );
 };
 
-const columns = [
+const amountColConfig = {
+  header: () => <div className="text-right">Amount</div>,
+  cell: ({ row }: { row: Row<Transaction> }) => (
+    <AmountCell amount={row.original.amount} date={row.original.date} compact />
+  ),
+};
+
+export const columns = [
   columnHelper.accessor("name", {
     header: "Recipient / Sender",
     cell: ({ row }) => (
@@ -85,12 +105,21 @@ const columns = [
       hideOnMobile: true,
     },
   }),
-  columnHelper.accessor("amount", {
-    header: () => <div className="text-right">Amount</div>,
-    cell: ({ row }) => (
-      <AmountCell amount={row.original.amount} date={row.original.date} />
-    ),
-  }),
+  columnHelper.accessor("amount", amountColConfig),
 ];
 
-export default columns;
+export const compactColumns = [
+  columnHelper.accessor("name", {
+    header: "Recipient / Sender",
+    cell: ({ row }) => (
+      <UserInfoCell
+        avatar={row.original.avatar}
+        name={row.original.name}
+        category={row.original.category}
+        compact
+      />
+    ),
+  }),
+  columnHelper.accessor("date", {}),
+  columnHelper.accessor("amount", amountColConfig),
+];

@@ -9,7 +9,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <div className="flex h-full ">
       <SidebarNav />
       <BottomNav />
-      <MainLayout>{children}</MainLayout>
+      <MainLayout>
+        {children}</MainLayout>
       <Toaster />
     </div>
   );

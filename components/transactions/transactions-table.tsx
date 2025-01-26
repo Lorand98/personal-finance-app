@@ -16,13 +16,12 @@ import { useSearchParams } from "next/navigation";
 import { useMemo } from "react";
 import TransactionFilter from "./transaction-filter";
 import TransactionPagination from "./transaction-pagination";
-import columns from "./transaction-table-columns";
+import { columns } from "./transaction-table-columns";
 import { Transaction } from "./types";
-interface TransactionsTableProps {
-  transactions: Transaction[];
-}
 
-const TransactionsTable = ({ transactions }: TransactionsTableProps) => {
+const TransactionsTable = ({ transactions }: {
+  transactions: Transaction[];
+}) => {
   const windowSize = useWindowSize();
   const { updateUrlParams } = useUrlParams();
   const searchParams = useSearchParams();

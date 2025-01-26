@@ -1,4 +1,4 @@
-import Card2 from "../ui/card2";
+import Card from "../common/common-card";
 import { Progress } from "../ui/progress";
 import ChangePot from "./change-pot";
 import PotOptions from "./pot-options";
@@ -9,7 +9,7 @@ const PotCard = ({ pot }: { pot: Pot }) => {
 
   const savedPercent = (total / target) * 100;
   return (
-    <Card2>
+    <Card>
       <div className="flex justify-between items-center">
         <div className="flex gap-2 items-center">
           <span
@@ -43,7 +43,7 @@ const PotCard = ({ pot }: { pot: Pot }) => {
           <ChangePot addition={false} pot={pot} />
         </div>
       </div>
-    </Card2>
+    </Card>
   );
 };
 
