@@ -66,7 +66,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ mode }) => {
         }
       });
     } else if (result.success) {
-      router.push(mode === "signup" ? "/login" : "/");
+      router.refresh();
     }
   };
 
