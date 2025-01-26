@@ -7,7 +7,9 @@ export default async function Pots() {
   const pots = await getPots(supabase);
 
   return pots.length === 0 ? (
-    <p>No pots available currently. Please add some pots.</p>
+    <p className="text-grey-500 text-xl">
+      No pots available currently. Please add some pots.
+    </p>
   ) : (
     <div className="flex flex-col gap-6 md:grid md:grid-cols-2">
       {pots.map((pot) => (

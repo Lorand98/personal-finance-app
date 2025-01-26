@@ -11,7 +11,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { useSearchParams } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { Transaction } from "../transactions/types";
 import { DataTable } from "../ui/table/data-table";
 import RecurringBillsFilter from "./recurring-bills-filter";
@@ -38,7 +38,7 @@ const RecurringBillsTable = ({
     return search ? [{ id: "name", value: search }] : [];
   }, [search]);
 
-  const urlSorting = useMemo(() => mapSortingOptionsToTanstack(sort), [sort]);
+  const sorting = useMemo(() => mapSortingOptionsToTanstack(sort, [{ id: "date", desc: false }]), [sort]);
 
   const table = useReactTable({
     data: recurringBills,
@@ -49,7 +49,7 @@ const RecurringBillsTable = ({
     state: {
       columnVisibility,
       columnFilters: urlSearch,
-      sorting: urlSorting,
+      sorting,
     },
   });
 

@@ -4,7 +4,7 @@ import useFallbackId from "@/hooks/use-fallback-id";
 import { cn } from "@/lib/utils";
 import caretDownIcon from "@/public/icon-caret-down.svg";
 import Image from "next/image";
-import { useEffect, useId, useRef, useState, type JSX } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import DropdownList from "./dropdown-list";
 
 export interface DropdownItem {
@@ -18,7 +18,7 @@ interface DropdownProps<T extends DropdownItem> {
   id?: string;
   className?: string;
   onSelect: (item: T) => void;
-  MobileSvgIcon?: (props: React.SVGProps<SVGSVGElement>) => JSX.Element;
+  MobileSvgIcon?: React.ComponentType<React.SVGProps<SVGSVGElement>>;
   label: string;
   dropdownLabelClassName?: string;
 }

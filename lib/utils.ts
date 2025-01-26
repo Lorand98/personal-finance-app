@@ -2,6 +2,7 @@ import twMerge from "@/tailwind-merge-config";
 import { clsx, type ClassValue } from "clsx";
 import moment from "moment";
 import { SORTING_OPTIONS } from "./constants";
+import { SortingState } from "@tanstack/react-table";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -26,31 +27,24 @@ export const isRecurringBillDueSoon = (date: string) => {
 
 export const mapSortingOptionsToTanstack = (
   sort: (typeof SORTING_OPTIONS)[number]["id"] | string,
+  defaultSort: SortingState
 ) => {
-  let sortOption = { id: "date", desc: false };
   switch (sort) {
     case "latest":
-      sortOption = { id: "date", desc: true };
-      break;
+      return [{ id: "date", desc: true }];
     case "oldest":
-      sortOption = { id: "date", desc: false };
-      break;
+      return [{ id: "date", desc: false }];
     case "a_to_z":
-      sortOption = { id: "name", desc: false };
-      break;
+      return [{ id: "name", desc: false }];
     case "z_to_a":
-      sortOption = { id: "name", desc: true };
-      break;
+      return [{ id: "name", desc: true }];
     case "highest":
-      sortOption = { id: "amount", desc: true };
-      break;
+      return [{ id: "amount", desc: true }];
     case "lowest":
-      sortOption = { id: "amount", desc: false };
-      break;
+      return [{ id: "amount", desc: false }];
     default:
-      break;
+      return defaultSort;
   }
-  return [sortOption];
 };
 
 export const mobileVisibility = <

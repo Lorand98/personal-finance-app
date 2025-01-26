@@ -34,7 +34,10 @@ const TransactionsTable = ({ transactions }: TransactionsTableProps) => {
   const search = searchParams.get("search") || "";
   const sort = searchParams.get("sort") || "";
 
-  const urlSorting = useMemo(() => mapSortingOptionsToTanstack(sort), [sort]);
+  const sorting = useMemo(
+    () => mapSortingOptionsToTanstack(sort, [{ id: "date", desc: true }]),
+    [sort]
+  );
 
   // Compute filters from URL
   const urlFilters = useMemo(() => {
@@ -60,7 +63,7 @@ const TransactionsTable = ({ transactions }: TransactionsTableProps) => {
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     state: {
-      sorting: urlSorting,
+      sorting,
       columnFilters: urlFilters,
       columnVisibility,
     },
