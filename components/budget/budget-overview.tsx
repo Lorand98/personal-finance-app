@@ -17,7 +17,7 @@ export default function BudgetOverview({
     <CommonCard>
       <div className="flex items-end justify-between">
         <h2>Budgets</h2>
-        <ViewAllLink href="/budgets" />
+        <ViewAllLink href="/budget" />
       </div>
       <BudgetSummary budgetSpendingData={budgetSpendingData} compact />
     </CommonCard>

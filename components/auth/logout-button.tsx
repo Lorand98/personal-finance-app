@@ -13,13 +13,15 @@ export default function LogoutButton() {
   const [isPending, startTransition] = useTransition();
 
   const handleLogout = () => {
+
+    //TODO: check if try catch is needed
     startTransition(async () => {
       try {
         const result = await logoutAction();
-        if ("error" in result) {
+        if (result && result.serverSideError) {
           toast({
             title: "Logout failed",
-            description: "Please try again",
+            description: result.serverSideError,
             variant: "destructive",
           });
         } else {

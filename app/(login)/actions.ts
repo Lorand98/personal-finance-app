@@ -5,14 +5,7 @@ import { loginSchema, signupSchema } from "@/lib/validations";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-type AuthResult = {
-  success?: boolean;
-  fieldErrors?: { [key: string]: string[] };
-  serverSideError?: string;
-};
-
-export async function signupAction(formData: FormData): Promise<AuthResult> {
-  try {
+export async function signupAction(formData: FormData) {
     const supabase = await createClient();
     const values = {
       name: formData.get("name"),
@@ -33,60 +26,46 @@ export async function signupAction(formData: FormData): Promise<AuthResult> {
     });
 
     if (error) {
-      console.error("Signup error:", error);
-      return { serverSideError: "Failed to create account. Please try again." };
-    }
-
-    return { success: true };
-  } catch (error) {
-    console.error("Unexpected signup error:", error);
-    return { serverSideError: "Something went wrong. Please try again." };
-  }
-}
-
-export async function loginAction(formData: FormData) {
-  try {
-    const supabase = await createClient();
-    const values = {
-      email: formData.get("email"),
-      password: formData.get("password"),
-    };
-
-    const parsed = loginSchema.safeParse(values);
-    if (!parsed.success) {
-      // Handle validation error
-      throw new Error("Invalid input");
-    }
-
-    const { error } = await supabase.auth.signInWithPassword({
-      email: parsed.data.email,
-      password: parsed.data.password,
-    });
-
-    if (error) {
-      throw new Error(error.message);
+      console.error("Sign up error", error);
+      return { serverSideError: error.message };
     }
 
     revalidatePath("/", "layout");
     redirect("/");
-  } catch (error) {
-    throw error;
-  }
 }
 
-export async function logoutAction(): Promise<AuthResult> {
-  try {
-    const supabase = await createClient();
-    const { error } = await supabase.auth.signOut();
+export async function loginAction(formData: FormData) {
+  const supabase = await createClient();
+  const values = {
+    email: formData.get("email"),
+    password: formData.get("password"),
+  };
 
-    if (error) {
-      console.error("Logout error:", error);
-      return { serverSideError: "Logout failed. Please try again." };
-    }
+  const parsed = loginSchema.safeParse(values);
+  if (!parsed.success) {
+    return { fieldErrors: parsed.error.flatten().fieldErrors };
+  }
 
-    return { success: true };
-  } catch (error) {
-    console.error("Unexpected logout error:", error);
-    return { serverSideError: "Something went wrong. Please try again." };
+  const { error } = await supabase.auth.signInWithPassword({
+    email: parsed.data.email,
+    password: parsed.data.password,
+  });
+
+  if (error) {
+    console.error("Sign in error", error);
+    return { serverSideError: error.message };
+  }
+
+  revalidatePath("/", "layout");
+  redirect("/");
+}
+
+export async function logoutAction() {
+  const supabase = await createClient();
+  const { error } = await supabase.auth.signOut();
+
+  if (error) {
+    console.error("Sign out error", error);
+    return { serverSideError: error.message };
   }
 }
