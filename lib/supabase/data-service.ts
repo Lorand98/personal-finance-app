@@ -71,7 +71,6 @@ export async function createTransaction(
   const balanceError = await updateBalance(supabase, {
     current: balance.current + amount,
     expenses: amount < 0 ? balance.expenses - amount : balance.expenses,
-    income: amount > 0 ? balance.income + amount : balance.income,
   });
 
   if (balanceError) return balanceError;
