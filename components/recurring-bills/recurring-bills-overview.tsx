@@ -1,16 +1,16 @@
+import { getRecurringBills } from "@/lib/supabase/data-service";
+import { createClient } from "@/lib/supabase/server";
 import { getRecurringBillStats } from "@/lib/utils";
 import CommonCard from "../common/common-card";
 import ViewAllLink from "../common/view-all-link";
-import { Transaction } from "../transactions/types";
 import BillSummaryItem from "./bill-summary-item";
 
-export default function RecurringBillsOverview({
-  recurringBills,
-}: {
-  recurringBills: Transaction[];
-}) {
+export default async function RecurringBillsOverview() {
+  const supabase = await createClient();
+  const recurringBills = await getRecurringBills(supabase);
   const { paidBillsTotal, upcomingBillsTotal, dueSoonBillsTotal } =
     getRecurringBillStats(recurringBills);
+    
   return (
     <CommonCard>
       <div className="flex justify-between items-end">

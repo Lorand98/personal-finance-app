@@ -1,17 +1,16 @@
+import { getBudget, getTransactions } from "@/lib/supabase/data-service";
+import { createClient } from "@/lib/supabase/server";
 import { getBudgetSpendingData } from "@/lib/utils";
 import CommonCard from "../common/common-card";
-import { Transaction } from "../transactions/types";
-import BudgetSummary from "./budget-summary";
-import { Budget } from "./types";
 import ViewAllLink from "../common/view-all-link";
+import BudgetSummary from "./budget-summary";
 
-export default function BudgetOverview({
-  budgets,
-  transactions,
-}: {
-  budgets: Budget[];
-  transactions: Transaction[];
-}) {
+export default async function BudgetOverview() {
+  const supabase = await createClient();
+  const [transactions, budgets] = await Promise.all([
+    getTransactions(supabase),
+    getBudget(supabase)
+  ]);
   const budgetSpendingData = getBudgetSpendingData(budgets, transactions);
   return (
     <CommonCard>

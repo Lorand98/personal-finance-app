@@ -1,12 +1,17 @@
+import { createClient } from "@/lib/supabase/server";
 import CommonCard from "../common/common-card";
 import FinancialProgressItem from "../common/financial-progress-item";
 import ViewAllLink from "../common/view-all-link";
 import PotsOverviewIcon from "../ui/icons/pots-overview-icon";
-import { Pot } from "./types";
+import { getPots } from "@/lib/supabase/data-service";
 
-export default function PotOverView({ pots }: { pots: Pot[] }) {
+export default async function PotOverView() {
+  const supabase = await createClient();
+  const pots = await getPots(supabase);
   const overViewPots = pots.slice(0, 4);
   const totalSaved = pots.reduce((acc, pot) => acc + pot.total, 0);
+
+
 
   return (
     <CommonCard>

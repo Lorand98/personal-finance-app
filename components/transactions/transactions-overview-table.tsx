@@ -12,7 +12,7 @@ import ViewAllLink from "../common/view-all-link";
 import { compactColumns } from "./transaction-table-columns";
 import { Transaction } from "./types";
 
-const TransactionsOverView = ({
+const TransactionsOverViewTable = ({
   transactions,
 }: {
   transactions: Transaction[];
@@ -45,4 +45,4 @@ const TransactionsOverView = ({
   );
 };
 
-export default TransactionsOverView;
+export default TransactionsOverViewTable;
