@@ -55,6 +55,7 @@ export function getRecurringBillStats(recurringBills: Transaction[]) {
   const paidBillsTotal = billSum(paidBills);
   const upcomingBillsTotal = billSum(upcomingBills);
   const dueSoonBillsTotal = billSum(dueSoonBills);
+  const allBillsTotal = billSum(uniqueRecurringBills);
 
   return {
     uniqueRecurringBills,
@@ -64,5 +65,6 @@ export function getRecurringBillStats(recurringBills: Transaction[]) {
     paidBillsTotal,
     upcomingBillsTotal,
     dueSoonBillsTotal,
+    allBillsTotal,
   };
 }

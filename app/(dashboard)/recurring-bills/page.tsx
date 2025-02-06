@@ -16,6 +16,7 @@ export default async function RecurringBills() {
     paidBillsTotal,
     upcomingBillsTotal,
     dueSoonBillsTotal,
+    allBillsTotal
   } = getRecurringBillStats(recurringBills);
 
   if (uniqueRecurringBills.length === 0) {
@@ -33,7 +34,7 @@ export default async function RecurringBills() {
           <RecurringBillsIcon />
           <div className="flex flex-col gap-3">
             <p>Total Bills</p>
-            <p className="text-preset-1 font-bold">${paidBillsTotal}</p>
+            <p className="text-preset-1 font-bold">${allBillsTotal}</p>
           </div>
         </div>
 
