@@ -1,12 +1,5 @@
-import Spinner from "@/components/ui/spinner";
+import VerticalLoading from "@/components/ui/loading/vertical-loading";
 
 export default function Loading() {
-  return (
-    <div className="grid items-center justify-center">
-      <Spinner />
-      <p className="text-preset-1 text-muted-foreground">
-        Loading dashboard...
-      </p>
-    </div>
-  );
+  return <VerticalLoading />;
 }
