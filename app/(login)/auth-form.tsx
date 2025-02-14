@@ -18,9 +18,15 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { loginAction, signupAction } from "./actions";
+import { Button } from "@/components/ui/button";
 
 type AuthFormProps = {
   mode: "login" | "signup";
+};
+
+const TEST_USER = {
+  email: "user@example.com",
+  password: "user1234",
 };
 
 const AuthForm: React.FC<AuthFormProps> = ({ mode }) => {
@@ -65,6 +71,11 @@ const AuthForm: React.FC<AuthFormProps> = ({ mode }) => {
         }
       });
     }
+  };
+
+  const handleTestLogin = () => {
+    form.setValue("email", TEST_USER.email);
+    form.setValue("password", TEST_USER.password);
   };
 
   return (
@@ -149,6 +160,12 @@ const AuthForm: React.FC<AuthFormProps> = ({ mode }) => {
           text={mode === "signup" ? "Sign Up" : "Log In"}
           submittingText={mode === "signup" ? "Signing Up..." : "Logging In..."}
         />
+
+        {mode === "login" && !isSubmitting && (
+          <Button className="w-full p-6 " onClick={handleTestLogin}>
+            Log In With Test User
+          </Button>
+        )}
       </form>
     </Form>
   );
