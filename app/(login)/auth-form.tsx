@@ -80,7 +80,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ mode }) => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6" method="POST">
         {mode === "signup" && (
           // Name Field
           <FormField
