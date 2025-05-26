@@ -24,7 +24,7 @@ export default async function Home() {
         </Suspense>
 
         <div className="flex flex-col gap-4 lg:grid lg:grid-cols-2">
-          <div className="flex flex-col gap-4 [&>*]:flex-1">
+          <div className="flex flex-col gap-4 *:flex-1">
             <Suspense fallback={<Skeleton />} key={susKey2}>
               <PotOverView />
             </Suspense>
@@ -32,7 +32,7 @@ export default async function Home() {
               <TransactionsOverView />
             </Suspense>
           </div>
-          <div className=" flex flex-col gap-4 [&>*]:flex-1">
+          <div className=" flex flex-col gap-4 *:flex-1">
             <Suspense fallback={<Skeleton />} key={susKey4}>
               <BudgetOverview />
             </Suspense>

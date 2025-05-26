@@ -40,7 +40,7 @@ const BillInfoCell = ({
   return (
     <div className="space-y-2">
       <div className="flex items-center gap-4">
-        <UserAvatar avatar={avatar} name={name} className="flex-shrink-0" />
+        <UserAvatar avatar={avatar} name={name} className="shrink-0" />
         <strong>{name}</strong>
       </div>
       {isMobile && <DueDate date={date} />}

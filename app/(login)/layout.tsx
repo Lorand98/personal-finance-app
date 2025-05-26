@@ -38,7 +38,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             bg-white p-8 rounded-xl w-full
             max-w-[90%]           /* On mobile screens */
             md:max-w-[75%]        /* On tablet screens */
-            lg:max-w-[35rem]      /* On desktop screens */
+            lg:max-w-140      /* On desktop screens */
           "
         >
           {children}

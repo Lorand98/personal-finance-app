@@ -56,7 +56,7 @@ export default function BudgetCard({
         {latestTransactions.length === 0 ? (
           <p className="text-grey-500">No available data</p>
         ) : (
-          <ul className="divide-y-2 divide-grey-500 divide-opacity-15 ">
+          <ul className="divide-y-2 divide-grey-500/[0.15]">
             {latestTransactions.map(({ id, name, amount, avatar, date }) => {
               const currencyAmount = `-$${Math.abs(amount)}`;
               return (

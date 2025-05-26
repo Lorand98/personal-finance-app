@@ -31,7 +31,7 @@ const UserInfoCell = ({
 }) => {
   return (
     <div className="flex items-center gap-4">
-      <UserAvatar avatar={avatar} name={name} className="flex-shrink-0" />
+      <UserAvatar avatar={avatar} name={name} className="shrink-0" />
       <div className="flex flex-col">
         <strong>{name}</strong>
         <SecondaryCellText

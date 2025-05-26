@@ -42,7 +42,7 @@ const TableFilter = ({ search, sort, categoryFilter }: TableFilterProps) => {
 
   return (
     <div className="flex justify-between gap-4">
-      <div className="basis-80 flex-shrink">
+      <div className="basis-80 shrink">
         <SearchBar
           placeholder={search.placeholder}
           value={search.value}

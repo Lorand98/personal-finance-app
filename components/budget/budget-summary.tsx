@@ -31,7 +31,7 @@ export default function BudgetSummary({
       <BudgetPieChart
         budgetSpendingData={budgetSpendingData}
         className={cn({
-          "flex-1 lg:h-[12rem] xl:h-[18rem]": compact,
+          "flex-1 lg:h-48 xl:h-72": compact,
         })}
       />
       <div

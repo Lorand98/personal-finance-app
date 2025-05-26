@@ -31,7 +31,7 @@ const SidebarNav = () => {
       <div className="mb-10 px-8">
         <Logo size={minimized ? "small" : "large"} />
       </div>
-      <ul className="py-6 flex gap-1 flex-col flex-grow">
+      <ul className="py-6 flex gap-1 flex-col grow">
         {menuItems.map((item) => (
           <motion.li
             key={item.label}
@@ -52,7 +52,7 @@ const SidebarNav = () => {
             animate={{
               rotate: minimized ? 180 : 0,
             }}
-            className="flex-shrink-0"
+            className="shrink-0"
           >
             <MinimizeMenuIcon
               className="

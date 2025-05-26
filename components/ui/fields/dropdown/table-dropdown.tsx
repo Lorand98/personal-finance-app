@@ -115,7 +115,7 @@ const TableDropdown = <T extends DropdownItem>({
       >
         {label}
       </label>
-      <div className="relative flex-shrink-0">
+      <div className="relative shrink-0">
         {/* Desktop dropdown combobox */}
         <div
           {...comboboxProps}
@@ -124,7 +124,7 @@ const TableDropdown = <T extends DropdownItem>({
         >
           <div
             className={cn(
-              "flex-shrink-0 overflow-hidden",
+              "shrink-0 overflow-hidden",
               dropdownLabelClassName
             )}
           >
