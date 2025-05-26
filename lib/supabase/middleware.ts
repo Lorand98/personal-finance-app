@@ -1,8 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
-//TODO call getuser also when fetching?
-
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({
     request,
@@ -53,7 +51,7 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  if(user && isPublicPath) {
+  if (user && isPublicPath) {
     // User is logged in and path is public, redirect to root
     const url = request.nextUrl.clone();
     url.pathname = "/";

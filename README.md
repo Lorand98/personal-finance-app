@@ -57,7 +57,7 @@ Users should be able to:
 
 - [React](https://reactjs.org/) - JS library
 - [Next.js](https://nextjs.org/) - React framework
-- [TawilwindCSS](https://tailwindcss.com/) - A utility-first CSS framework
+- [TailwindCSS](https://tailwindcss.com/) - A utility-first CSS framework
 - [ShadCN UI](https://ui.shadcn.com/) - Accessible and customizable components that you can copy and paste into your apps.
 - [Tanstack Table](https://tanstack.com/table/) - Headless UI table component
 - [Supabase](https://supabase.io/) - Database and authentication service
