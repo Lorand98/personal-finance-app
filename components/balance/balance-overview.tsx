@@ -4,7 +4,11 @@ import CommonCard from "../common/common-card";
 
 export default async function BalanceOverview() {
   const supabase = await createClient();
-  const balance = await getBalance(supabase);
+  const { data: balance, error } = await getBalance(supabase);
+  if (error) {
+    throw new Error("Failed to fetch balance data. Please try again later.");
+  }
+
   return (
     <div className="flex flex-col gap-3 sm:flex-row sm:justify-evenly  ">
       <CommonCard className="bg-grey-900 text-white">

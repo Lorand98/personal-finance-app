@@ -4,7 +4,13 @@ import TransactionsOverViewTable from "./transactions-overview-table";
 
 export default async function TransactionsOverview() {
   const supabase = await createClient();
-  const transactions = await getTransactions(supabase);
+  const { data: transactions, error } = await getTransactions(supabase);
 
-  return <TransactionsOverViewTable transactions={transactions} />;
+  if (error) {
+    throw new Error(
+      "Failed to load transactions overview. Please try again later."
+    );
+  }
+
+  return <TransactionsOverViewTable transactions={transactions || []} />;
 }

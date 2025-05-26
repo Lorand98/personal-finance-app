@@ -7,11 +7,19 @@ import BudgetSummary from "./budget-summary";
 
 export default async function BudgetOverview() {
   const supabase = await createClient();
-  const [transactions, budgets] = await Promise.all([
-    getTransactions(supabase),
-    getBudget(supabase)
-  ]);
-  const budgetSpendingData = getBudgetSpendingData(budgets, transactions);
+  const [
+    { data: transactions, error: transactionError },
+    { data: budgets, error: budgetError },
+  ] = await Promise.all([getTransactions(supabase), getBudget(supabase)]);
+
+  if (transactionError || budgetError) {
+    throw new Error("Failed to load budgets overview. Please try again later.");
+  }
+
+  const budgetSpendingData = getBudgetSpendingData(
+    budgets || [],
+    transactions || []
+  );
   return (
     <CommonCard>
       <div className="flex items-end justify-between">

@@ -1,5 +1,6 @@
 import BudgetCard from "@/components/budget/budget-card";
 import BudgetSummary from "@/components/budget/budget-summary";
+import NoContent from "@/components/common/no-content";
 import { Transaction } from "@/components/transactions/types";
 import { getBudget, getTransactions } from "@/lib/supabase/data-service";
 import { createClient } from "@/lib/supabase/server";
@@ -8,12 +9,6 @@ import { getBudgetSpendingData } from "@/lib/utils";
 export const metadata = {
   title: "Budget",
 };
-
-const NoBudgets = () => (
-  <div className="py-6 rounded-xl">
-    <p className="text-grey-500 text-xl">You have no budgets set up yet.</p>
-  </div>
-);
 
 function getLatestTransactions(
   transactions: Transaction[],
@@ -28,14 +23,19 @@ function getLatestTransactions(
 
 export default async function Budget() {
   const supabase = await createClient();
-  const budgets = await getBudget(supabase);
-  const transactions = await getTransactions(supabase);
+  const { data: budgets, error: budgetFetchError } = await getBudget(supabase);
+  const { data: transactions, error: transactionFetchError } =
+    await getTransactions(supabase);
 
-  if (budgets.length === 0) {
-    return <NoBudgets />;
+  if (budgetFetchError || transactionFetchError) {
+    throw new Error("Failed to load budgets. Please try again later.");
   }
 
-  const budgetSpendingData = getBudgetSpendingData(budgets, transactions);
+  if (!budgets || budgets.length === 0) {
+    return <NoContent contentType="budgets" />;
+  }
+
+  const budgetSpendingData = getBudgetSpendingData(budgets, transactions || []);
 
   return (
     <div className="flex flex-col gap-6 lg:grid lg:grid-cols-[5fr_10fr] lg:items-start">
@@ -44,7 +44,7 @@ export default async function Budget() {
       <div className="space-y-6">
         {budgetSpendingData.map((budget) => {
           const latestTransactions = getLatestTransactions(
-            transactions,
+            transactions || [],
             budget.category,
             3
           );

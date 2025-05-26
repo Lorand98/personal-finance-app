@@ -1,6 +1,8 @@
 "use server";
 
-import { TransactionInsert } from "@/components/transactions/types";
+import {
+  TransactionInsert
+} from "@/components/transactions/types";
 import createResourceAction from "@/lib/server/resource-action";
 import { createTransaction } from "@/lib/supabase/data-service";
 import { newTransactionSchema } from "@/lib/validations";

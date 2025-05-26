@@ -5,10 +5,10 @@ export async function GET() {
   const supabase = await createClient();
 
   try {
-    const { unusedColors } = await getAvailablePotThemes(supabase);
+    const { data } = await getAvailablePotThemes(supabase);
     return new Response(
       JSON.stringify({
-        availableColors: unusedColors,
+        availableColors: data,
       }),
       {
         headers: { "Content-Type": "application/json" },

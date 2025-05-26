@@ -1,6 +1,6 @@
 import { PostgrestError, SupabaseClient } from "@supabase/supabase-js";
-import { Database } from "../supabase/database.types";
 import { z } from "zod";
+import { Database } from "../supabase/database.types";
 
 export type ServerActionResult<T extends z.ZodTypeAny> = {
   success?: boolean;
@@ -11,23 +11,31 @@ export type ServerActionResult<T extends z.ZodTypeAny> = {
   serverSideError?: string;
 };
 
+// Generic DataServiceResult with optional typing
+export type DataServiceResult<T = unknown> = {
+  data: T;
+  error: PostgrestError | Error | null;
+};
+
+// Function types with generics
 export type CreateEntityFn<T extends z.ZodTypeAny> = (
   supabase: SupabaseClient<Database>,
   data: z.infer<T> & { user_id: string }
-) => Promise<PostgrestError | undefined>;
+) => Promise<DataServiceResult>;
 
 export type UpdateEntityFn<T extends z.ZodTypeAny> = (
   supabase: SupabaseClient<Database>,
   data: z.infer<T> & { user_id: string },
   id: number
-) => Promise<PostgrestError | undefined>;
+) => Promise<DataServiceResult>;
 
 export type DeleteEntityFn = (
   supabase: SupabaseClient<Database>,
   id: number,
   userId: string
-) => Promise<PostgrestError | undefined>;
+) => Promise<DataServiceResult<null>>;
 
+// Operation types
 export type BaseOperation = {
   revalidatePathRoute: string;
 };

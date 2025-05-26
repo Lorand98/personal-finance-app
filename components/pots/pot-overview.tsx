@@ -7,11 +7,14 @@ import { getPots } from "@/lib/supabase/data-service";
 
 export default async function PotOverView() {
   const supabase = await createClient();
-  const pots = await getPots(supabase);
-  const overViewPots = pots.slice(0, 4);
-  const totalSaved = pots.reduce((acc, pot) => acc + pot.total, 0);
+  const { data: pots, error } = await getPots(supabase);
 
+  if (error) {
+    throw new Error("Failed to load pots overview. Please try again later.");
+  }
 
+  const overViewPots = pots?.slice(0, 4);
+  const totalSaved = pots?.reduce((acc, pot) => acc + pot.total, 0);
 
   return (
     <CommonCard>
@@ -28,7 +31,7 @@ export default async function PotOverView() {
           </div>
         </div>
         <div className="grid grid-cols-2 flex-1">
-          {overViewPots.map(({ id, total, theme, name }) => (
+          {overViewPots?.map(({ id, total, theme, name }) => (
             <FinancialProgressItem
               title={name}
               amount={total}

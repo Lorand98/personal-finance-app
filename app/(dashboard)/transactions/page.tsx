@@ -9,7 +9,11 @@ export const metadata = {
 export default async function Transactions() {
   const supabase = await createClient();
 
-  const transactions = await getTransactions(supabase);
+  const { data: transactions, error } = await getTransactions(supabase);
+
+  if (error) {
+    throw new Error("Failed to load transactions. Please try again later.");
+  }
 
   return (
     <div>

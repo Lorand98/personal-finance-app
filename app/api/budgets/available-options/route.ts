@@ -5,13 +5,11 @@ export async function GET() {
   const supabase = await createClient();
 
   try {
-    const { unusedCategories, unusedColors } = await getAvailableBudgetOptions(
-      supabase
-    );
+    const { data } = await getAvailableBudgetOptions(supabase);
     return new Response(
       JSON.stringify({
-        availableCategories: unusedCategories,
-        availableColors: unusedColors,
+        availableCategories: data?.unusedCategories,
+        availableColors: data?.unusedColors,
       }),
       {
         headers: { "Content-Type": "application/json" },

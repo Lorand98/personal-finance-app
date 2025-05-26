@@ -6,7 +6,7 @@ import { getRecurringBillStats } from "@/lib/utils";
 
 export default async function RecurringBills() {
   const supabase = await createClient();
-  const recurringBills = await getRecurringBills(supabase);
+  const { data: recurringBills } = await getRecurringBills(supabase);
 
   const {
     uniqueRecurringBills,
@@ -16,8 +16,8 @@ export default async function RecurringBills() {
     paidBillsTotal,
     upcomingBillsTotal,
     dueSoonBillsTotal,
-    allBillsTotal
-  } = getRecurringBillStats(recurringBills);
+    allBillsTotal,
+  } = getRecurringBillStats(recurringBills || []);
 
   if (uniqueRecurringBills.length === 0) {
     return (

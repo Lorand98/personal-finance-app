@@ -7,10 +7,16 @@ import BillSummaryItem from "./bill-summary-item";
 
 export default async function RecurringBillsOverview() {
   const supabase = await createClient();
-  const recurringBills = await getRecurringBills(supabase);
+  const { data: recurringBills, error } = await getRecurringBills(supabase);
   const { paidBillsTotal, upcomingBillsTotal, dueSoonBillsTotal } =
-    getRecurringBillStats(recurringBills);
-    
+    getRecurringBillStats(recurringBills || []);
+
+  if (error) {
+    throw new Error(
+      "Failed to load recurring bills overview. Please try again later."
+    );
+  }
+
   return (
     <CommonCard>
       <div className="flex justify-between items-end">
