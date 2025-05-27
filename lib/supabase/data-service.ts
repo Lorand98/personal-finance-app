@@ -106,8 +106,6 @@ export async function createTransaction(
       .insert(transaction)
       .select();
 
-    console.log(data);
-
     if (txError) {
       console.error(txError);
       return { data: null, error: txError };

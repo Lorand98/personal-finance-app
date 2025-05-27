@@ -5,36 +5,53 @@ import { loginSchema, signupSchema } from "@/lib/validations";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-export async function signupAction(formData: FormData) {
-    const supabase = await createClient();
-    const values = {
-      name: formData.get("name"),
-      email: formData.get("email"),
-      password: formData.get("password"),
-    };
+type AuthFields = {
+  email: string;
+  password: string;
+  name?: string;
+};
 
-    const parsed = signupSchema.safeParse(values);
-    if (!parsed.success) {
-      return { fieldErrors: parsed.error.flatten().fieldErrors };
-    }
+type AuthActionState = {
+  fieldErrors?: { [K in keyof AuthFields]?: string[] };
+  serverSideError?: string;
+};
 
-    const { name, email, password } = parsed.data;
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: { data: { name } },
-    });
+export async function signupAction(
+  _prevState: AuthActionState,
+  formData: FormData
+): Promise<AuthActionState> {
+  const supabase = await createClient();
+  const values = {
+    name: formData.get("name"),
+    email: formData.get("email"),
+    password: formData.get("password"),
+  };
 
-    if (error) {
-      console.error("Sign up error", error);
-      return { serverSideError: error.message };
-    }
+  const parsed = signupSchema.safeParse(values);
+  if (!parsed.success) {
+    return { fieldErrors: parsed.error.flatten().fieldErrors };
+  }
 
-    revalidatePath("/", "layout");
-    redirect("/");
+  const { name, email, password } = parsed.data;
+  const { error } = await supabase.auth.signUp({
+    email,
+    password,
+    options: { data: { name } },
+  });
+
+  if (error) {
+    console.error("Sign up error", error);
+    return { serverSideError: error.message };
+  }
+
+  revalidatePath("/", "layout");
+  redirect("/");
 }
 
-export async function loginAction(formData: FormData) {
+export async function loginAction(
+  _prevState: AuthActionState,
+  formData: FormData
+): Promise<AuthActionState> {
   const supabase = await createClient();
   const values = {
     email: formData.get("email"),
@@ -68,4 +85,7 @@ export async function logoutAction() {
     console.error("Sign out error", error);
     return { serverSideError: error.message };
   }
+
+  revalidatePath("/", "layout");
+  redirect("/");
 }
