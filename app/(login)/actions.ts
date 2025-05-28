@@ -14,6 +14,7 @@ type AuthFields = {
 type AuthActionState = {
   fieldErrors?: { [K in keyof AuthFields]?: string[] };
   serverSideError?: string;
+  success?: boolean;
 };
 
 export async function signupAction(
@@ -41,11 +42,17 @@ export async function signupAction(
 
   if (error) {
     console.error("Sign up error", error);
+    if (!error.code) {
+      return {
+        serverSideError:
+          "An unexpected sign-up error occurred. Please try again later.",
+      };
+    }
     return { serverSideError: error.message };
   }
 
   revalidatePath("/", "layout");
-  redirect("/");
+    redirect("/login?status=verification_sent");
 }
 
 export async function loginAction(
@@ -70,6 +77,12 @@ export async function loginAction(
 
   if (error) {
     console.error("Sign in error", error);
+    if (!error.code) {
+      return {
+        serverSideError:
+          "An unexpected sign-in error occurred. Please try again later.",
+      };
+    }
     return { serverSideError: error.message };
   }
 
@@ -83,7 +96,12 @@ export async function logoutAction() {
 
   if (error) {
     console.error("Sign out error", error);
-    return { serverSideError: error.message };
+    if (!error.code) {
+      return {
+        serverSideError:
+          "An unexpected sign-out error occurred. Please try again later.",
+      };
+    }
   }
 
   revalidatePath("/", "layout");
